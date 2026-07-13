@@ -1,6 +1,6 @@
 // import 'package:flutter/material.dart';
-// import 'package:tallebplus_app/core/core.dart';
-// import 'package:tallebplus_app/features/auth/data/models/city_model.dart';
+// import 'package:ewan/core/core.dart';
+// import 'package:ewan/features/auth/data/models/city_model.dart';
 // import '../../auth.dart';
 
 // @RoutePage()
@@ -236,17 +236,16 @@
 //             onChanged: (String value) {
 //               emailController.onTextChange(value);
 //             },
-//             validator:
-//                 (String? value) => validateInput(
-//                   value,
-//                   context,
-//                   fieldName: 'email',
-//                   externalErrors: externalErrors,
-//                   <ValidationType>[
-//                     ValidationType.email,
-//                     ValidationType.requiredField,
-//                   ],
-//                 ),
+//             validator: (String? value) => validateInput(
+//               value,
+//               context,
+//               fieldName: 'email',
+//               externalErrors: externalErrors,
+//               <ValidationType>[
+//                 ValidationType.email,
+//                 ValidationType.requiredField,
+//               ],
+//             ),
 //           );
 //         },
 //       ),
@@ -267,14 +266,13 @@
 //           onChanged: (String value) {
 //             firstNameController.onTextChange(value);
 //           },
-//           validator:
-//               (String? value) => validateInput(
-//                 value,
-//                 fieldName: 'first_name',
-//                 externalErrors: externalErrors,
-//                 context,
-//                 <ValidationType>[ValidationType.requiredField],
-//               ),
+//           validator: (String? value) => validateInput(
+//             value,
+//             fieldName: 'first_name',
+//             externalErrors: externalErrors,
+//             context,
+//             <ValidationType>[ValidationType.requiredField],
+//           ),
 //         );
 //       },
 //     );
@@ -294,14 +292,13 @@
 //           onChanged: (String value) {
 //             lastNameController.onTextChange(value);
 //           },
-//           validator:
-//               (String? value) => validateInput(
-//                 value,
-//                 fieldName: 'last_name',
-//                 externalErrors: externalErrors,
-//                 context,
-//                 <ValidationType>[ValidationType.requiredField],
-//               ),
+//           validator: (String? value) => validateInput(
+//             value,
+//             fieldName: 'last_name',
+//             externalErrors: externalErrors,
+//             context,
+//             <ValidationType>[ValidationType.requiredField],
+//           ),
 //         );
 //       },
 //     );
@@ -313,14 +310,13 @@
 //       isEmpty: selectedCity == null,
 //       nextFocusNode: addressFocusNode,
 //       selectedItem: selectedCity,
-//       validator:
-//           (CityResult? value) => validateInput(
-//             value != null ? "v" : "",
-//             fieldName: 'city',
-//             externalErrors: externalErrors,
-//             context,
-//             <ValidationType>[ValidationType.requiredField],
-//           ),
+//       validator: (CityResult? value) => validateInput(
+//         value != null ? "v" : "",
+//         fieldName: 'city',
+//         externalErrors: externalErrors,
+//         context,
+//         <ValidationType>[ValidationType.requiredField],
+//       ),
 //       onChanged: (CityResult? value) {
 //         setState(() {
 //           selectedCity = value;
@@ -376,14 +372,13 @@
 //             });
 //           },
 //           obscureText: isObscure,
-//           validator:
-//               (String? value) => validateInput(
-//                 value,
-//                 fieldName: 'password',
-//                 externalErrors: externalErrors,
-//                 context,
-//                 <ValidationType>[ValidationType.password],
-//               ),
+//           validator: (String? value) => validateInput(
+//             value,
+//             fieldName: 'password',
+//             externalErrors: externalErrors,
+//             context,
+//             <ValidationType>[ValidationType.password],
+//           ),
 //           onChanged: (String value) {
 //             passwordController.onTextChange(value);
 //           },
@@ -409,10 +404,12 @@
 //             });
 //           },
 //           obscureText: isObscure,
-//           validator:
-//               (String? value) => validateInput(value, context, <ValidationType>[
-//                 ValidationType.confirmPassword,
-//               ], password: passwordTextEditingController.text),
+//           validator: (String? value) => validateInput(
+//             value,
+//             context,
+//             <ValidationType>[ValidationType.confirmPassword],
+//             password: passwordTextEditingController.text,
+//           ),
 //           onChanged: (String value) {
 //             confirmPasswordController.onTextChange(value);
 //           },

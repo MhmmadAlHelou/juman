@@ -1,5 +1,5 @@
 // import 'package:flutter/material.dart';
-// import 'package:tallebplus_app/core/core.dart';
+// import 'package:ewan/core/core.dart';
 
 // import '../../auth.dart';
 
@@ -49,8 +49,8 @@
 //     return BlocListener<AuthenticationBloc, AuthenticationState>(
 //       listener: (BuildContext context, AuthenticationState state) {
 //         state.maybeWhen(
-//           loadingResendVerificationCode:
-//               () => globalButtonController.changeToLoader(),
+//           loadingResendVerificationCode: () =>
+//               globalButtonController.changeToLoader(),
 //           resendVerificationCodeSucceed: (String? message) {
 //             context.pushRoute(
 //               VerificationCodeRoute(
@@ -113,12 +113,11 @@
 //             onChanged: (String value) {
 //               emailController.onTextChange(value);
 //             },
-//             validator:
-//                 (String? value) =>
-//                     validateInput(value, context, <ValidationType>[
-//                       ValidationType.email,
-//                       ValidationType.requiredField,
-//                     ]),
+//             validator: (String? value) =>
+//                 validateInput(value, context, <ValidationType>[
+//                   ValidationType.email,
+//                   ValidationType.requiredField,
+//                 ]),
 //           );
 //         },
 //       ),

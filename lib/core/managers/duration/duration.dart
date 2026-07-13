@@ -1,1 +1,1 @@
-// export 'duration_manager.dart';
+export 'duration_manager.dart';

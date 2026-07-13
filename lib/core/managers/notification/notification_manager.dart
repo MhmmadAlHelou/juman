@@ -28,12 +28,16 @@
 //     );
 
 //     await notificationPlugin
-//         .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+//         .resolvePlatformSpecificImplementation<
+//           AndroidFlutterLocalNotificationsPlugin
+//         >()
 //         ?.createNotificationChannel(channel);
 
 //     // show message using local notification
-//     const AndroidInitializationSettings androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
-//     const DarwinInitializationSettings iOSSettings = DarwinInitializationSettings();
+//     const AndroidInitializationSettings androidSettings =
+//         AndroidInitializationSettings('@mipmap/ic_launcher');
+//     const DarwinInitializationSettings iOSSettings =
+//         DarwinInitializationSettings();
 //     const InitializationSettings initialSettings = InitializationSettings(
 //       android: androidSettings,
 //       iOS: iOSSettings,
@@ -51,27 +55,27 @@
 
 //   void _handleNotificationClick(Map<String, dynamic> data) {
 //     // Parse notification data
-//     final NotificationMiniData notificationData = NotificationMiniData.fromJson(data);
+//     final NotificationMiniData notificationData = NotificationMiniData.fromJson(
+//       data,
+//     );
 //     // Navigate based on type
 //     switch (notificationData.objectType) {
 //       case NotificationType.order:
 //         if (notificationData.objectId != null) {
-//             GlobalNotifiers.orderNotifier.value =
-//             !GlobalNotifiers.orderNotifier.value;
-//           Managers.route.push(OrderRoute(
-//             orderId: notificationData.objectId!,
-//             isMyOrder: false,
-//           ));
+//           GlobalNotifiers.orderNotifier.value =
+//               !GlobalNotifiers.orderNotifier.value;
+//           Managers.route.push(
+//             OrderRoute(orderId: notificationData.objectId!, isMyOrder: false),
+//           );
 //         }
 //         break;
 //       case NotificationType.myOrder:
 //         if (notificationData.objectId != null) {
-//             GlobalNotifiers.orderNotifier.value =
-//             !GlobalNotifiers.orderNotifier.value;
-//           Managers.route.push(OrderRoute(
-//             orderId: notificationData.objectId!,
-//             isMyOrder: true,
-//           ));
+//           GlobalNotifiers.orderNotifier.value =
+//               !GlobalNotifiers.orderNotifier.value;
+//           Managers.route.push(
+//             OrderRoute(orderId: notificationData.objectId!, isMyOrder: true),
+//           );
 //         }
 //         break;
 //       case NotificationType.alert:
@@ -84,23 +88,21 @@
 //   @override
 //   Future<void> handleForegroundNotification(RemoteMessage message) async {
 //     // Download the image if the URL is provided
-//     final Uint8List? imageBytes =
-//         message.data['image'] != null
-//             ? await downloadImage(message.data['image'])
-//             : null;
+//     final Uint8List? imageBytes = message.data['image'] != null
+//         ? await downloadImage(message.data['image'])
+//         : null;
 
 //     // Prepare BigPictureStyleInformation if image is available
-//     DefaultStyleInformation styleInformation =
-//         imageBytes != null
-//             ? BigPictureStyleInformation(
-//               ByteArrayAndroidBitmap(imageBytes),
-//               contentTitle: message.notification?.title,
-//               summaryText: message.notification?.body,
-//             )
-//             : BigTextStyleInformation(
-//               message.notification?.body ?? "",
-//               contentTitle: message.notification?.title,
-//             );
+//     DefaultStyleInformation styleInformation = imageBytes != null
+//         ? BigPictureStyleInformation(
+//             ByteArrayAndroidBitmap(imageBytes),
+//             contentTitle: message.notification?.title,
+//             summaryText: message.notification?.body,
+//           )
+//         : BigTextStyleInformation(
+//             message.notification?.body ?? "",
+//             contentTitle: message.notification?.title,
+//           );
 
 //     // show message using local notification
 //     final NotificationDetails notificationDetails = NotificationDetails(

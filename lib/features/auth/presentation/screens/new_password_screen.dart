@@ -1,4 +1,4 @@
-// import 'package:tallebplus_app/core/core.dart';
+// import 'package:ewan/core/core.dart';
 // import 'package:flutter/material.dart';
 
 // import '../../auth.dart';
@@ -109,10 +109,11 @@
 //             });
 //           },
 //           obscureText: isObscure,
-//           validator:
-//               (String? value) => validateInput(value, context, <ValidationType>[
-//                 ValidationType.password,
-//               ]),
+//           validator: (String? value) => validateInput(
+//             value,
+//             context,
+//             <ValidationType>[ValidationType.password],
+//           ),
 //           onChanged: (String value) {
 //             passwordController.onTextChange(value);
 //           },
@@ -138,10 +139,12 @@
 //             });
 //           },
 //           obscureText: isObscure,
-//           validator:
-//               (String? value) => validateInput(value, context, <ValidationType>[
-//                 ValidationType.confirmPassword,
-//               ], password: passwordTextEditingController.text),
+//           validator: (String? value) => validateInput(
+//             value,
+//             context,
+//             <ValidationType>[ValidationType.confirmPassword],
+//             password: passwordTextEditingController.text,
+//           ),
 //           onChanged: (String value) {
 //             confirmPasswordController.onTextChange(value);
 //           },

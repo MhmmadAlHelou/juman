@@ -1,12 +1,10 @@
-// import 'error.dart';
+import 'error.dart';
 
-// class LocalException extends GeneralException {
-//   LocalException({
-//     super.message,
-//   });
+class LocalException extends GeneralException {
+  LocalException({super.message});
 
-//   @override
-//   String toString() {
-//     return message;
-//   }
-// }
+  @override
+  String toString() {
+    return message;
+  }
+}

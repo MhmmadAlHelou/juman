@@ -1,4 +1,4 @@
-// import 'package:tallebplus_app/core/core.dart';
+// import 'package:ewan/core/core.dart';
 // import 'package:flutter/material.dart';
 
 // import '../../auth.dart';
@@ -151,37 +151,34 @@
 
 //             submitButton(),
 //             BlocBuilder<AuthenticationBloc, AuthenticationState>(
-//               buildWhen: (
-//                 AuthenticationState previous,
-//                 AuthenticationState current,
-//               ) {
-//                 if (current.runtimeType ==
-//                     const AuthenticationState.remainingTimeForResend()
-//                         .runtimeType) {
-//                   return true;
-//                 }
-//                 return false;
-//               },
+//               buildWhen:
+//                   (AuthenticationState previous, AuthenticationState current) {
+//                     if (current.runtimeType ==
+//                         const AuthenticationState.remainingTimeForResend()
+//                             .runtimeType) {
+//                       return true;
+//                     }
+//                     return false;
+//                   },
 //               builder: (BuildContext context, AuthenticationState state) {
 //                 final int remainingTime =
 //                     state.whenOrNull(
-//                       remainingTimeForResend:
-//                           (int? remainingTime) => remainingTime,
+//                       remainingTimeForResend: (int? remainingTime) =>
+//                           remainingTime,
 //                     ) ??
 //                     -1;
 //                 return Center(
 //                   child: QuestionWithActionWidget(
 //                     question: LocaleKeys.didNotReceiveTheCode,
-//                     action:
-//                         remainingTime > 1
-//                             ? LocaleKeys.resendInSeconds
-//                             : LocaleKeys.resend,
-//                     actionArgs:
-//                         remainingTime > 0
-//                             ? <String>[remainingTime.toString()]
-//                             : <String>[],
-//                     onPressed:
-//                         remainingTime >= 0 ? () {} : resendVerificationCode,
+//                     action: remainingTime > 1
+//                         ? LocaleKeys.resendInSeconds
+//                         : LocaleKeys.resend,
+//                     actionArgs: remainingTime > 0
+//                         ? <String>[remainingTime.toString()]
+//                         : <String>[],
+//                     onPressed: remainingTime >= 0
+//                         ? () {}
+//                         : resendVerificationCode,
 //                   ),
 //                 );
 //               },

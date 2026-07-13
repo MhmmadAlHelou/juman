@@ -20,7 +20,7 @@
 
 //   @override
 //   void initState() {
-//     if (PrefData.isSignedIn) {      
+//     if (PrefData.isSignedIn) {
 //       if (!PrefData.fcmTokenSent) {
 //         Managers.notificationManager.getFcmToken().then(
 //           (String value) => getIt<BaseRemoteDataSource>()
@@ -35,7 +35,7 @@
 //               }),
 //         );
 //       }
-//       FirebaseMessaging.instance.onTokenRefresh.listen((String? token) {    
+//       FirebaseMessaging.instance.onTokenRefresh.listen((String? token) {
 //         if (token == null) {
 //           return;
 //         }
@@ -55,7 +55,7 @@
 //               }),
 //         );
 //       }
-//       FirebaseMessaging.instance.onTokenRefresh.listen((String? token) {     
+//       FirebaseMessaging.instance.onTokenRefresh.listen((String? token) {
 //         if (token == null) {
 //           return;
 //         }
@@ -81,16 +81,15 @@
 //       },
 //       child: AutoTabsScaffold(
 //         resizeToAvoidBottomInset: false,
-//         homeIndex: 0,        
-//         floatingActionButtonLocation:
-//             FloatingActionButtonLocation.centerDocked,
+//         homeIndex: 0,
+//         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 //         animationCurve: Curves.bounceIn,
 //         animationDuration: const Duration(milliseconds: 100),
 //         routes: const <PageRouteInfo>[
-//           HomeRoute(),
-//           FavouritesRoute(),
-//           OrdersRoute(),
-//           ProfileRoute(),
+//           // HomeRoute(),
+//           // FavouritesRoute(),
+//           // OrdersRoute(),
+//           // ProfileRoute(),
 //         ],
 //         bottomNavigationBuilder: (_, TabsRouter tabsRouter) {
 //           _tabsRouter = tabsRouter;
