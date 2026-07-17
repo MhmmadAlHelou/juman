@@ -212,6 +212,7 @@ class AuthenticationBloc
   ) async {
     try {
       // event as _$SignInImpl;
+      // event as _SignIn;
       if (event is! _SignIn) return;
 
       emit(const AuthenticationState.loadingSignIn());

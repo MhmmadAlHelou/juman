@@ -1,11 +1,13 @@
+import 'package:ewan/core/core.dart';
 import 'package:ewan/features/auth/presentation/screens/login_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await EasyLocalization.ensureInitialized(); // 1. تهيئة الحزمة
+
+  await serviceLocator();
 
   runApp(
     EasyLocalization(
@@ -24,7 +26,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      // 2. ربط إعدادات اللغة مع MaterialApp
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
@@ -39,12 +40,13 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('welcome_msg').tr(), // سيظهر النص حسب لغة الجهاز
-      ),
-      body: Container(
-        height: MediaQuery.of(context).size.height - 5,
-        child: LoginView(),
+      appBar: AppBar(title: const Text('welcome_msg').tr()),
+      body: LoginScreen(
+        onLoginSuccess: () {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('login_success_msg').tr()));
+        },
       ),
       // body: Center(
       //   child: ElevatedButton(

@@ -19,10 +19,10 @@ class AppRouter extends RootStackRouter {
     //   page: CreateAccountRoute.page,
     //   transitionsBuilder: TransitionsBuilders.fadeIn,
     // ),
-    // CustomRoute(
-    //   page: LoginRoute.page,
-    //   transitionsBuilder: TransitionsBuilders.fadeIn,
-    // ),
+    CustomRoute(
+      page: LoginRoute.page,
+      transitionsBuilder: TransitionsBuilders.fadeIn,
+    ),
     // CustomRoute(
     //   page: ForgetPasswordRoute.page,
     //   transitionsBuilder: TransitionsBuilders.fadeIn,

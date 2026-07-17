@@ -1,33 +1,5 @@
 # ewan
 
-
-________________
-## generating localizations:
-   
-    by easy_localization: ^3.0.7+1
- 
-    create directories 
-        assets/
-        └── translations/
-            ├── ar.json
-            └── en.json
-
-    add in pubspec.yaml: 
-        flutter:
-           assets:
-              - assets/translations/
-
-    then in main.dart I Initialized EasyLocalization
-    selecting supported languages : supportedLocales: const [Locale('en'), Locale('ar')]
-    and tested it..
-
-
-_________________
-## generating freezed:
-
-
-
-
 _________________
 ## back to:
 
