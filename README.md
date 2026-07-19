@@ -10,4 +10,5 @@ _________________
     lib\core\common\widget\global_app_bar_widget.dart line 135
     lib\core\managers\managers.dart line 21
     lib\core\common\blocs\app_manager_cubit.dart line 37
+    lib\features\auth\presentation\screens\create_account_screen.dart line 135
 

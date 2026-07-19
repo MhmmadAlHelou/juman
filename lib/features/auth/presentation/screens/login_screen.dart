@@ -98,6 +98,7 @@ class _LoginViewState extends State<LoginView> {
               widget.onLoginSuccess!.call();
             } else {
               // context.router.replaceAll(<PageRouteInfo>[const BaseRoute()]);
+              showSnackBar(context: context, message: "signIn Succeed!!!!!!!");
             }
           },
           accountNeedVerify: () {
