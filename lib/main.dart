@@ -1,6 +1,8 @@
+import 'app.dart' show App;
 import 'package:ewan/core/core.dart';
 import 'package:ewan/features/auth/presentation/screens/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'generated/codegen_loader.g.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,10 +13,13 @@ void main() async {
 
   runApp(
     EasyLocalization(
-      supportedLocales: const [Locale('en'), Locale('ar')], // اللغات المدعومة
-      path: 'assets/translations', // مسار ملفات الـ JSON
-      fallbackLocale: const Locale('en'), // اللغة الاحتياطية في حال حدوث خطأ
-      child: const MyApp(),
+      supportedLocales: LocalizationConfig.supportedLocales,
+      path: LocalizationConfig.translationFilePath,
+      fallbackLocale: LocalizationConfig.defaultLocale,
+      useFallbackTranslations: true,
+      assetLoader: const CodegenLoader(),
+      startLocale: LocalizationConfig.defaultLocale,
+      child: App.instance,
     ),
   );
 }

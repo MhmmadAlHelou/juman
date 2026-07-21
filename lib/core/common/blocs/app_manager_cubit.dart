@@ -34,7 +34,10 @@ class AppManagerCubit extends Cubit<AppManagerState> {
   Future<void> logOut() async {
     userEntity = null;
     await _localDataSource.logout();
-    // await getIt<AppRouter>().replaceAll(<PageRouteInfo>[const BaseRoute()]);
+    emit(
+      state.copyWith(appManagerStatus: AppManagerStatus.signOut),
+    ); ////////////_______///////////////////////////////
+    await getIt<AppRouter>().replaceAll(<PageRouteInfo>[const BaseRoute()]);
   }
 
   void changeTextTheme(BoxConstraints constraints) {

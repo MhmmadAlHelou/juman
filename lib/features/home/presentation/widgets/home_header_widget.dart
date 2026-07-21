@@ -10,9 +10,8 @@
 //   @override
 //   Widget build(BuildContext context) {
 //     return BlocProvider<ProfileBloc>(
-//       create:
-//           (BuildContext context) =>
-//               getIt<ProfileBloc>()..add(const ProfileEvent.getProfile()),
+//       create: (BuildContext context) =>
+//           getIt<ProfileBloc>()..add(const ProfileEvent.getProfile()),
 //       child: const HomeHeaderWidgetView(),
 //     );
 //   }
@@ -92,120 +91,116 @@
 
 //   profileHomeHeader() {
 //     return BlocBuilder<ProfileBloc, ProfileState>(
-//       buildWhen:
-//           (ProfileState previous, ProfileState current) =>
-//               current.runtimeType ==
-//                   const ProfileState.getProfileSucceed().runtimeType ||
-//               current.runtimeType == const ProfileState.loading().runtimeType ||
-//               current.runtimeType ==
-//                   const ProfileState.guestUser().runtimeType ||
-//               current.runtimeType == const ProfileState.failed().runtimeType,
+//       buildWhen: (ProfileState previous, ProfileState current) =>
+//           current.runtimeType ==
+//               const ProfileState.getProfileSucceed().runtimeType ||
+//           current.runtimeType == const ProfileState.loading().runtimeType ||
+//           current.runtimeType == const ProfileState.guestUser().runtimeType ||
+//           current.runtimeType == const ProfileState.failed().runtimeType,
 //       builder: (BuildContext context, ProfileState state) {
 //         return state.maybeWhen(
 //           loading: () => Container(),
-//           failed:
-//               (GeneralException? generalException) => const SizedBox.shrink(),
-//           guestUser:
-//               () => GestureDetector(
-//                 onTap: () {
-//                   AutoTabsRouter.of(context).setActiveIndex(3);
-//                 },
-//                 child: Row(
-//                   children: <Widget>[
-//                     GestureDetector(
-//                       onTap: () {
-//                         AutoTabsRouter.of(context).setActiveIndex(3);
-//                       },
-//                       child: Container(
-//                         width: 40,
-//                         height: 40,
-//                         decoration: BoxDecoration(
-//                           color: Palette.gray,
-//                           shape: BoxShape.circle,
-//                           border: Border.all(
-//                             color: context.colorScheme.primary,
-//                             width: 1,
-//                           ),
-//                         ),
-//                         child: Center(
-//                           child: SvgPicture.asset(
-//                             height: 20,
-//                             width: 20,
-//                             AssetsManager.svg.profile.path,
-//                             colorFilter: const ColorFilter.mode(
-//                               Palette.darkGray,
-//                               BlendMode.srcIn,
-//                             ),
-//                           ),
+//           failed: (GeneralException? generalException) =>
+//               const SizedBox.shrink(),
+//           guestUser: () => GestureDetector(
+//             onTap: () {
+//               AutoTabsRouter.of(context).setActiveIndex(3);
+//             },
+//             child: Row(
+//               children: <Widget>[
+//                 GestureDetector(
+//                   onTap: () {
+//                     AutoTabsRouter.of(context).setActiveIndex(3);
+//                   },
+//                   child: Container(
+//                     width: 40,
+//                     height: 40,
+//                     decoration: BoxDecoration(
+//                       color: Palette.gray,
+//                       shape: BoxShape.circle,
+//                       border: Border.all(
+//                         color: context.colorScheme.primary,
+//                         width: 1,
+//                       ),
+//                     ),
+//                     child: Center(
+//                       child: SvgPicture.asset(
+//                         height: 20,
+//                         width: 20,
+//                         AssetsManager.svg.profile.path,
+//                         colorFilter: const ColorFilter.mode(
+//                           Palette.darkGray,
+//                           BlendMode.srcIn,
 //                         ),
 //                       ),
 //                     ),
-//                     const SizedBox(width: 12),
-//                     GestureDetector(
-//                       onTap: () {
-//                         AutoTabsRouter.of(context).setActiveIndex(3);
-//                       },
-//                       child: Text(
-//                         (LocaleKeys.hiTechie).tr(),
-//                         style: context.titleSmall?.copyWith(
-//                           color: Palette.secondary,
-//                           fontFamily: FontFamily.fredokaOne,
-//                         ),
-//                       ),
-//                     ),
-//                   ],
+//                   ),
 //                 ),
-//               ),
-//           getProfileSucceed:
-//               (UserData? userData) => GestureDetector(
-//                 onTap: () {
-//                   AutoTabsRouter.of(context).setActiveIndex(3);
-//                 },
-//                 child: Row(
-//                   children: <Widget>[
-//                     GestureDetector(
-//                       onTap: () {
-//                         AutoTabsRouter.of(context).setActiveIndex(3);
-//                       },
-//                       child: Container(
-//                         width: 40,
-//                         height: 40,
-//                         decoration: BoxDecoration(
-//                           color: Palette.gray,
-//                           shape: BoxShape.circle,
-//                           border: Border.all(
-//                             color: context.colorScheme.primary,
-//                             width: 1,
-//                           ),
-//                         ),
-//                         child: Center(
-//                           child: ClipOval(
-//                             clipBehavior: Clip.hardEdge,
-//                             child: NetworkImageWidget(
-//                               width: 30,
-//                               height: 30,
-//                               url: userData?.image ?? "",
-//                             ),
-//                           ),
-//                         ),
-//                       ),
+//                 const SizedBox(width: 12),
+//                 GestureDetector(
+//                   onTap: () {
+//                     AutoTabsRouter.of(context).setActiveIndex(3);
+//                   },
+//                   child: Text(
+//                     (LocaleKeys.hiTechie).tr(),
+//                     style: context.titleSmall?.copyWith(
+//                       color: Palette.secondary,
+//                       fontFamily: FontFamily.fredokaOne,
 //                     ),
-//                     const SizedBox(width: 12),
-//                     GestureDetector(
-//                       onTap: () {
-//                         AutoTabsRouter.of(context).setActiveIndex(3);
-//                       },
-//                       child: Text(
-//                         "Hi, ${userData?.firstName ?? "Techie"}".tr(),
-//                         style: context.titleSmall?.copyWith(
-//                           color: Palette.secondary,
-//                           fontFamily: FontFamily.fredokaOne,
-//                         ),
-//                       ),
-//                     ),
-//                   ],
+//                   ),
 //                 ),
-//               ),
+//               ],
+//             ),
+//           ),
+//           getProfileSucceed: (UserData? userData) => GestureDetector(
+//             onTap: () {
+//               AutoTabsRouter.of(context).setActiveIndex(3);
+//             },
+//             child: Row(
+//               children: <Widget>[
+//                 GestureDetector(
+//                   onTap: () {
+//                     AutoTabsRouter.of(context).setActiveIndex(3);
+//                   },
+//                   child: Container(
+//                     width: 40,
+//                     height: 40,
+//                     decoration: BoxDecoration(
+//                       color: Palette.gray,
+//                       shape: BoxShape.circle,
+//                       border: Border.all(
+//                         color: context.colorScheme.primary,
+//                         width: 1,
+//                       ),
+//                     ),
+//                     child: Center(
+//                       child: ClipOval(
+//                         clipBehavior: Clip.hardEdge,
+//                         child: NetworkImageWidget(
+//                           width: 30,
+//                           height: 30,
+//                           url: userData?.image ?? "",
+//                         ),
+//                       ),
+//                     ),
+//                   ),
+//                 ),
+//                 const SizedBox(width: 12),
+//                 GestureDetector(
+//                   onTap: () {
+//                     AutoTabsRouter.of(context).setActiveIndex(3);
+//                   },
+//                   child: Text(
+//                     "Hi, ${userData?.firstName ?? "Techie"}".tr(),
+//                     style: context.titleSmall?.copyWith(
+//                       color: Palette.secondary,
+//                       fontFamily: FontFamily.fredokaOne,
+//                     ),
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
 //           orElse: () => const SizedBox.shrink(),
 //         );
 //       },

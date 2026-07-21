@@ -43,16 +43,16 @@ class AppRouter extends RootStackRouter {
     //   page: StaticRoute.page,
     //   transitionsBuilder: TransitionsBuilders.fadeIn,
     // ),
-    // CustomRoute(
-    //   page: BaseRoute.page,
-    //   initial: true,
-    //   children: [
-    //     CustomRoute(page: HomeRoute.page),
-    //     CustomRoute(page: ProfileRoute.page),
-    //     // CustomRoute(page: OrdersRoute.page),/////////////////////////////////-----------------------
-    //     CustomRoute(page: FavouritesRoute.page),
-    //   ],
-    // ),
+    CustomRoute(
+      page: BaseRoute.page,
+      initial: true,
+      children: [
+        CustomRoute(page: HomeRoute.page),
+        // CustomRoute(page: ProfileRoute.page),
+        // CustomRoute(page: OrdersRoute.page),/////////////////////////////////-----------------------
+        // CustomRoute(page: FavouritesRoute.page),
+      ],
+    ),
     // CustomRoute(
     //   page: EditProfileRoute.page,
     //   transitionsBuilder: TransitionsBuilders.fadeIn,

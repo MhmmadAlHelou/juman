@@ -11,4 +11,8 @@ _________________
     lib\core\managers\managers.dart line 21
     lib\core\common\blocs\app_manager_cubit.dart line 37
     lib\features\auth\presentation\screens\create_account_screen.dart line 135
+    _____________________
+
+    lib\features\home\data\home_repository.dart
+    lib\features\home\presentation\helper\home_helper.dart lines 7 8
 

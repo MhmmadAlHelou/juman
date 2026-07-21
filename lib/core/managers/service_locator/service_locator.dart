@@ -43,7 +43,7 @@ void repositories() {
   // Base Feature
   getIt.registerFactory(() => AuthRepository(getIt()));
   // getIt.registerFactory(() => ProfileRepository(getIt()));
-  // getIt.registerFactory(() => HomeRepository(getIt()));
+  getIt.registerFactory(() => HomeRepository(getIt()));
   // getIt.registerFactory(() => NotificationRepository(getIt()));
   // // getIt.registerFactory(() => OrdersRepository(getIt()));--------------------------------
   // getIt.registerFactory(() => FavouritesRepository(getIt()));
@@ -56,7 +56,7 @@ void cubits() {
   // getIt.registerFactory(() => NotificationBloc(getIt()));
   // Home
 
-  // getIt.registerFactory(() => HomeBloc(getIt()));
+  getIt.registerFactory(() => HomeBloc(getIt()));
   // // getIt.registerFactory(() => OrdersBloc(getIt()));/////////////____________//////////////////////////////
   // getIt.registerFactory(() => FavouritesBloc(getIt()));
 }
