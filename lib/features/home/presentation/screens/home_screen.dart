@@ -1,4 +1,6 @@
 // import 'package:addstream_flutter/addstream_flutter.dart';
+import 'package:ewan/features/home/presentation/widgets/card_item.dart';
+import 'package:ewan/features/home/presentation/widgets/map.dart';
 import 'package:flutter/material.dart';
 import 'package:ewan/core/core.dart';
 // import 'package:ewan/features/orders/bloc/orders_bloc.dart';
@@ -70,77 +72,109 @@ class _HomeViewState extends State<HomeView> with HomeHelper {
           // );
           await Future<void>.delayed(const Duration(milliseconds: 300));
         },
-        child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              // const HomeHeaderWidget(),
-              const SizedBox(height: 16),
-              // AddStreamWidget(
-              //   zoneId: '137',
-              //   height: 200,
-              //   margin: const EdgeInsets.symmetric(horizontal: 10),
-              //   onAdLoaded: () => debugPrint('Ad loaded'),
-              //   onAdFailed: (Object error) => debugPrint('Ad failed: $error'),
-              //   errorWidget: const AdsWidget(),
-              // ),
-              const SizedBox(height: 32),
-              Padding(
-                padding: const EdgeInsetsDirectional.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () {
-                        // context.pushRoute(const ServicesRoute());
-                      },
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            (LocaleKeys.quickExplorer).tr(),
-                            style: context.bodyMedium?.copyWith(
-                              fontFamily: FontFamily.fredokaOne,
-                            ),
-                          ),
-                          Text(
-                            (LocaleKeys.seeAll).tr(),
-                            style: context.labelLarge?.copyWith(
-                              color: Palette.secondary,
-                              fontFamily: FontFamily.fredokaOne,
-                            ),
-                          ),
-                        ],
-                      ),
+        // child: SingleChildScrollView(
+        //   physics: const AlwaysScrollableScrollPhysics(),
+        child: Stack(
+          // crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            // const HomeHeaderWidget(),
+            // const SizedBox(height: 16),
+            Positioned.fill(child: const MyMap()),
+            // const SizedBox(height: 32),
+            DraggableScrollableSheet(
+              initialChildSize: 0.5,
+              minChildSize: 0.09,
+              maxChildSize: 1.0,
+              snap: true,
+              snapSizes: const [0.09, 0.5, 1.0],
+              builder: (context, scrollController) {
+                return Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(20),
                     ),
-                    const SizedBox(height: 20),
-                    // const CategoriesWidget(),
-                    const SizedBox(height: 32),
-                    // AddStreamWidget(
-                    //   zoneId: '136',
-                    //   height: 100,
-                    //   onAdLoaded: () => debugPrint('Ad loaded'),
-                    //   onAdFailed: (Object error) =>
-                    //       debugPrint('Ad failed: $error'),
-                    //   errorWidget: const HomeImageWidget(),
-                    // ),
-                    const SizedBox(height: 32),
-                    Text(
-                      (LocaleKeys.recentProject).tr(),
-                      style: context.bodyMedium?.copyWith(
-                        fontFamily: FontFamily.fredokaOne,
+                  ),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Container(
+                          width: 40,
+                          height: 5,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 16),
-                    // const RecentProjectsWidget(),
-                  ],
-                ),
-              ),
-            ],
-          ),
+                      Expanded(
+                        // padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: ListView.builder(
+                          controller: scrollController,
+                          itemCount: 5,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: ListingCard(
+                                imageUrls: const [
+                                  'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80',
+                                  'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=800&q=80',
+                                  'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=800&q=80',
+                                  'https://images.unsplash.com/photo-1595576508898-0ad5c879a061?w=800&q=80',
+                                  'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=800&q=80',
+                                ],
+                                title: "Shared room in L'Hospitalet de …",
+                                rating: 4.67,
+                                reviewCount: 177,
+                                subtitle1:
+                                    'Hostelfly Fira – Bed in 8-person mixed dormit…',
+                                subtitle2: 'Business host',
+                                dateRange: '1–6 Aug',
+                                priceText: '£142 total',
+                                tags: const [
+                                  'Pay £0 today',
+                                  'Free cancellation',
+                                ],
+                                onTap: () {
+                                  // handle tap -> navigate to details page
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+            // Padding(
+            //   padding: const EdgeInsets.all(16),
+            //   child: ListingCard(
+            //     imageUrls: const [
+            //       'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80',
+            //       'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=800&q=80',
+            //       'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=800&q=80',
+            //       'https://images.unsplash.com/photo-1595576508898-0ad5c879a061?w=800&q=80',
+            //       'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=800&q=80',
+            //     ],
+            //     title: "Shared room in L'Hospitalet de …",
+            //     rating: 4.67,
+            //     reviewCount: 177,
+            //     subtitle1: 'Hostelfly Fira – Bed in 8-person mixed dormit…',
+            //     subtitle2: 'Business host',
+            //     dateRange: '1–6 Aug',
+            //     priceText: '£142 total',
+            //     tags: const ['Pay £0 today', 'Free cancellation'],
+            //     onTap: () {
+            //       // handle tap -> navigate to details page
+            //     },
+            //   ),
+            // ),
+          ],
         ),
+        // ),
       ),
     );
   }
