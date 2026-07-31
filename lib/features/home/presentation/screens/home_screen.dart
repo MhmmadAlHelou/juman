@@ -1,6 +1,8 @@
 // import 'package:addstream_flutter/addstream_flutter.dart';
+import 'package:ewan/features/home/data/models/properties_model.dart';
 import 'package:ewan/features/home/presentation/widgets/card_item.dart';
 import 'package:ewan/features/home/presentation/widgets/map.dart';
+import 'package:ewan/features/home/presentation/widgets/property_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:ewan/core/core.dart';
 // import 'package:ewan/features/orders/bloc/orders_bloc.dart';
@@ -36,6 +38,44 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> with HomeHelper {
   late HomeBloc _homeBloc;
+
+  final Properties dummyProperty = Properties(
+    id: 'dummy_001',
+    propertyCategory: PropertyCategory.apartments,
+    placeType: PlaceType.entirePlace,
+    title: "Casanova Elegance, with balcony and 4 bedrooms",
+    description:
+        "A spacious and bright apartment located in the heart of Barcelona, ​​with space for up to 9 people. "
+        "It contains 4 fully equipped bedrooms, a spacious living room, and a modern kitchen. "
+        "Close to transportation, restaurants and major tourist attractions.",
+    area: 'Barcelona, ​​Spain',
+    streetAddress: 'Carrer de Casanova, 12',
+    mapLocation: const {'lat': 41.3874, 'lng': 2.1686},
+    propertySize: 120,
+    maximumGuests: 9,
+    bedrooms: 4,
+    bathrooms: 2,
+    amenities: const [
+      Amenity.wifi,
+      Amenity.kitchen,
+      Amenity.tv,
+      Amenity.elevator,
+      Amenity.washingMachine,
+      Amenity.airConditioning,
+      Amenity.freeParking,
+    ],
+    images: const [
+      'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80',
+      'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=800&q=80',
+      'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=800&q=80',
+      'https://images.unsplash.com/photo-1595576508898-0ad5c879a061?w=800&q=80',
+      'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=800&q=80',
+    ],
+    minimumStay: 2,
+    maximumStay: 30,
+    price: 251,
+    document: const [],
+  );
 
   @override
   void initState() {
@@ -80,7 +120,6 @@ class _HomeViewState extends State<HomeView> with HomeHelper {
             // const HomeHeaderWidget(),
             // const SizedBox(height: 16),
             Positioned.fill(child: const MyMap()),
-            // const SizedBox(height: 32),
             DraggableScrollableSheet(
               initialChildSize: 0.5,
               minChildSize: 0.09,
@@ -109,7 +148,6 @@ class _HomeViewState extends State<HomeView> with HomeHelper {
                         ),
                       ),
                       Expanded(
-                        // padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: ListView.builder(
                           controller: scrollController,
                           itemCount: 5,
@@ -117,27 +155,16 @@ class _HomeViewState extends State<HomeView> with HomeHelper {
                             return Padding(
                               padding: const EdgeInsets.all(16),
                               child: ListingCard(
-                                imageUrls: const [
-                                  'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80',
-                                  'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=800&q=80',
-                                  'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=800&q=80',
-                                  'https://images.unsplash.com/photo-1595576508898-0ad5c879a061?w=800&q=80',
-                                  'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=800&q=80',
-                                ],
-                                title: "Shared room in L'Hospitalet de …",
-                                rating: 4.67,
-                                reviewCount: 177,
-                                subtitle1:
-                                    'Hostelfly Fira – Bed in 8-person mixed dormit…',
-                                subtitle2: 'Business host',
-                                dateRange: '1–6 Aug',
-                                priceText: '£142 total',
-                                tags: const [
-                                  'Pay £0 today',
-                                  'Free cancellation',
-                                ],
+                                property: dummyProperty,
                                 onTap: () {
-                                  // handle tap -> navigate to details page
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => PropertyDetailPage(
+                                        property: dummyProperty,
+                                      ),
+                                    ),
+                                  );
                                 },
                               ),
                             );
@@ -149,29 +176,6 @@ class _HomeViewState extends State<HomeView> with HomeHelper {
                 );
               },
             ),
-            // Padding(
-            //   padding: const EdgeInsets.all(16),
-            //   child: ListingCard(
-            //     imageUrls: const [
-            //       'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80',
-            //       'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=800&q=80',
-            //       'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=800&q=80',
-            //       'https://images.unsplash.com/photo-1595576508898-0ad5c879a061?w=800&q=80',
-            //       'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=800&q=80',
-            //     ],
-            //     title: "Shared room in L'Hospitalet de …",
-            //     rating: 4.67,
-            //     reviewCount: 177,
-            //     subtitle1: 'Hostelfly Fira – Bed in 8-person mixed dormit…',
-            //     subtitle2: 'Business host',
-            //     dateRange: '1–6 Aug',
-            //     priceText: '£142 total',
-            //     tags: const ['Pay £0 today', 'Free cancellation'],
-            //     onTap: () {
-            //       // handle tap -> navigate to details page
-            //     },
-            //   ),
-            // ),
           ],
         ),
         // ),

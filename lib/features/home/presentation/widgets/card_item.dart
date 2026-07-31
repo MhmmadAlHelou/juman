@@ -1,3 +1,4 @@
+import 'package:ewan/features/home/data/models/properties_model.dart';
 import 'package:flutter/material.dart';
 
 /// -----------------------------------------------------------------------
@@ -6,29 +7,31 @@ import 'package:flutter/material.dart';
 /// search-result cards.
 /// -----------------------------------------------------------------------
 class ListingCard extends StatefulWidget {
-  final List<String> imageUrls;
-  final String title;
-  final double rating;
-  final int reviewCount;
-  final String
-  subtitle1; // e.g. "Hostelfly Fira – Bed in 8-person mixed dorm..."
-  final String subtitle2; // e.g. "Business host"
-  final String dateRange; // e.g. "1–6 Aug"
-  final String priceText; // e.g. "£142 total"
-  final List<String> tags; // e.g. ["Pay £0 today", "Free cancellation"]
+  final Properties property;
+  // final List<String> imageUrls;
+  // final String title;
+  // final double rating;
+  // final int reviewCount;
+  // final String
+  // subtitle1; // e.g. "Hostelfly Fira – Bed in 8-person mixed dorm..."
+  // final String subtitle2; // e.g. "Business host"
+  // final String dateRange; // e.g. "1–6 Aug"
+  // final String priceText; // e.g. "£142 total"
+  // final List<String> tags; // e.g. ["Pay £0 today", "Free cancellation"]
   final VoidCallback? onTap;
 
   const ListingCard({
     super.key,
-    required this.imageUrls,
-    required this.title,
-    required this.rating,
-    required this.reviewCount,
-    required this.subtitle1,
-    required this.subtitle2,
-    required this.dateRange,
-    required this.priceText,
-    this.tags = const [],
+    required this.property,
+    // required this.imageUrls,
+    // required this.title,
+    // required this.rating,
+    // required this.reviewCount,
+    // required this.subtitle1,
+    // required this.subtitle2,
+    // required this.dateRange,
+    // required this.priceText,
+    // this.tags = const [],
     this.onTap,
   });
 
@@ -48,7 +51,7 @@ class _ListingCardState extends State<ListingCard> {
   }
 
   void _goTo(int page) {
-    if (page < 0 || page >= widget.imageUrls.length) return;
+    if (page < 0 || page >= widget.property.images.length) return;
     _pageController.animateToPage(
       page,
       duration: const Duration(milliseconds: 300),
@@ -81,11 +84,11 @@ class _ListingCardState extends State<ListingCard> {
             // --- Swipeable images ---
             PageView.builder(
               controller: _pageController,
-              itemCount: widget.imageUrls.length,
+              itemCount: widget.property.images.length,
               onPageChanged: (index) => setState(() => _currentPage = index),
               itemBuilder: (context, index) {
                 return Image.network(
-                  widget.imageUrls[index],
+                  widget.property.images[index],
                   fit: BoxFit.cover,
                   loadingBuilder: (context, child, progress) {
                     if (progress == null) return child;
@@ -124,7 +127,7 @@ class _ListingCardState extends State<ListingCard> {
               right: 0,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(widget.imageUrls.length, (index) {
+                children: List.generate(widget.property.images.length, (index) {
                   final active = index == _currentPage;
                   return AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
@@ -143,7 +146,7 @@ class _ListingCardState extends State<ListingCard> {
             ),
 
             // --- Optional left/right arrows (nice on tablet / web / desktop) ---
-            if (widget.imageUrls.length > 1) ...[
+            if (widget.property.images.length > 1) ...[
               Positioned(
                 left: 8,
                 top: 0,
@@ -187,7 +190,7 @@ class _ListingCardState extends State<ListingCard> {
             children: [
               Expanded(
                 child: Text(
-                  widget.title,
+                  widget.property.title,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
@@ -198,39 +201,40 @@ class _ListingCardState extends State<ListingCard> {
                 ),
               ),
               const SizedBox(width: 8),
-              Row(
-                children: [
-                  const Icon(Icons.star, size: 13, color: Color(0xFF222222)),
-                  const SizedBox(width: 4),
-                  Text(
-                    '${widget.rating.toStringAsFixed(2)} (${widget.reviewCount})',
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: Color(0xFF222222),
-                    ),
-                  ),
-                ],
-              ),
+              // Row(
+              //   children: [
+              //     const Icon(Icons.star, size: 13, color: Color(0xFF222222)),
+              //     const SizedBox(width: 4),
+              //     Text(
+              //       '${widget.rating.toStringAsFixed(2)} (${widget.reviewCount})',
+              //       style: const TextStyle(
+              //         fontSize: 14,
+              //         color: Color(0xFF222222),
+              //       ),
+              //     ),
+              //   ],
+              // ),
             ],
           ),
           const SizedBox(height: 2),
           Text(
-            widget.subtitle1,
+            widget.property.propertyCategory.name,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
           ),
           Text(
-            widget.subtitle2,
+            widget.property.placeType.name,
             style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
           ),
           Text(
-            widget.dateRange,
+            widget.property.description,
             style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
           ),
+
           const SizedBox(height: 6),
           Text(
-            widget.priceText,
+            '${widget.property.price.toStringAsFixed(2)} SYP',
             style: const TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.w600,
@@ -238,14 +242,14 @@ class _ListingCardState extends State<ListingCard> {
               decoration: TextDecoration.underline,
             ),
           ),
-          if (widget.tags.isNotEmpty) ...[
+          if (widget.property.amenities.isNotEmpty) ...[
             const SizedBox(height: 8),
             Wrap(
               spacing: 6,
               runSpacing: 6,
-              children: widget.tags
+              children: widget.property.amenities
                   .map(
-                    (tag) => Container(
+                    (amenity) => Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 9,
                         vertical: 5,
@@ -255,7 +259,7 @@ class _ListingCardState extends State<ListingCard> {
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(
-                        tag,
+                        amenity.name,
                         style: const TextStyle(
                           fontSize: 12,
                           color: Color.fromARGB(255, 9, 98, 18),
@@ -356,45 +360,6 @@ class _ArrowButton extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(4),
           child: Icon(icon, size: 20, color: Colors.black87),
-        ),
-      ),
-    );
-  }
-}
-
-// -----------------------------------------------------------------------
-// Example usage
-// -----------------------------------------------------------------------
-class ListingCardDemo extends StatelessWidget {
-  const ListingCardDemo({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: ListingCard(
-            imageUrls: const [
-              'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80',
-              'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=800&q=80',
-              'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=800&q=80',
-              'https://images.unsplash.com/photo-1595576508898-0ad5c879a061?w=800&q=80',
-              'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=800&q=80',
-            ],
-            title: "Shared room in L'Hospitalet de …",
-            rating: 4.67,
-            reviewCount: 177,
-            subtitle1: 'Hostelfly Fira – Bed in 8-person mixed dormit…',
-            subtitle2: 'Business host',
-            dateRange: '1–6 Aug',
-            priceText: '£142 total',
-            tags: const ['Pay £0 today', 'Free cancellation'],
-            onTap: () {
-              // handle tap -> navigate to details page
-            },
-          ),
         ),
       ),
     );
