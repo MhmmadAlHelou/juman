@@ -2,6 +2,8 @@
   "welcome_msg": "Welcome to our App",
   "change_lang": "Change Language",
 
+  "currency": "SYP",
+
     
   "noInternetConnectionError": "No internet connection, please try again",
   "genericError": "Something went wrong, please try again",

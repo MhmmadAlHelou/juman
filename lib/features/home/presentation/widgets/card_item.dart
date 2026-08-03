@@ -1,45 +1,23 @@
 import 'package:ewan/features/home/data/models/properties_model.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../core/core.dart';
+
 /// -----------------------------------------------------------------------
-/// ListingCard
-/// A single "listing" card (image carousel + info) similar to Airbnb's
-/// search-result cards.
+/// PropertyCard
+/// A single "property" card (image carousel + info)
 /// -----------------------------------------------------------------------
-class ListingCard extends StatefulWidget {
-  final Properties property;
-  // final List<String> imageUrls;
-  // final String title;
-  // final double rating;
-  // final int reviewCount;
-  // final String
-  // subtitle1; // e.g. "Hostelfly Fira – Bed in 8-person mixed dorm..."
-  // final String subtitle2; // e.g. "Business host"
-  // final String dateRange; // e.g. "1–6 Aug"
-  // final String priceText; // e.g. "£142 total"
-  // final List<String> tags; // e.g. ["Pay £0 today", "Free cancellation"]
+class PropertyCard extends StatefulWidget {
+  final PropertiesModel property;
   final VoidCallback? onTap;
 
-  const ListingCard({
-    super.key,
-    required this.property,
-    // required this.imageUrls,
-    // required this.title,
-    // required this.rating,
-    // required this.reviewCount,
-    // required this.subtitle1,
-    // required this.subtitle2,
-    // required this.dateRange,
-    // required this.priceText,
-    // this.tags = const [],
-    this.onTap,
-  });
+  const PropertyCard({super.key, required this.property, this.onTap});
 
   @override
-  State<ListingCard> createState() => _ListingCardState();
+  State<PropertyCard> createState() => _PropertyCardState();
 }
 
-class _ListingCardState extends State<ListingCard> {
+class _PropertyCardState extends State<PropertyCard> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
   bool _isFavorite = false;
@@ -93,15 +71,15 @@ class _ListingCardState extends State<ListingCard> {
                   loadingBuilder: (context, child, progress) {
                     if (progress == null) return child;
                     return Container(
-                      color: Colors.grey.shade200,
+                      color: Palette.semiGray,
                       child: const Center(
                         child: CircularProgressIndicator(strokeWidth: 2),
                       ),
                     );
                   },
                   errorBuilder: (context, error, stackTrace) => Container(
-                    color: Colors.grey.shade300,
-                    child: const Icon(Icons.broken_image, color: Colors.grey),
+                    color: Palette.semiGray,
+                    child: const Icon(Icons.broken_image, color: Palette.gray),
                   ),
                 );
               },
@@ -137,8 +115,8 @@ class _ListingCardState extends State<ListingCard> {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: active
-                          ? Colors.white
-                          : Colors.white.withValues(alpha: 0.55),
+                          ? Palette.white
+                          : Palette.white.withValues(alpha: 0.55),
                     ),
                   );
                 }),
@@ -196,7 +174,7 @@ class _ListingCardState extends State<ListingCard> {
                   style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF222222),
+                    color: Palette.text,
                   ),
                 ),
               ),
@@ -221,24 +199,24 @@ class _ListingCardState extends State<ListingCard> {
             widget.property.propertyCategory.name,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
+            style: TextStyle(fontSize: 14, color: Palette.semiGray),
           ),
           Text(
             widget.property.placeType.name,
-            style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
+            style: TextStyle(fontSize: 14, color: Palette.semiGray),
           ),
           Text(
             widget.property.description,
-            style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
+            style: TextStyle(fontSize: 14, color: Palette.semiGray),
           ),
 
           const SizedBox(height: 6),
           Text(
             '${widget.property.price.toStringAsFixed(2)} SYP',
-            style: const TextStyle(
-              fontSize: 15,
+            style: TextStyle(
+              fontSize: FontSize.smallTitle,
               fontWeight: FontWeight.w600,
-              color: Color(0xFF222222),
+              color: Palette.text,
               decoration: TextDecoration.underline,
             ),
           ),
@@ -255,14 +233,14 @@ class _ListingCardState extends State<ListingCard> {
                         vertical: 5,
                       ),
                       decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 174, 235, 152),
+                        color: Palette.lightPrimary.withValues(alpha: 0.3),
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(
                         amenity.name,
                         style: const TextStyle(
                           fontSize: 12,
-                          color: Color.fromARGB(255, 9, 98, 18),
+                          color: Palette.primary,
                         ),
                       ),
                     ),
@@ -292,8 +270,8 @@ class _HeartButton extends StatelessWidget {
       child: Icon(
         isFavorite ? Icons.favorite : Icons.favorite_border,
         size: 26,
-        color: isFavorite ? const Color(0xFFFF385C) : Colors.white,
-        shadows: const [Shadow(color: Colors.black45, blurRadius: 4)],
+        color: isFavorite ? Palette.red : Palette.white,
+        shadows: const [Shadow(color: Palette.black, blurRadius: 4)],
       ),
     );
   }
@@ -309,10 +287,10 @@ class _MapBadge extends StatelessWidget {
       width: 42,
       height: 42,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Palette.white,
         borderRadius: BorderRadius.circular(8),
         boxShadow: const [
-          BoxShadow(color: Colors.black26, blurRadius: 4, offset: Offset(0, 1)),
+          BoxShadow(color: Palette.black, blurRadius: 4, offset: Offset(0, 1)),
         ],
       ),
       child: ClipRRect(
@@ -331,7 +309,7 @@ class _MapBadge extends StatelessWidget {
               ],
             ),
             const Center(
-              child: Icon(Icons.location_on, size: 16, color: Colors.black87),
+              child: Icon(Icons.location_on, size: 16, color: Palette.black),
             ),
           ],
         ),
@@ -352,14 +330,14 @@ class _ArrowButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.white.withValues(alpha: 0.9),
+      color: Palette.white.withValues(alpha: 0.9),
       shape: const CircleBorder(),
       child: InkWell(
         customBorder: const CircleBorder(),
         onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.all(4),
-          child: Icon(icon, size: 20, color: Colors.black87),
+          child: Icon(icon, size: 20, color: Palette.black),
         ),
       ),
     );

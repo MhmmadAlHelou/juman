@@ -1,11 +1,10 @@
 // import 'package:addstream_flutter/addstream_flutter.dart';
-import 'package:ewan/features/home/data/models/properties_model.dart';
+import 'package:ewan/features/home/bloc/property/property_cubit.dart';
 import 'package:ewan/features/home/presentation/widgets/card_item.dart';
 import 'package:ewan/features/home/presentation/widgets/map.dart';
 import 'package:ewan/features/home/presentation/widgets/property_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:ewan/core/core.dart';
-// import 'package:ewan/features/orders/bloc/orders_bloc.dart';
 
 import '../../home.dart';
 
@@ -20,9 +19,9 @@ class HomeScreen extends StatelessWidget {
         BlocProvider<HomeBloc>(
           create: (BuildContext context) => getIt<HomeBloc>(),
         ),
-        // BlocProvider<OrdersBloc>(
-        //   create: (BuildContext context) => getIt<OrdersBloc>(),
-        // ),
+        BlocProvider<PropertyCubit>(
+          create: (BuildContext context) => getIt<PropertyCubit>(),
+        ),
       ],
       child: const HomeView(),
     );
@@ -38,8 +37,9 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> with HomeHelper {
   late HomeBloc _homeBloc;
+  late PropertyCubit propertyCubit;
 
-  final Properties dummyProperty = Properties(
+  final PropertiesModel dummyProperty = PropertiesModel(
     id: 'dummy_001',
     propertyCategory: PropertyCategory.apartments,
     placeType: PlaceType.entirePlace,
@@ -86,7 +86,8 @@ class _HomeViewState extends State<HomeView> with HomeHelper {
     // context.read<OrdersBloc>().add(
     //   const OrdersEvent.getAllOrder(page: 1, serviceId: null),
     // );
-
+    propertyCubit = context.read<PropertyCubit>();
+    context.read<PropertyCubit>().loadProperties();
     super.initState();
   }
 
@@ -100,85 +101,85 @@ class _HomeViewState extends State<HomeView> with HomeHelper {
         0,
         (MediaQuery.of(context).padding).bottom,
       ),
-      child: RefreshIndicator(
-        onRefresh: () async {
-          // _homeBloc.add(const HomeEvent.getAds());
-          // _homeBloc.add(const HomeEvent.getHomeAd());
-          _homeBloc.add(
-            const HomeEvent.filterServices(hasActiveOrderOnly: true),
-          );
-          // context.read<OrdersBloc>().add(
-          //   const OrdersEvent.getAllOrder(page: 1, serviceId: null),
-          // );
-          await Future<void>.delayed(const Duration(milliseconds: 300));
-        },
-        // child: SingleChildScrollView(
-        //   physics: const AlwaysScrollableScrollPhysics(),
-        child: Stack(
-          // crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            // const HomeHeaderWidget(),
-            // const SizedBox(height: 16),
-            Positioned.fill(child: const MyMap()),
-            DraggableScrollableSheet(
-              initialChildSize: 0.5,
-              minChildSize: 0.09,
-              maxChildSize: 1.0,
-              snap: true,
-              snapSizes: const [0.09, 0.5, 1.0],
-              builder: (context, scrollController) {
-                return Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(20),
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Container(
-                          width: 40,
-                          height: 5,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300],
-                            borderRadius: BorderRadius.circular(10),
+      child: BlocBuilder<PropertyCubit, PropertyState>(
+        builder: (context, state) {
+          return RefreshIndicator(
+            onRefresh: () async {
+              _homeBloc.add(
+                const HomeEvent.filterServices(hasActiveOrderOnly: true),
+              );
+              // context.read<OrdersBloc>().add(
+              //   const OrdersEvent.getAllOrder(page: 1, serviceId: null),
+              // );
+              await Future<void>.delayed(const Duration(milliseconds: 300));
+            },
+            child: Stack(
+              children: <Widget>[
+                // const HomeHeaderWidget(),
+                // const SizedBox(height: 16),
+                Positioned.fill(child: const MyMap()),
+
+                if (state.selectedpropertyId == null)
+                  DraggableScrollableSheet(
+                    initialChildSize: 0.5,
+                    minChildSize: 0.09,
+                    maxChildSize: 1.0,
+                    snap: true,
+                    snapSizes: const [0.09, 0.5, 1.0],
+                    builder: (context, scrollController) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(20),
                           ),
                         ),
-                      ),
-                      Expanded(
-                        child: ListView.builder(
-                          controller: scrollController,
-                          itemCount: 5,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.all(16),
-                              child: ListingCard(
-                                property: dummyProperty,
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => PropertyDetailPage(
-                                        property: dummyProperty,
-                                      ),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: Container(
+                                width: 40,
+                                height: 5,
+                                decoration: BoxDecoration(
+                                  color: Palette.semiGray,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: ListView.builder(
+                                controller: scrollController,
+                                itemCount: 5,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(16),
+                                    child: PropertyCard(
+                                      property: dummyProperty,
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => PropertyDetailPage(
+                                              property: dummyProperty,
+                                            ),
+                                          ),
+                                        );
+                                      },
                                     ),
                                   );
                                 },
                               ),
-                            );
-                          },
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
+                      );
+                    },
                   ),
-                );
-              },
+              ],
             ),
-          ],
-        ),
-        // ),
+          );
+        },
       ),
     );
   }

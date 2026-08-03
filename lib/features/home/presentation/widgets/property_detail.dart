@@ -2,130 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:ewan/features/home/data/models/properties_model.dart';
 
-// extension PropertyCategoryLabel on PropertyCategory {
-//   String get label {
-//     switch (this) {
-//       case PropertyCategory.villas:
-//         return 'Villa';
-//       case PropertyCategory.chalets:
-//         return 'Chalets';
-//       case PropertyCategory.country:
-//         return 'Country';
-//       case PropertyCategory.houses:
-//         return 'House';
-//       case PropertyCategory.furnished:
-//         return 'Furnished';
-//       case PropertyCategory.apartments:
-//         return 'Apartments';
-//       case PropertyCategory.farmStaysAndRetreats:
-//         return 'Farm Stays And Retreats';
-//     }
-//   }
-// }
-
-// extension PlaceTypeLabel on PlaceType {
-//   String get label {
-//     switch (this) {
-//       case PlaceType.entirePlace:
-//         return 'Entire Place';
-//       case PlaceType.privateRoom:
-//         return 'Private Room';
-//       case PlaceType.sharedRoom:
-//         return 'Shared Room';
-//     }
-//   }
-// }
-
-// extension AmenityLabel on Amenity {
-//   String get label {
-//     switch (this) {
-//       case Amenity.wifi:
-//         return 'Wifi';
-//       case Amenity.airConditioning:
-//         return 'Air Conditioning';
-//       case Amenity.heating:
-//         return 'Heating';
-//       case Amenity.kitchen:
-//         return 'Kitchen';
-//       case Amenity.refrigerator:
-//         return 'Refrigerator';
-//       case Amenity.washingMachine:
-//         return 'Washing Machine';
-//       case Amenity.tv:
-//         return 'TV';
-//       case Amenity.freeParking:
-//         return 'Free Parking';
-//       case Amenity.swimmingPool:
-//         return 'Swimming Pool';
-//       case Amenity.balcony:
-//         return 'Balcony';
-//       case Amenity.garden:
-//         return 'Garden';
-//       case Amenity.elevator:
-//         return 'Elevator';
-//       case Amenity.workspaceDesk:
-//         return 'Workspace Desk';
-//       case Amenity.hotWater:
-//         return 'Hot Water';
-//       case Amenity.internet:
-//         return 'Internet';
-//       case Amenity.gym:
-//         return 'Gym';
-//       case Amenity.bbqArea:
-//         return 'BBQ Area';
-//       case Amenity.petFriendly:
-//         return 'Pet Friendly';
-//       case Amenity.exteriorSecurityCamera:
-//         return 'Exterior Security Camera';
-//     }
-//   }
-
-//   IconData get icon {
-//     switch (this) {
-//       case Amenity.wifi:
-//         return Icons.wifi;
-//       case Amenity.airConditioning:
-//         return Icons.ac_unit;
-//       case Amenity.heating:
-//         return Icons.thermostat;
-//       case Amenity.kitchen:
-//         return Icons.kitchen;
-//       case Amenity.refrigerator:
-//         return Icons.kitchen_outlined;
-//       case Amenity.washingMachine:
-//         return Icons.local_laundry_service;
-//       case Amenity.tv:
-//         return Icons.tv;
-//       case Amenity.freeParking:
-//         return Icons.local_parking;
-//       case Amenity.swimmingPool:
-//         return Icons.pool;
-//       case Amenity.balcony:
-//         return Icons.balcony;
-//       case Amenity.garden:
-//         return Icons.yard;
-//       case Amenity.elevator:
-//         return Icons.elevator;
-//       case Amenity.workspaceDesk:
-//         return Icons.desk;
-//       case Amenity.hotWater:
-//         return Icons.hot_tub;
-//       case Amenity.internet:
-//         return Icons.router;
-//       case Amenity.gym:
-//         return Icons.fitness_center;
-//       case Amenity.bbqArea:
-//         return Icons.outdoor_grill;
-//       case Amenity.petFriendly:
-//         return Icons.pets;
-//       case Amenity.exteriorSecurityCamera:
-//         return Icons.videocam;
-//     }
-//   }
-// }
+import '../../../../core/core.dart';
 
 class PropertyDetailPage extends StatefulWidget {
-  final Properties property;
+  final PropertiesModel property;
 
   const PropertyDetailPage({super.key, required this.property});
 
@@ -169,7 +49,7 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
           SliverAppBar(
             pinned: false,
             expandedHeight: 320,
-            backgroundColor: Colors.white,
+            backgroundColor: Palette.white,
             leading: Padding(
               padding: const EdgeInsets.all(8),
               child: _RoundIconButton(
@@ -189,7 +69,7 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                 padding: const EdgeInsets.all(8),
                 child: _RoundIconButton(
                   icon: _isFavorite ? Icons.favorite : Icons.favorite_border,
-                  iconColor: _isFavorite ? Colors.red : Colors.black,
+                  iconColor: _isFavorite ? Palette.red : Palette.black,
                   onTap: () => setState(() => _isFavorite = !_isFavorite),
                 ),
               ),
@@ -226,8 +106,8 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: _currentImage == i
-                                    ? Colors.white
-                                    : Colors.white54,
+                                    ? Palette.white
+                                    : Palette.semiGray,
                               ),
                             );
                           }),
@@ -242,13 +122,13 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                           vertical: 3,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.black54,
+                          color: Palette.black.withValues(alpha: 0.54),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Text(
                           '${_currentImage + 1} / ${p.images.length}',
                           style: const TextStyle(
-                            color: Colors.white,
+                            color: Palette.white,
                             fontSize: 12,
                           ),
                         ),
@@ -265,7 +145,7 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
             child: Container(
               padding: const EdgeInsets.fromLTRB(16, 32, 16, 100),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Palette.white,
                 borderRadius: const BorderRadius.vertical(
                   top: Radius.circular(20),
                 ),
@@ -283,13 +163,13 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                   const SizedBox(height: 6),
                   Text(
                     '${p.placeType.label} in ${p.propertyCategory.label}',
-                    style: TextStyle(fontSize: 15, color: Colors.grey[700]),
+                    style: TextStyle(fontSize: 15, color: Palette.darkGray),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     '${p.maximumGuests} guests · ${p.bedrooms} bedrooms · ${p.bathrooms} bathrooms'
                     '${p.propertySize != null ? ' · ${p.propertySize!.toStringAsFixed(0)} m²' : ''}',
-                    style: TextStyle(fontSize: 15, color: Colors.grey[700]),
+                    style: TextStyle(fontSize: 15, color: Palette.darkGray),
                   ),
                   const Divider(height: 32),
 
@@ -333,7 +213,7 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                   const SizedBox(height: 4),
                   Text(
                     '${p.area}${p.streetAddress.isNotEmpty ? '، ${p.streetAddress}' : ''}',
-                    style: TextStyle(fontSize: 15, color: Colors.grey[700]),
+                    style: TextStyle(fontSize: 15, color: Palette.darkGray),
                   ),
                   const SizedBox(height: 12),
                   if (_lat != null && _lng != null)
@@ -390,10 +270,10 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Palette.white,
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.08),
+                color: Palette.black.withValues(alpha: 0.08),
                 blurRadius: 8,
                 offset: const Offset(0, -2),
               ),
@@ -404,7 +284,7 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
               Expanded(
                 child: RichText(
                   text: TextSpan(
-                    style: const TextStyle(color: Colors.black, fontSize: 16),
+                    style: const TextStyle(color: Palette.black, fontSize: 16),
                     children: [
                       TextSpan(
                         text: '${p.price.toStringAsFixed(2)} ',
@@ -423,7 +303,7 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                   // TODO: The logic of booking or contacting the owner
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFE00B41),
+                  backgroundColor: Palette.red,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 28,
                     vertical: 14,
@@ -434,7 +314,7 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                 ),
                 child: const Text(
                   'Book Now',
-                  style: TextStyle(color: Colors.white, fontSize: 16),
+                  style: TextStyle(color: Palette.white, fontSize: 16),
                 ),
               ),
             ],
@@ -454,7 +334,7 @@ class _RoundIconButton extends StatelessWidget {
   const _RoundIconButton({
     required this.icon,
     required this.onTap,
-    this.iconColor = Colors.black,
+    this.iconColor = Palette.black,
   });
 
   @override
@@ -465,7 +345,7 @@ class _RoundIconButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(8),
         decoration: const BoxDecoration(
-          color: Colors.white,
+          color: Palette.white,
           shape: BoxShape.circle,
         ),
         child: Icon(icon, size: 20, color: iconColor),

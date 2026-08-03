@@ -1,6 +1,8 @@
 {
   "welcome_msg": "مرحباً بك في تطبيقنا",
   "change_lang": "تغيير اللغة",
+  
+  "currency": "ليرة سورية",
 
   
   "noInternetConnectionError": "لا يوجد اتصال بالإنترنت، يرجى المحاولة مرة أخرى",

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 enum PropertyCategory {
   villas,
@@ -183,7 +184,7 @@ extension AmenityExtension on Amenity {
   }
 }
 
-class Properties {
+class PropertiesModel {
   final String? id;
   final PropertyCategory propertyCategory;
   final PlaceType placeType;
@@ -203,7 +204,7 @@ class Properties {
   final double price;
   final List<String> document;
 
-  const Properties({
+  const PropertiesModel({
     this.id,
     required this.propertyCategory,
     required this.placeType,
@@ -224,8 +225,8 @@ class Properties {
     required this.document,
   });
 
-  factory Properties.fromJson(Map<String, dynamic> json, {String? id}) {
-    return Properties(
+  factory PropertiesModel.fromJson(Map<String, dynamic> json, {String? id}) {
+    return PropertiesModel(
       id: id,
       propertyCategory: PropertyCategoryExtension.fromString(
         json['propertyCategory'] ?? '',
@@ -273,7 +274,7 @@ class Properties {
     };
   }
 
-  Properties copyWith({
+  PropertiesModel copyWith({
     String? id,
     PropertyCategory? propertyCategory,
     PlaceType? placeType,
@@ -293,7 +294,7 @@ class Properties {
     double? price,
     List<String>? document,
   }) {
-    return Properties(
+    return PropertiesModel(
       id: id ?? this.id,
       propertyCategory: propertyCategory ?? this.propertyCategory,
       placeType: placeType ?? this.placeType,
@@ -314,4 +315,11 @@ class Properties {
       document: document ?? this.document,
     );
   }
+}
+
+extension PropertiesModelLocation on PropertiesModel {
+  double get latitude => (mapLocation['lat'] as num?)?.toDouble() ?? 0.0;
+  double get longitude => (mapLocation['lng'] as num?)?.toDouble() ?? 0.0;
+
+  LatLng get latLng => LatLng(latitude, longitude);
 }

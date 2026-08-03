@@ -13,6 +13,7 @@ class Palette {
   static const Color hint = Color.fromRGBO(148, 163, 184, 1);
   static const Color white = Color.fromRGBO(255, 255, 255, 1);
   static const Color black = Color.fromRGBO(0, 0, 0, 1);
+  static const Color red = Color.fromRGBO(255, 0, 0, 1);
 
   static const Color error = Color.fromRGBO(255, 76, 81, 1);
   static const Color text = Color.fromRGBO(15, 23, 42, 1);

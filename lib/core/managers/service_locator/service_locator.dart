@@ -1,6 +1,8 @@
 import 'package:ewan/features/base/data/base_repository.dart';
 import 'package:ewan/features/favourites/bloc/favourites_bloc.dart';
 import 'package:ewan/features/favourites/data/favourites_repository.dart';
+import 'package:ewan/features/home/bloc/property/property_cubit.dart';
+import 'package:ewan/features/home/data/properties_repository.dart';
 // import 'package:ewan/features/orders/bloc/orders_bloc.dart';/////////////////////
 
 import 'package:ewan/features/profile/profile.dart';
@@ -44,6 +46,8 @@ void repositories() {
   getIt.registerFactory(() => AuthRepository(getIt()));
   // getIt.registerFactory(() => ProfileRepository(getIt()));
   getIt.registerFactory(() => HomeRepository(getIt()));
+  // getIt.registerFactory(() => MockListingsRepository());
+  getIt.registerFactory<PropertiesRepository>(() => MockListingsRepository());
   // getIt.registerFactory(() => NotificationRepository(getIt()));
   // // getIt.registerFactory(() => OrdersRepository(getIt()));--------------------------------
   // getIt.registerFactory(() => FavouritesRepository(getIt()));
@@ -54,9 +58,11 @@ void cubits() {
   getIt.registerFactory(() => AuthenticationBloc(getIt(), getIt(), getIt()));
   // getIt.registerFactory(() => ProfileBloc(getIt(), getIt()));
   // getIt.registerFactory(() => NotificationBloc(getIt()));
-  // Home
 
+  // Home Feature
   getIt.registerFactory(() => HomeBloc(getIt()));
+  // getIt.registerFactory(() => PropertyCubit(getIt()));
+  getIt.registerFactory(() => PropertyCubit(getIt<PropertiesRepository>()));
   // // getIt.registerFactory(() => OrdersBloc(getIt()));/////////////____________//////////////////////////////
   // getIt.registerFactory(() => FavouritesBloc(getIt()));
 }
