@@ -1,8 +1,9 @@
+import 'package:ewan/features/home/presentation/helper/markers/house_marker_generator.dart';
+import 'package:ewan/features/home/presentation/widgets/property_location_map.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:ewan/features/home/data/models/properties_model.dart';
+import 'package:ewan/features/home/data/models/models.dart';
 
-import '../../../../core/core.dart';
+import 'package:ewan/core/core.dart';
 
 class PropertyDetailPage extends StatefulWidget {
   final PropertiesModel property;
@@ -17,6 +18,18 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
   final PageController _pageController = PageController();
   int _currentImage = 0;
   bool _isFavorite = false;
+  BitmapDescriptor? houseMarkerIcon;
+
+  Future<void> _loadMarkerIcon() async {
+    final icon = await HouseMarkerGenerator.generate();
+    setState(() => houseMarkerIcon = icon);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadMarkerIcon();
+  }
 
   @override
   void dispose() {
@@ -87,6 +100,25 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                         return Image.network(
                           p.images[index],
                           fit: BoxFit.cover,
+                          loadingBuilder: (context, child, progress) {
+                            if (progress == null) return child;
+                            return Container(
+                              color: Palette.semiGray,
+                              child: const Center(
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              ),
+                            );
+                          },
+                          errorBuilder: (context, error, stackTrace) =>
+                              Container(
+                                color: Palette.semiGray,
+                                child: const Icon(
+                                  Icons.broken_image,
+                                  color: Palette.gray,
+                                ),
+                              ),
                         );
                       },
                     ),
@@ -167,15 +199,15 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    '${p.maximumGuests} guests · ${p.bedrooms} bedrooms · ${p.bathrooms} bathrooms'
-                    '${p.propertySize != null ? ' · ${p.propertySize!.toStringAsFixed(0)} m²' : ''}',
+                    '${p.maximumGuests} ${'guests'.tr()} · ${p.bedrooms} ${'bedrooms'.tr()} · ${p.bathrooms} ${'bathrooms'.tr()}'
+                    '${p.propertySize != null ? ' · ${p.propertySize!.toStringAsFixed(0)} ${'m'.tr()}' : ''}',
                     style: TextStyle(fontSize: 15, color: Palette.darkGray),
                   ),
                   const Divider(height: 32),
 
                   // ---------- الوصف ----------
-                  const Text(
-                    'About this place',
+                  Text(
+                    'aboutThisPlace'.tr(),
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
@@ -222,24 +254,39 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                       child: SizedBox(
                         height: 200,
                         child: RepaintBoundary(
-                          child: IgnorePointer(
-                            child: GoogleMap(
-                              initialCameraPosition: CameraPosition(
-                                target: LatLng(_lat!, _lng!),
-                                zoom: 14,
-                              ),
-                              markers: {
-                                Marker(
-                                  markerId: const MarkerId('property'),
-                                  position: LatLng(_lat!, _lng!),
+                          child: GestureDetector(
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => PropertyLocationMapPage(
+                                  property: p,
+                                  houseMarkerIcon: houseMarkerIcon,
                                 ),
-                              },
-                              zoomControlsEnabled: false,
-                              myLocationButtonEnabled: false,
-                              scrollGesturesEnabled: false,
-                              rotateGesturesEnabled: false,
-                              tiltGesturesEnabled: false,
-                              zoomGesturesEnabled: false,
+                              ),
+                            ),
+                            child: AbsorbPointer(
+                              child: GoogleMap(
+                                initialCameraPosition: CameraPosition(
+                                  target: LatLng(_lat!, _lng!),
+                                  zoom: 14,
+                                ),
+                                markers: {
+                                  Marker(
+                                    markerId: const MarkerId('property'),
+                                    position: LatLng(_lat!, _lng!),
+                                    icon:
+                                        houseMarkerIcon ??
+                                        BitmapDescriptor.defaultMarker,
+                                  ),
+                                },
+                                zoomControlsEnabled: false,
+                                myLocationButtonEnabled: false,
+                                scrollGesturesEnabled: false,
+                                rotateGesturesEnabled: false,
+                                tiltGesturesEnabled: false,
+                                zoomGesturesEnabled: false,
+                                liteModeEnabled: true,
+                              ),
                             ),
                           ),
                         ),

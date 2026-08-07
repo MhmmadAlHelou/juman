@@ -11,7 +11,10 @@ export 'dart:convert';
 export 'package:freezed_annotation/freezed_annotation.dart';
 export 'package:shared_preferences/shared_preferences.dart';
 
-export 'package:ewan/generated/keys.g.dart';
+export 'package:ewan/generated/locale_keys.g.dart';
+// export 'package:ewan/generated/keys.g.dart';
+
+export 'package:google_maps_flutter/google_maps_flutter.dart';
 
 export 'dart:developer';
 export 'dart:typed_data';

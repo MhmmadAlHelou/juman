@@ -1,11 +1,9 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:ewan/core/core.dart';
-import 'package:ewan/features/home/bloc/property/marker_bitmap_generator.dart';
+import 'package:ewan/features/home/presentation/helper/markers/marker_bitmap_generator.dart';
 import 'package:ewan/features/home/data/models/properties_model.dart';
 import 'package:ewan/features/home/data/properties_repository.dart';
 // import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 part 'property_state.dart';
 // part 'property_cubit.freezed.dart';

@@ -38,19 +38,21 @@ class MyMap extends StatelessWidget {
 
         return Stack(
           children: [
-            GoogleMap(
-              initialCameraPosition: CameraPosition(
-                target: LatLng(33.5138, 36.2765),
-                zoom: 12,
+            RepaintBoundary(
+              child: GoogleMap(
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(33.5138, 36.2765),
+                  zoom: 12,
+                ),
+                markers: markers,
+                onTap: (LatLng position) {
+                  context.read<PropertyCubit>().clearSelection();
+                },
+                // onMapCreated: (controller) => _mapController = controller,
+                myLocationEnabled: true,
+                myLocationButtonEnabled: false,
+                zoomControlsEnabled: false,
               ),
-              markers: markers,
-              onTap: (LatLng position) {
-                context.read<PropertyCubit>().clearSelection();
-              },
-              // onMapCreated: (controller) => _mapController = controller,
-              myLocationEnabled: true,
-              myLocationButtonEnabled: false,
-              zoomControlsEnabled: false,
             ),
 
             if (selected != null)

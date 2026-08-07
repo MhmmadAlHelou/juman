@@ -3,8 +3,14 @@
   "change_lang": "Change Language",
 
   "currency": "SYP",
+  "map": "Map",
 
-    
+  "m": "m²",
+  "guests": "guests",
+  "bedrooms": "bedrooms",
+  "bathrooms": "bathrooms",
+  "aboutThisPlace": "About this place",
+
   "noInternetConnectionError": "No internet connection, please try again",
   "genericError": "Something went wrong, please try again",
   "unknownError": "Internal server error, please try again",

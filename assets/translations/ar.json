@@ -1,10 +1,16 @@
 {
   "welcome_msg": "مرحباً بك في تطبيقنا",
   "change_lang": "تغيير اللغة",
-  
-  "currency": "ليرة سورية",
 
-  
+  "currency": "ليرة سورية",
+  "map": "الخريطة",
+
+  "m": "م²",
+  "guests": "ضيف",
+  "bedrooms": "غرفة نوم",
+  "bathrooms": "حمام",
+  "aboutThisPlace": "حول هذا المكان",
+
   "noInternetConnectionError": "لا يوجد اتصال بالإنترنت، يرجى المحاولة مرة أخرى",
   "genericError": "حدث خطأ ما، يرجى المحاولة مرة أخرى",
   "unknownError": "خطأ داخلي في الخادم، يرجى المحاولة مرة أخرى",

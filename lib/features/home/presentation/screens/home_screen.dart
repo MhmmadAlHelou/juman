@@ -1,5 +1,6 @@
 // import 'package:addstream_flutter/addstream_flutter.dart';
 import 'package:ewan/features/home/bloc/property/property_cubit.dart';
+import 'package:ewan/features/home/presentation/helper/map_sheet_controller.dart';
 import 'package:ewan/features/home/presentation/widgets/card_item.dart';
 import 'package:ewan/features/home/presentation/widgets/map.dart';
 import 'package:ewan/features/home/presentation/widgets/property_detail.dart';
@@ -35,7 +36,9 @@ class HomeView extends StatefulWidget {
   State<HomeView> createState() => _HomeViewState();
 }
 
-class _HomeViewState extends State<HomeView> with HomeHelper {
+// class _HomeViewState extends State<HomeView> with HomeHelper {
+class _HomeViewState extends State<HomeView>
+    with MapSheetController<HomeView>, HomeHelper {
   late HomeBloc _homeBloc;
   late PropertyCubit propertyCubit;
 
@@ -88,6 +91,10 @@ class _HomeViewState extends State<HomeView> with HomeHelper {
     // );
     propertyCubit = context.read<PropertyCubit>();
     context.read<PropertyCubit>().loadProperties();
+
+    // _sheetController.addListener(_onSheetChanged);
+    sheetController.addListener(onSheetChanged);
+
     super.initState();
   }
 
@@ -121,12 +128,14 @@ class _HomeViewState extends State<HomeView> with HomeHelper {
 
                 if (state.selectedpropertyId == null)
                   DraggableScrollableSheet(
+                    controller: sheetController,
                     initialChildSize: 0.5,
                     minChildSize: 0.09,
                     maxChildSize: 1.0,
                     snap: true,
                     snapSizes: const [0.09, 0.5, 1.0],
                     builder: (context, scrollController) {
+                      innerScrollController = scrollController;
                       return Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -175,6 +184,20 @@ class _HomeViewState extends State<HomeView> with HomeHelper {
                         ),
                       );
                     },
+                  ),
+                if (showMapButton)
+                  Positioned(
+                    bottom: 24,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: FloatingActionButton.extended(
+                        onPressed: () => collapseSheetToMap(),
+                        icon: const Icon(Icons.map),
+                        label: const Text(LocaleKeys.map).tr(),
+                        // label: const Text('map').tr(),
+                      ),
+                    ),
                   ),
               ],
             ),

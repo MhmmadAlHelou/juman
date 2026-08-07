@@ -1,7 +1,6 @@
 import 'dart:ui' as ui;
 import 'package:ewan/core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MarkerBitmapGenerator {
   static Future<BitmapDescriptor> generate({

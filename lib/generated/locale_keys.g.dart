@@ -2,7 +2,16 @@
 
 // ignore_for_file: constant_identifier_names
 
-abstract class LocaleKeys {
+abstract class  LocaleKeys {
+  static const welcome_msg = 'welcome_msg';
+  static const change_lang = 'change_lang';
+  static const currency = 'currency';
+  static const map = 'map';
+  static const m = 'm';
+  static const guests = 'guests';
+  static const bedrooms = 'bedrooms';
+  static const bathrooms = 'bathrooms';
+  static const aboutThisPlace = 'aboutThisPlace';
   static const noInternetConnectionError = 'noInternetConnectionError';
   static const genericError = 'genericError';
   static const unknownError = 'unknownError';
@@ -52,8 +61,7 @@ abstract class LocaleKeys {
   static const insertNewPassword = 'insertNewPassword';
   static const resendInSeconds = 'resendInSeconds';
   static const theCodeHasBeenResent = 'theCodeHasBeenResent';
-  static const thePasswordHasBeenResetSuccessfully =
-      'thePasswordHasBeenResetSuccessfully';
+  static const thePasswordHasBeenResetSuccessfully = 'thePasswordHasBeenResetSuccessfully';
   static const search = 'search';
   static const language = 'language';
   static const termsOfUse = 'termsOfUse';
@@ -61,6 +69,13 @@ abstract class LocaleKeys {
   static const aboutUs = 'aboutUs';
   static const contactUs = 'contactUs';
   static const settings = 'settings';
+  static const checkForUpdate = 'checkForUpdate';
+  static const updateAvailable = 'updateAvailable';
+  static const upToDate = 'upToDate';
+  static const getLatestFromStore = 'getLatestFromStore';
+  static const currentVersion = 'currentVersion';
+  static const latestVersion = 'latestVersion';
+  static const checkUpdateFailed = 'checkUpdateFailed';
   static const myInformation = 'myInformation';
   static const editProfile = 'editProfile';
   static const myServices = 'myServices';
@@ -70,20 +85,18 @@ abstract class LocaleKeys {
   static const logoutMessage = 'logoutMessage';
   static const sendAndDeactivate = 'sendAndDeactivate';
   static const deactivate = 'deactivate';
-  static const letUsKnowWhyYouWantToDeactivate =
-      'letUsKnowWhyYouWantToDeactivate';
+  static const letUsKnowWhyYouWantToDeactivate = 'letUsKnowWhyYouWantToDeactivate';
   static const deleteAccountMessage = 'deleteAccountMessage';
   static const delete = 'delete';
+  static const services = 'services';
   static const topServices = 'topServices';
   static const buildProjectsWithQuality = 'buildProjectsWithQuality';
   static const viewDetails = 'viewDetails';
   static const notifications = 'notifications';
   static const home = 'home';
-  static const services = 'services';
   static const profile = 'profile';
   static const thereIsNoNotification = 'thereIsNoNotification';
-  static const weAreHereToAnswerYourQuestions =
-      'weAreHereToAnswerYourQuestions';
+  static const weAreHereToAnswerYourQuestions = 'weAreHereToAnswerYourQuestions';
   static const send = 'send';
   static const fullName = 'fullName';
   static const message = 'message';
@@ -98,8 +111,7 @@ abstract class LocaleKeys {
   static const changePassword = 'changePassword';
   static const oldPassword = 'oldPassword';
   static const newPassword = 'newPassword';
-  static const yourPasswordHasChangedSuccessfully =
-      'yourPasswordHasChangedSuccessfully';
+  static const yourPasswordHasChangedSuccessfully = 'yourPasswordHasChangedSuccessfully';
   static const passwordComplexityError = 'passwordComplexityError';
   static const categories = 'categories';
   static const city = 'city';
@@ -116,4 +128,42 @@ abstract class LocaleKeys {
   static const viewAll = 'viewAll';
   static const recentProject = 'recentProject';
   static const hiTechie = 'hiTechie';
+  static const filter = 'filter';
+  static const allServices = 'allServices';
+  static const saveToFav = 'saveToFav';
+  static const personalInformation = 'personalInformation';
+  static const accountManagement = 'accountManagement';
+  static const savedItems = 'savedItems';
+  static const mySubmissions = 'mySubmissions';
+  static const supportAndPrivacy = 'supportAndPrivacy';
+  static const appSettings = 'appSettings';
+  static const welcomeGuest = 'welcomeGuest';
+  static const loginToSync = 'loginToSync';
+  static const alreadyHaveAnAccount = 'alreadyHaveAnAccount';
+  static const backToLogin = 'backToLogin';
+  static const continueAsGuest = 'continueAsGuest';
+  static const changeEmailAddress = 'changeEmailAddress';
+  static const welcomeBack = 'welcomeBack';
+  static const welcomeMessage = 'welcomeMessage';
+  static const add = 'add';
+  static const title = 'title';
+  static const selectStartDate = 'selectStartDate';
+  static const selectEndDate = 'selectEndDate';
+  static const selectDate = 'selectDate';
+  static const selectTime = 'selectTime';
+  static const fieldRequired = 'fieldRequired';
+  static const whatWouldYouLikeToAdd = 'whatWouldYouLikeToAdd';
+  static const selectCategory = 'selectCategory';
+  static const all = 'all';
+  static const submitted = 'submitted';
+  static const submittedOn = 'submittedOn';
+  static const submissionStatus = 'submissionStatus';
+  static const yourOrderIsUnderReview = 'yourOrderIsUnderReview';
+  static const editSubmission = 'editSubmission';
+  static const exclusiveContent = 'exclusiveContent';
+  static const exclusiveContentMessage = 'exclusiveContentMessage';
+  static const saved = 'saved';
+  static const noResultsFound = 'noResultsFound';
+  static const emptyListDescription = 'emptyListDescription';
+
 }
