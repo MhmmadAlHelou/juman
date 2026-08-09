@@ -133,6 +133,9 @@ flutter:
     - family: FredokaOne
       fonts:
         - asset: assets/fonts/FredokaOne-Regular.ttf
+    - family: Alexandria
+      fonts:
+        - asset: assets/fonts/Alexandria-Regular.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

@@ -140,7 +140,7 @@ class _LoginViewState extends State<LoginView> {
           ),
           const SizedBox(height: 20),
           submitButton(),
-          const SizedBox(height: 5),
+          const SizedBox(height: 23),
           Center(
             child: QuestionWithActionWidget(
               question: LocaleKeys.doNotHaveAnAccount,
@@ -161,7 +161,7 @@ class _LoginViewState extends State<LoginView> {
                 (LocaleKeys.continueAsGuest).tr(),
                 style: context.titleSmall?.copyWith(
                   color: Palette.hint,
-                  fontSize: 12,
+                  fontSize: FontSize.largeLabel,
                 ),
               ),
             ),
@@ -178,12 +178,13 @@ class _LoginViewState extends State<LoginView> {
         valueListenable: emailController,
         builder: (BuildContext context, String? emailValue, Widget? child) {
           return TextInputWidget(
+            borderColor: Color.fromRGBO(232, 225, 210, 1),
             controller: emailTextEditingController,
             keyboardType: TextInputType.emailAddress,
             textDirection: TextDirection.ltr,
             focusNode: emailFocusNode,
             nextFocusNode: passwordFocusNode,
-            hintText: "email@example.com",
+            hintText: "name@example.com",
             isEmpty: emailValue?.isEmpty ?? false,
             onChanged: (String value) {
               emailController.onTextChange(value);

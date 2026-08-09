@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 class Palette {
   Palette._();
 
-  static const Color primary = Color.fromRGBO(86, 177, 110, 1);
+  static const Color backgroundColor = Color.fromRGBO(251, 249, 241, 1);
+
+  static const Color primary = Color.fromRGBO(107, 24, 21, 1);
   static const Color lightPrimary = Color.fromRGBO(40, 176, 151, 0.5);
-  // static const Color  = Color.fromRGBO(162, 101, 249, 1); //
   static const Color secondary = Color.fromRGBO(82, 82, 132, 1);
   static const Color lightSecondary = Color.fromRGBO(19, 91, 236, 1);
+
+  static const Color fontColor = Color.fromRGBO(86, 66, 64, 1);
 
   static const Color writing = Color.fromRGBO(100, 116, 139, 1);
   static const Color hint = Color.fromRGBO(148, 163, 184, 1);

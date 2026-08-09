@@ -13,11 +13,13 @@ class LabelAuthTextWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         Text(
-          context.tr(text).toUpperCase(),
+          context.tr(text),
           style: context.labelLarge?.copyWith(
+            fontSize: FontSize.smallBody,
             letterSpacing: 0.6,
-            color: Palette.hint,
-            fontWeight: FontWeight.bold,
+            color: Palette.primary,
+            fontWeight: FontWeight.w700,
+            fontFamily: FontFamily.alexandria,
           ),
         ),
         const SizedBox(height: 6),

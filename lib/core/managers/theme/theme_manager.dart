@@ -26,14 +26,14 @@ class ThemeManager {
       color: Palette.primary,
       circularTrackColor: Palette.lightPrimary,
     ),
-    scaffoldBackgroundColor: Palette.white,
+    scaffoldBackgroundColor: Palette.backgroundColor,
 
     cardColor: Palette.gray,
     hintColor: Palette.hint,
     datePickerTheme: const DatePickerThemeData(backgroundColor: Palette.white),
     // shadowColor: Palette.grey,
     shadowColor: const Color.fromRGBO(0, 0, 0, 0.25),
-    fontFamily: FontFamily.plusJakartaSans,
+    fontFamily: FontFamily.alexandria,
 
     dividerColor: Palette.gray,
     dividerTheme: const DividerThemeData(color: Palette.gray, thickness: 1),

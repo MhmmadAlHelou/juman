@@ -24,7 +24,9 @@ class QuestionWithActionWidget extends StatelessWidget {
             TextSpan(
               text: question.tr(),
               style: context.titleSmall?.copyWith(
-                color: Palette.hint,
+                color: Palette.fontColor,
+                fontFamily: FontFamily.alexandria,
+                fontSize: FontSize.smallBody,
                 fontWeight: FontWeight.w400,
               ),
             ),
@@ -33,8 +35,10 @@ class QuestionWithActionWidget extends StatelessWidget {
               text: action.tr(args: actionArgs),
               style: context.bodySmall?.copyWith(
                 decorationColor: context.theme.colorScheme.primary,
-                fontWeight: FontWeight.w900,
+                fontSize: FontSize.smallBody,
+                fontWeight: FontWeight.w700,
                 color: context.theme.colorScheme.primary,
+                fontFamily: FontFamily.alexandria,
               ),
             ),
           ],
