@@ -12,6 +12,14 @@ abstract class  LocaleKeys {
   static const bedrooms = 'bedrooms';
   static const bathrooms = 'bathrooms';
   static const aboutThisPlace = 'aboutThisPlace';
+  static const whatThisPlaceOffers = 'whatThisPlaceOffers';
+  static const whereIsThePlaceLocated = 'whereIsThePlaceLocated';
+  static const accommodationDetails = 'accommodationDetails';
+  static const minimumStay = 'minimumStay';
+  static const maximumStay = 'maximumStay';
+  static const nights = 'nights';
+  static const sypForTheNight = 'sypForTheNight';
+  static const bookNow = 'bookNow';
   static const noInternetConnectionError = 'noInternetConnectionError';
   static const genericError = 'genericError';
   static const unknownError = 'unknownError';

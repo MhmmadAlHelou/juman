@@ -17,7 +17,7 @@ mixin MapSheetController<T extends StatefulWidget> on State<T> {
 
   Future<void> collapseSheetToMap() async {
     if (innerScrollController?.hasClients ?? false) {
-      // _innerScrollController?.jumpTo(0);
+      // innerScrollController?.jumpTo(0);
       await innerScrollController!.animateTo(
         0,
         duration: const Duration(milliseconds: 250),

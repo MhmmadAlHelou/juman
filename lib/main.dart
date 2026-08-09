@@ -6,7 +6,7 @@ import 'generated/codegen_loader.g.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await EasyLocalization.ensureInitialized(); // 1. تهيئة الحزمة
+  await EasyLocalization.ensureInitialized(); // initialize EasyLocalization
 
   await serviceLocator();
 

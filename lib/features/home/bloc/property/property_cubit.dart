@@ -48,7 +48,7 @@ class PropertyCubit extends Cubit<PropertyState> {
         ),
       );
     } catch (e, st) {
-      Logger().e('Failed to load properties: $st', error: e);
+      Logger().e('Failed to load properties: $e', error: st);
       emit(state.copyWith(isLoading: false));
     }
   }

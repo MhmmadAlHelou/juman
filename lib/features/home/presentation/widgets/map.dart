@@ -3,7 +3,6 @@ import 'package:ewan/features/home/bloc/property/property_cubit.dart';
 import 'package:ewan/features/home/presentation/widgets/card_item.dart';
 import 'package:ewan/features/home/presentation/widgets/property_detail.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:ewan/features/home/data/models/properties_model.dart';
 
 class MyMap extends StatelessWidget {

@@ -199,15 +199,15 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    '${p.maximumGuests} ${'guests'.tr()} · ${p.bedrooms} ${'bedrooms'.tr()} · ${p.bathrooms} ${'bathrooms'.tr()}'
-                    '${p.propertySize != null ? ' · ${p.propertySize!.toStringAsFixed(0)} ${'m'.tr()}' : ''}',
+                    '${p.maximumGuests} ${LocaleKeys.guests.tr()} · ${p.bedrooms} ${LocaleKeys.bedrooms.tr()} · ${p.bathrooms} ${LocaleKeys.bathrooms.tr()}'
+                    '${p.propertySize != null ? ' · ${p.propertySize!.toStringAsFixed(0)} ${LocaleKeys.m.tr()}' : ''}',
                     style: TextStyle(fontSize: 15, color: Palette.darkGray),
                   ),
                   const Divider(height: 32),
 
                   // ---------- الوصف ----------
                   Text(
-                    'aboutThisPlace'.tr(),
+                    LocaleKeys.aboutThisPlace.tr(),
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
@@ -218,8 +218,8 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                   const Divider(height: 32),
 
                   // ---------- المرافق ----------
-                  const Text(
-                    'What this place offers',
+                  Text(
+                    LocaleKeys.whatThisPlaceOffers.tr(),
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 12),
@@ -238,8 +238,8 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                   const Divider(height: 32),
 
                   // ---------- الموقع ----------
-                  const Text(
-                    'Where is the place located',
+                  Text(
+                    LocaleKeys.whereIsThePlaceLocated.tr(),
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 4),
@@ -295,14 +295,14 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                   const Divider(height: 32),
 
                   // ---------- تفاصيل الإقامة ----------
-                  const Text(
-                    'Accommodation details',
+                  Text(
+                    LocaleKeys.accommodationDetails.tr(),
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Minimum stay: ${p.minimumStay} nights'
-                    '${p.maximumStay != null && p.maximumStay! > 0 ? ' · Maximum stay: ${p.maximumStay} nights' : ''}',
+                    '${LocaleKeys.minimumStay.tr()} ${p.minimumStay} ${LocaleKeys.nights.tr()}'
+                    '${p.maximumStay != null && p.maximumStay! > 0 ? ' · ${LocaleKeys.maximumStay.tr()} ${p.maximumStay} ${LocaleKeys.nights.tr()}' : ''}',
                     style: const TextStyle(fontSize: 15),
                   ),
                 ],
@@ -340,7 +340,7 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                           fontSize: 18,
                         ),
                       ),
-                      const TextSpan(text: 'SYP/ For the night'),
+                      TextSpan(text: LocaleKeys.sypForTheNight.tr()),
                     ],
                   ),
                 ),
@@ -359,8 +359,8 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                child: const Text(
-                  'Book Now',
+                child: Text(
+                  LocaleKeys.bookNow.tr(),
                   style: TextStyle(color: Palette.white, fontSize: 16),
                 ),
               ),

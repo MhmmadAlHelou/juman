@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 
-import '../../generated/keys.g.dart';
+import '../../generated/locale_keys.g.dart';
 
 final String kNoInternetConnection = LocaleKeys.noInternetConnectionError.tr();
 final String kGenericErrorMessage = LocaleKeys.genericError.tr();
