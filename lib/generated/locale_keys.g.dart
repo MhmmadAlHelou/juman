@@ -19,7 +19,11 @@ abstract class  LocaleKeys {
   static const maximumStay = 'maximumStay';
   static const nights = 'nights';
   static const sypForTheNight = 'sypForTheNight';
-  static const bookNow = 'bookNow';
+  static const reserve = 'reserve';
+  static const showMore = 'showMore';
+  static const showLess = 'showLess';
+  static const showAllAmenities = 'showAllAmenities';
+  static const innn = 'innn';
   static const noInternetConnectionError = 'noInternetConnectionError';
   static const genericError = 'genericError';
   static const unknownError = 'unknownError';
