@@ -15,7 +15,11 @@ part 'property_state.dart';
 class PropertyCubit extends Cubit<PropertyState> {
   final PropertiesRepository _repository;
 
-  PropertyCubit(this._repository) : super(const PropertyState());
+  PropertyCubit({required PropertiesRepository repository})
+    : _repository = repository,
+      super(const PropertyState()) {
+    loadProperties();
+  }
 
   Future<void> loadProperties() async {
     emit(state.copyWith(isLoading: true));

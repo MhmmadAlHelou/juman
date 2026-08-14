@@ -81,6 +81,31 @@ class _ContantPageDetailsState extends State<ContantPageDetails> {
                 fontFamily: FontFamily.alexandria,
               ),
             ),
+
+            const Divider(height: 64, color: Color.fromRGBO(232, 225, 210, 1)),
+
+            // ---------- Accommodation Details ----------
+            Text(
+              LocaleKeys.accommodationDetails.tr(),
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.w700,
+                fontFamily: FontFamily.alexandria,
+                color: Palette.fontColor,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              '${LocaleKeys.minimumStay.tr()} ${p.minimumStay} ${LocaleKeys.nights.tr()}'
+              '${p.maximumStay != null && p.maximumStay! > 0 ? ' · ${LocaleKeys.maximumStay.tr()} ${p.maximumStay} ${LocaleKeys.nights.tr()}' : ''}',
+              style: TextStyle(
+                fontSize: 16,
+                color: Palette.fontColor.withValues(alpha: 0.7),
+                fontWeight: FontWeight.w400,
+                fontFamily: FontFamily.alexandria,
+              ),
+            ),
+
             const Divider(height: 64, color: Color.fromRGBO(232, 225, 210, 1)),
 
             // ---------- Description ----------
@@ -199,29 +224,6 @@ class _ContantPageDetailsState extends State<ContantPageDetails> {
                   ),
                 ),
               ),
-            const Divider(height: 64, color: Color.fromRGBO(232, 225, 210, 1)),
-
-            // ---------- Accommodation Details ----------
-            Text(
-              LocaleKeys.accommodationDetails.tr(),
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w700,
-                fontFamily: FontFamily.alexandria,
-                color: Palette.fontColor,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              '${LocaleKeys.minimumStay.tr()} ${p.minimumStay} ${LocaleKeys.nights.tr()}'
-              '${p.maximumStay != null && p.maximumStay! > 0 ? ' · ${LocaleKeys.maximumStay.tr()} ${p.maximumStay} ${LocaleKeys.nights.tr()}' : ''}',
-              style: TextStyle(
-                fontSize: 16,
-                color: Palette.fontColor.withValues(alpha: 0.7),
-                fontWeight: FontWeight.w400,
-                fontFamily: FontFamily.alexandria,
-              ),
-            ),
           ],
         ),
       ),

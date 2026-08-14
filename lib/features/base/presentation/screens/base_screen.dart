@@ -87,6 +87,7 @@ class _BaseScreenState extends State<BaseScreen> {
         animationDuration: const Duration(milliseconds: 100),
         routes: const <PageRouteInfo>[
           HomeRoute(),
+          AddPropertyPage(),
           // FavouritesRoute(),
           // OrdersRoute(),
           // ProfileRoute(),

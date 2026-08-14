@@ -12,8 +12,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         // getAds: (_GetAds value) => getAds(event, emit),
         // getHomeAd: (_GetHomeAd value) => getHomeAd(event, emit),
         // clickAds: (_ClickAds value) => clickOnAds(event, emit),
-        filterServices: (_FilterServices value) => filterServices(event, emit),
-        getSubServices: (_GetSubServices value) => getSubServices(event, emit),
+        filterServices: (_FilterServices value) => filterServices(value, emit),
+        getSubServices: (_GetSubServices value) => getSubServices(value, emit),
       );
     });
   }

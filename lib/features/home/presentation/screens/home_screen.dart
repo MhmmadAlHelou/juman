@@ -1,4 +1,5 @@
 // import 'package:addstream_flutter/addstream_flutter.dart';
+import 'package:ewan/features/add_property/bloc/add_property_cubit.dart';
 import 'package:ewan/features/home/bloc/property/property_cubit.dart';
 import 'package:ewan/features/home/presentation/helper/map_sheet_controller.dart';
 import 'package:ewan/features/home/presentation/widgets/card_item.dart';
@@ -23,6 +24,9 @@ class HomeScreen extends StatelessWidget {
         BlocProvider<PropertyCubit>(
           create: (BuildContext context) => getIt<PropertyCubit>(),
         ),
+        BlocProvider<AddPropertyCubit>(
+          create: (BuildContext context) => getIt<AddPropertyCubit>(),
+        ),
       ],
       child: const HomeView(),
     );
@@ -41,16 +45,18 @@ class _HomeViewState extends State<HomeView>
     with MapSheetController<HomeView>, HomeHelper {
   late HomeBloc _homeBloc;
   late PropertyCubit propertyCubit;
+  late AddPropertyCubit addPropertyCubit;
 
   final PropertiesModel dummyProperty = PropertiesModel(
     id: 'dummy_001',
-    propertyCategory: PropertyCategory.apartments,
+    propertyCategory: PropertyCategory.furnishedApartments,
     placeType: PlaceType.entirePlace,
     title: "Casanova Elegance, with balcony and 4 bedrooms",
     description:
         "A spacious and bright apartment located in the heart of Barcelona, ​​with space for up to 9 people. "
         "It contains 4 fully equipped bedrooms, a spacious living room, and a modern kitchen. "
         "Close to transportation, restaurants and major tourist attractions.",
+    city: City.ruralDamascus,
     area: 'Barcelona, ​​Spain',
     streetAddress: 'Carrer de Casanova, 12',
     mapLocation: const {'lat': 41.3874, 'lng': 2.1686},
@@ -89,6 +95,9 @@ class _HomeViewState extends State<HomeView>
     // context.read<OrdersBloc>().add(
     //   const OrdersEvent.getAllOrder(page: 1, serviceId: null),
     // );
+
+    addPropertyCubit = context.read<AddPropertyCubit>();
+
     propertyCubit = context.read<PropertyCubit>();
     context.read<PropertyCubit>().loadProperties();
 
@@ -118,6 +127,8 @@ class _HomeViewState extends State<HomeView>
               // context.read<OrdersBloc>().add(
               //   const OrdersEvent.getAllOrder(page: 1, serviceId: null),
               // );
+              context.read<PropertyCubit>().loadProperties();
+
               await Future<void>.delayed(const Duration(milliseconds: 300));
             },
             child: Stack(

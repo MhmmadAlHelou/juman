@@ -4,10 +4,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 enum PropertyCategory {
   villas,
   chalets,
-  country,
-  houses,
-  furnished,
-  apartments,
+  countryHouses,
+  furnishedApartments,
   farmStaysAndRetreats,
 }
 
@@ -27,14 +25,10 @@ extension PropertyCategoryLabel on PropertyCategory {
         return 'Villa';
       case PropertyCategory.chalets:
         return 'Chalets';
-      case PropertyCategory.country:
-        return 'Country';
-      case PropertyCategory.houses:
-        return 'House';
-      case PropertyCategory.furnished:
-        return 'Furnished';
-      case PropertyCategory.apartments:
-        return 'Apartments';
+      case PropertyCategory.countryHouses:
+        return 'Country Houses';
+      case PropertyCategory.furnishedApartments:
+        return 'Furnished Apartments';
       case PropertyCategory.farmStaysAndRetreats:
         return 'Farm Stays And Retreats';
     }
@@ -184,12 +178,35 @@ extension AmenityExtension on Amenity {
   }
 }
 
+enum City { damascus, ruralDamascus }
+
+extension CityLabel on City {
+  String get label {
+    switch (this) {
+      case City.damascus:
+        return 'Damascus';
+      case City.ruralDamascus:
+        return 'Rural Damascus';
+    }
+  }
+}
+
+extension CityExtension on City {
+  static City fromString(String value) {
+    return City.values.firstWhere(
+      (e) => e.name == value,
+      orElse: () => City.damascus,
+    );
+  }
+}
+
 class PropertiesModel {
   final String? id;
   final PropertyCategory propertyCategory;
   final PlaceType placeType;
   final String title;
   final String description;
+  final City city;
   final String area;
   final String streetAddress;
   final Map<String, dynamic> mapLocation;
@@ -210,6 +227,7 @@ class PropertiesModel {
     required this.placeType,
     required this.title,
     required this.description,
+    required this.city,
     required this.area,
     required this.streetAddress,
     required this.mapLocation,
@@ -234,6 +252,7 @@ class PropertiesModel {
       placeType: PlaceTypeExtension.fromString(json['placeType'] ?? ''),
       title: json['title'] ?? '',
       description: json['description'] ?? '',
+      city: CityExtension.fromString(json['city'] ?? ''),
       area: json['area'] ?? '',
       streetAddress: json['streetAddress'] ?? '',
       mapLocation: Map<String, dynamic>.from(json['mapLocation'] ?? {}),
@@ -258,6 +277,7 @@ class PropertiesModel {
       'placeType': placeType.name,
       'title': title,
       'description': description,
+      'city': city.name,
       'area': area,
       'streetAddress': streetAddress,
       'mapLocation': mapLocation,
@@ -280,6 +300,7 @@ class PropertiesModel {
     PlaceType? placeType,
     String? title,
     String? description,
+    City? city,
     String? area,
     String? streetAddress,
     Map<String, dynamic>? mapLocation,
@@ -300,6 +321,7 @@ class PropertiesModel {
       placeType: placeType ?? this.placeType,
       title: title ?? this.title,
       description: description ?? this.description,
+      city: city ?? this.city,
       area: area ?? this.area,
       streetAddress: streetAddress ?? this.streetAddress,
       mapLocation: mapLocation ?? this.mapLocation,
