@@ -33,7 +33,15 @@ class _PropertyLocationPickerPageState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Select Location')),
+      appBar: AppBar(
+        title: Text(
+          LocaleKeys.selectLocation.tr(),
+          style: TextStyle(
+            fontFamily: FontFamily.alexandria,
+            color: Palette.primary,
+          ),
+        ),
+      ),
       body: Stack(
         alignment: Alignment.center,
         children: [
@@ -49,7 +57,7 @@ class _PropertyLocationPickerPageState
             myLocationButtonEnabled: false,
             zoomControlsEnabled: false,
           ),
-          // الدبوس الثابت بمنتصف الشاشة
+          // the marker in middle of the screen
           IgnorePointer(
             child: Padding(
               padding: const EdgeInsets.only(bottom: 40),
@@ -67,7 +75,25 @@ class _PropertyLocationPickerPageState
             child: SafeArea(
               child: ElevatedButton(
                 onPressed: () => Navigator.pop(context, _currentCenter),
-                child: const Text('Confirm Location'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Palette.primary,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 32,
+                    vertical: 12,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: Text(
+                  LocaleKeys.confirmLocation.tr(),
+                  style: TextStyle(
+                    color: Palette.white,
+                    fontSize: 14,
+                    fontFamily: FontFamily.alexandria,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
               ),
             ),
           ),

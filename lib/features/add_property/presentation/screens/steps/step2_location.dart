@@ -16,32 +16,57 @@ class AddPropertyStep2 extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Where is your place located?',
-            style: Theme.of(context).textTheme.headlineSmall,
+            LocaleKeys.whereIsYourPlaceLocated.tr(),
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+              fontFamily: FontFamily.alexandria,
+              color: Palette.fontColor,
+            ),
           ),
           const SizedBox(height: 24),
 
-          const Text('City', style: TextStyle(fontWeight: FontWeight.bold)),
+          Text(
+            LocaleKeys.city.tr(),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontFamily: FontFamily.alexandria,
+              color: Palette.fontColor,
+            ),
+          ),
           const SizedBox(height: 8),
           const _CityDropdown(),
           const SizedBox(height: 24),
 
-          const Text('Area', style: TextStyle(fontWeight: FontWeight.bold)),
+          Text(
+            LocaleKeys.area.tr(),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontFamily: FontFamily.alexandria,
+              color: Palette.fontColor,
+            ),
+          ),
           const SizedBox(height: 8),
           const _AreaDropdown(),
           const SizedBox(height: 24),
 
-          const Text(
-            'Street Address',
-            style: TextStyle(fontWeight: FontWeight.bold),
+          Text(
+            LocaleKeys.streetAddress.tr(),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontFamily: FontFamily.alexandria,
+              color: Palette.fontColor,
+            ),
           ),
           const SizedBox(height: 8),
           const _StreetAddressField(),
           const SizedBox(height: 24),
 
-          const Text(
-            'Map Location',
-            style: TextStyle(fontWeight: FontWeight.bold),
+          Text(
+            LocaleKeys.mapLocation.tr(),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontFamily: FontFamily.alexandria,
+              color: Palette.fontColor,
+            ),
           ),
           const SizedBox(height: 8),
           const _MapLocationPicker(),
@@ -61,9 +86,9 @@ class _CityDropdown extends StatelessWidget {
       builder: (context, state) {
         return DropdownButtonFormField<City>(
           initialValue: state.formData.city,
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             border: OutlineInputBorder(),
-            hintText: 'Select city',
+            hintText: LocaleKeys.selectCity.tr(),
           ),
           items: City.values
               .map((c) => DropdownMenuItem(value: c, child: Text(c.label)))
@@ -101,7 +126,9 @@ class _AreaDropdown extends StatelessWidget {
           initialValue: validValue,
           decoration: InputDecoration(
             border: const OutlineInputBorder(),
-            hintText: city == null ? 'Select city first' : 'Select area',
+            hintText: city == null
+                ? LocaleKeys.selectCityFirst.tr()
+                : LocaleKeys.selectArea.tr(),
           ),
           items: areas
               .map((a) => DropdownMenuItem(value: a, child: Text(a)))
@@ -157,10 +184,10 @@ class _StreetAddressFieldState extends State<_StreetAddressField> {
           maxLength: 200,
           decoration: InputDecoration(
             border: const OutlineInputBorder(),
-            hintText: 'e.g. Al-Mazzeh Street, Building 12',
+            hintText: LocaleKeys.egAlMazzehStreetBuilding12.tr(),
             counterText: '$length/200',
             errorText: length > 0 && length < 5
-                ? 'At least 5 characters'
+                ? LocaleKeys.atLeast5Characters.tr()
                 : null,
           ),
           onChanged: (value) =>
@@ -223,8 +250,8 @@ class _MapLocationPicker extends StatelessWidget {
                 Expanded(
                   child: Text(
                     isSelected
-                        ? 'Location selected — tap to change'
-                        : 'Tap to select location on map',
+                        ? LocaleKeys.locationSelectedTapToChange.tr()
+                        : LocaleKeys.tapToSelectLocationOnMap,
                   ),
                 ),
                 const Icon(Icons.chevron_right),

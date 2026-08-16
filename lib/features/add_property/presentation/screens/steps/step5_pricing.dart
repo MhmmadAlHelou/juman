@@ -15,43 +15,64 @@ class AddPropertyStep5 extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Set your pricing & stay rules',
-            style: Theme.of(context).textTheme.headlineSmall,
+            LocaleKeys.setYourPricingAndStayRules.tr(),
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+              fontFamily: FontFamily.alexandria,
+              color: Palette.fontColor,
+            ),
           ),
           const SizedBox(height: 24),
 
-          const Text(
-            'Minimum Stay (nights)',
-            style: TextStyle(fontWeight: FontWeight.bold),
+          Text(
+            LocaleKeys.minimumStayNights.tr(),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontFamily: FontFamily.alexandria,
+              color: Palette.fontColor,
+            ),
           ),
           const SizedBox(height: 8),
           const _MinStayField(),
           const SizedBox(height: 24),
 
-          const Text(
-            'Maximum Stay (nights) — optional',
-            style: TextStyle(fontWeight: FontWeight.bold),
+          Text(
+            LocaleKeys.maximumStayNightsOptional.tr(),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontFamily: FontFamily.alexandria,
+              color: Palette.fontColor,
+            ),
           ),
           const SizedBox(height: 8),
           const _MaxStayField(),
           const SizedBox(height: 24),
 
-          const Text(
-            'Price per Night',
-            style: TextStyle(fontWeight: FontWeight.bold),
+          Text(
+            LocaleKeys.pricePerNight.tr(),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontFamily: FontFamily.alexandria,
+              color: Palette.fontColor,
+            ),
           ),
           const SizedBox(height: 8),
           const _PriceField(),
           const SizedBox(height: 32),
 
-          const Text(
-            'Ownership Documents',
-            style: TextStyle(fontWeight: FontWeight.bold),
+          Text(
+            LocaleKeys.ownershipDocuments.tr(),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontFamily: FontFamily.alexandria,
+              color: Palette.fontColor,
+            ),
           ),
           const SizedBox(height: 4),
           Text(
-            'Upload 1–2 PDF documents proving ownership.',
-            style: Theme.of(context).textTheme.bodySmall,
+            LocaleKeys.upload12PDFDocumentsProvingOwnership.tr(),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(fontFamily: FontFamily.alexandria),
           ),
           const SizedBox(height: 12),
           const _DocumentsUploader(),
@@ -100,8 +121,8 @@ class _MinStayFieldState extends State<_MinStayField> {
           decoration: InputDecoration(
             border: const OutlineInputBorder(),
             hintText: 'e.g. 2',
-            suffixText: 'nights',
-            errorText: showError ? 'Must be between 1 and 365' : null,
+            suffixText: LocaleKeys.nights.tr(),
+            errorText: showError ? LocaleKeys.mustBeBetween1And365.tr() : null,
           ),
           onChanged: (text) {
             final parsed = int.tryParse(text);
@@ -155,8 +176,10 @@ class _MaxStayFieldState extends State<_MaxStayField> {
           decoration: InputDecoration(
             border: const OutlineInputBorder(),
             hintText: 'No limit',
-            suffixText: 'nights',
-            errorText: showError ? 'Must be ≥ minimum stay' : null,
+            suffixText: LocaleKeys.nights.tr(),
+            errorText: showError
+                ? LocaleKeys.mustBeGreaterThanOrEqualMinimumStay.tr()
+                : null,
           ),
           onChanged: (text) {
             final parsed = int.tryParse(text);
@@ -213,8 +236,8 @@ class _PriceFieldState extends State<_PriceField> {
           decoration: InputDecoration(
             border: const OutlineInputBorder(),
             hintText: 'e.g. 50',
-            prefixText: '\$ ',
-            errorText: showError ? 'Must be greater than 0' : null,
+            prefixText: LocaleKeys.currency.tr(),
+            errorText: showError ? LocaleKeys.mustBeGreaterThan0.tr() : null,
           ),
           onChanged: (text) {
             final parsed = double.tryParse(text);
@@ -284,14 +307,20 @@ class _DocumentsUploader extends StatelessWidget {
                             color: Colors.grey.shade700,
                           ),
                           const SizedBox(height: 10),
-                          const Text(
-                            'Tap to upload PDF',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                          Text(
+                            LocaleKeys.tapToUploadPDF.tr(),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontFamily: FontFamily.alexandria,
+                            ),
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            '${docs.length}/$_maxDocs documents',
-                            style: Theme.of(context).textTheme.bodySmall,
+                            LocaleKeys.ofDocuments.tr(
+                              args: ['${docs.length}/$_maxDocs'],
+                            ),
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(fontFamily: FontFamily.alexandria),
                           ),
                         ],
                       ),

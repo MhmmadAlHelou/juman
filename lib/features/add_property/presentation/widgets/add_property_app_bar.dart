@@ -39,10 +39,8 @@ class AddPropertyAppBar extends StatelessWidget implements PreferredSizeWidget {
                 child: LinearProgressIndicator(
                   value: progress,
                   minHeight: 3,
-                  backgroundColor: Colors.grey.shade300,
-                  valueColor: AlwaysStoppedAnimation(
-                    Theme.of(context).colorScheme.primary,
-                  ),
+                  backgroundColor: Palette.semiGray,
+                  valueColor: AlwaysStoppedAnimation(Palette.primary),
                 ),
               );
             },
@@ -54,8 +52,13 @@ class AddPropertyAppBar extends StatelessWidget implements PreferredSizeWidget {
             buildWhen: (p, c) => p.currentStep != c.currentStep,
             builder: (context, state) {
               return Text(
-                'Step ${state.currentStep + 1} of $totalSteps',
-
+                LocaleKeys.stepOf.tr(
+                  args: [
+                    (state.currentStep + 1).toString(),
+                    totalSteps.toString(),
+                  ],
+                ),
+                // 'step ${state.currentStep + 1} of $totalSteps',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Colors.grey.shade600,
                   fontSize: 13,

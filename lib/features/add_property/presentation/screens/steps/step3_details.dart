@@ -16,43 +16,57 @@ class AddPropertyStep3 extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Share some basic details',
-            style: Theme.of(context).textTheme.headlineSmall,
+            LocaleKeys.shareSomeBasicDetails.tr(),
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+              fontFamily: FontFamily.alexandria,
+              color: Palette.fontColor,
+            ),
           ),
           const SizedBox(height: 24),
 
-          const Text(
-            'Property Size (m²) — optional',
-            style: TextStyle(fontWeight: FontWeight.bold),
+          Text(
+            LocaleKeys.propertySizeM2Optional.tr(),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontFamily: FontFamily.alexandria,
+              color: Palette.fontColor,
+            ),
           ),
           const SizedBox(height: 8),
           const _PropertySizeField(),
           const SizedBox(height: 24),
 
-          const _IntStepperRow(
-            label: 'Maximum Guests',
+          _IntStepperRow(
+            label: LocaleKeys.maximumGuests.tr(),
             field: _IntStepperField.guests,
           ),
           const Divider(height: 32),
-          const _IntStepperRow(
-            label: 'Bedrooms',
+          _IntStepperRow(
+            label: LocaleKeys.bedrooms.tr(),
             field: _IntStepperField.bedrooms,
           ),
           const Divider(height: 32),
-          const _IntStepperRow(
-            label: 'Bathrooms',
+          _IntStepperRow(
+            label: LocaleKeys.bathrooms.tr(),
             field: _IntStepperField.bathrooms,
           ),
           const SizedBox(height: 32),
 
-          const Text(
-            'Amenities',
-            style: TextStyle(fontWeight: FontWeight.bold),
+          Text(
+            LocaleKeys.amenities.tr(),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontFamily: FontFamily.alexandria,
+              color: Palette.fontColor,
+            ),
           ),
           const SizedBox(height: 4),
           Text(
-            'Select at least one',
-            style: Theme.of(context).textTheme.bodySmall,
+            LocaleKeys.selectAtLeastOne.tr(),
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              fontFamily: FontFamily.alexandria,
+              color: Palette.fontColor,
+            ),
           ),
           const SizedBox(height: 12),
           const _AmenitiesGrid(),
@@ -99,10 +113,10 @@ class _PropertySizeFieldState extends State<_PropertySizeField> {
       inputFormatters: [
         FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
       ],
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         border: OutlineInputBorder(),
         hintText: 'e.g. 150',
-        suffixText: 'm²',
+        suffixText: LocaleKeys.m.tr(),
       ),
       onChanged: (value) {
         final parsed = double.tryParse(value);
@@ -157,7 +171,17 @@ class _IntStepperRow extends StatelessWidget {
         final value = _currentValue(state.formData);
         return Row(
           children: [
-            Expanded(child: Text(label, style: const TextStyle(fontSize: 16))),
+            Expanded(
+              child: Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: FontFamily.alexandria,
+                  color: Palette.fontColor,
+                ),
+              ),
+            ),
             IconButton(
               icon: const Icon(Icons.remove_circle_outline),
               onPressed: value <= _min

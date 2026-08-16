@@ -46,6 +46,8 @@ class _HomeViewState extends State<HomeView>
   late HomeBloc _homeBloc;
   late PropertyCubit propertyCubit;
   late AddPropertyCubit addPropertyCubit;
+  // late PropertiesRepository repository;
+  // late List<PropertiesModel> repoModel;
 
   final PropertiesModel dummyProperty = PropertiesModel(
     id: 'dummy_001',
@@ -99,7 +101,9 @@ class _HomeViewState extends State<HomeView>
     addPropertyCubit = context.read<AddPropertyCubit>();
 
     propertyCubit = context.read<PropertyCubit>();
-    context.read<PropertyCubit>().loadProperties();
+    getIt<PropertyCubit>().loadProperties();
+
+    // repoModel = await repository.getListings();
 
     // _sheetController.addListener(_onSheetChanged);
     sheetController.addListener(onSheetChanged);
@@ -127,7 +131,9 @@ class _HomeViewState extends State<HomeView>
               // context.read<OrdersBloc>().add(
               //   const OrdersEvent.getAllOrder(page: 1, serviceId: null),
               // );
-              context.read<PropertyCubit>().loadProperties();
+              getIt<PropertyCubit>().loadProperties();
+
+              // repoModel = await repository.getListings();
 
               await Future<void>.delayed(const Duration(milliseconds: 300));
             },
@@ -174,18 +180,39 @@ class _HomeViewState extends State<HomeView>
                                 itemBuilder: (context, index) {
                                   return Padding(
                                     padding: const EdgeInsets.all(16),
-                                    child: PropertyCard(
-                                      property: dummyProperty,
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (_) => PropertyDetailPage(
-                                              property: dummyProperty,
-                                            ),
-                                          ),
-                                        );
-                                      },
+                                    child: Column(
+                                      children: [
+                                        PropertyCard(
+                                          property: dummyProperty,
+                                          // property: repoModel[index],
+                                          onTap: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (_) =>
+                                                    PropertyDetailPage(
+                                                      property: dummyProperty,
+                                                    ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                        const SizedBox(height: 16),
+                                        PropertyCard(
+                                          property: dummyProperty,
+                                          onTap: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (_) =>
+                                                    PropertyDetailPage(
+                                                      property: dummyProperty,
+                                                    ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ],
                                     ),
                                   );
                                 },

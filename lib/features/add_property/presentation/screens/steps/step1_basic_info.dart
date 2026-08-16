@@ -14,15 +14,22 @@ class AddPropertyStep1 extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Add some basic info',
-            style: Theme.of(context).textTheme.headlineSmall,
+            LocaleKeys.addSomeBasicInfo.tr(),
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+              fontFamily: FontFamily.alexandria,
+              color: Palette.fontColor,
+            ),
           ),
           const SizedBox(height: 24),
 
           // ---- Property Category ----
-          const Text(
-            'Property Category',
-            style: TextStyle(fontWeight: FontWeight.bold),
+          Text(
+            LocaleKeys.propertyCategory.tr(),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontFamily: FontFamily.alexandria,
+              color: Palette.fontColor,
+            ),
           ),
           const SizedBox(height: 8),
           BlocBuilder<AddPropertyCubit, AddPropertyState>(
@@ -31,9 +38,9 @@ class AddPropertyStep1 extends StatelessWidget {
             builder: (context, state) {
               return DropdownButtonFormField<PropertyCategory>(
                 initialValue: state.formData.propertyCategory,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Select category',
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  hintText: LocaleKeys.selectCategory.tr(),
                 ),
                 items: PropertyCategory.values
                     .map(
@@ -51,9 +58,13 @@ class AddPropertyStep1 extends StatelessWidget {
           const SizedBox(height: 24),
 
           // ---- Place Type ----
-          const Text(
-            'Place Type',
-            style: TextStyle(fontWeight: FontWeight.bold),
+          Text(
+            LocaleKeys.placeType.tr(),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontFamily: FontFamily.alexandria,
+              color: Palette.fontColor,
+            ),
           ),
           BlocBuilder<AddPropertyCubit, AddPropertyState>(
             buildWhen: (p, c) => p.formData.placeType != c.formData.placeType,
@@ -80,15 +91,26 @@ class AddPropertyStep1 extends StatelessWidget {
           const SizedBox(height: 24),
 
           // ---- Title ----
-          const Text('Title', style: TextStyle(fontWeight: FontWeight.bold)),
+          Text(
+            LocaleKeys.title.tr(),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontFamily: FontFamily.alexandria,
+              color: Palette.fontColor,
+            ),
+          ),
           const SizedBox(height: 8),
           _TitleField(),
           const SizedBox(height: 24),
 
           // ---- Description ----
-          const Text(
-            'Description',
-            style: TextStyle(fontWeight: FontWeight.bold),
+          Text(
+            LocaleKeys.description.tr(),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontFamily: FontFamily.alexandria,
+              color: Palette.fontColor,
+            ),
           ),
           const SizedBox(height: 8),
           _DescriptionField(),
@@ -130,10 +152,10 @@ class _TitleFieldState extends State<_TitleField> {
           maxLength: 80,
           decoration: InputDecoration(
             border: const OutlineInputBorder(),
-            hintText: 'e.g. Cozy villa with pool view',
+            hintText: LocaleKeys.egCozyVillaWithPoolView.tr(),
             counterText: '$length/80',
             errorText: length > 0 && length < 10
-                ? 'At least 10 characters'
+                ? LocaleKeys.atLeast10Characters.tr()
                 : null,
           ),
           onChanged: (value) =>
@@ -177,10 +199,10 @@ class _DescriptionFieldState extends State<_DescriptionField> {
           maxLines: 6,
           decoration: InputDecoration(
             border: const OutlineInputBorder(),
-            hintText: 'Describe your place...',
+            hintText: LocaleKeys.describeYourPlace.tr(),
             counterText: '$length/1000',
             errorText: length > 0 && length < 50
-                ? 'At least 50 characters'
+                ? LocaleKeys.atLeast50Characters.tr()
                 : null,
           ),
           onChanged: (value) =>

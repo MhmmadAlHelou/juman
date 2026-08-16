@@ -41,13 +41,21 @@ class AddPropertyStep4 extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Add some photos of your place',
-            style: Theme.of(context).textTheme.headlineSmall,
+            LocaleKeys.addSomePhotosOfYourPlace.tr(),
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+              fontFamily: FontFamily.alexandria,
+              color: Palette.fontColor,
+            ),
           ),
           const SizedBox(height: 8),
           Text(
-            "You'll need $_minImages photos to get started. You can add more or make changes later.",
-            style: Theme.of(context).textTheme.bodyMedium,
+            LocaleKeys.youWillNeedPhotosToGetStarted.tr(
+              args: [_minImages.toString()],
+            ),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              fontFamily: FontFamily.alexandria,
+              color: Palette.fontColor,
+            ),
           ),
           const SizedBox(height: 20),
 
@@ -79,14 +87,20 @@ class AddPropertyStep4 extends StatelessWidget {
                           const SizedBox(height: 12),
                           Text(
                             isFull
-                                ? 'Maximum photos reached'
-                                : 'Tap to browse files',
-                            style: const TextStyle(fontWeight: FontWeight.bold),
+                                ? LocaleKeys.maximumPhotosReached.tr()
+                                : LocaleKeys.tapToBrowseFiles.tr(),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontFamily: FontFamily.alexandria,
+                            ),
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            '$count/$_maxImages photos selected',
-                            style: Theme.of(context).textTheme.bodySmall,
+                            LocaleKeys.photosSelected.tr(
+                              args: ['$count/$_maxImages'],
+                            ),
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(fontFamily: FontFamily.alexandria),
                           ),
                         ],
                       ),
@@ -115,7 +129,12 @@ class AddPropertyStep4 extends StatelessWidget {
               return Padding(
                 padding: const EdgeInsets.only(top: 8),
                 child: Text(
-                  'Add ${_minImages - count} more photo${_minImages - count == 1 ? '' : 's'} to continue',
+                  LocaleKeys.addMorePhotosToContinue.tr(
+                    args: [
+                      '${_minImages - count}',
+                      (_minImages - count == 1 ? '' : 's'),
+                    ],
+                  ),
                   style: TextStyle(color: Theme.of(context).colorScheme.error),
                 ),
               );
@@ -173,8 +192,8 @@ class _ImagesGrid extends StatelessWidget {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(6),
                     ),
-                    child: const Text(
-                      'Cover Photo',
+                    child: Text(
+                      LocaleKeys.coverPhoto.tr(),
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 12,
@@ -241,8 +260,9 @@ class _ImagesGrid extends StatelessWidget {
                               color: Colors.black54,
                               borderRadius: BorderRadius.circular(4),
                             ),
-                            child: const Text(
-                              'Set as cover',
+                            child: Text(
+                              LocaleKeys.setAsCover.tr(),
+                              // 'Set as cover',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 10,
@@ -303,26 +323,32 @@ class _PhotoTipsCard extends StatelessWidget {
                 color: Theme.of(context).colorScheme.primary,
               ),
               const SizedBox(width: 8),
-              const Text(
-                'Photo Tips',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              Text(
+                LocaleKeys.photoTips.tr(),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  fontFamily: FontFamily.alexandria,
+                ),
               ),
             ],
           ),
           const SizedBox(height: 12),
-          const _TipRow(
-            title: 'Use natural light',
-            subtitle: 'Open blinds and turn off indoor lights.',
+          _TipRow(
+            title: LocaleKeys.useNaturalLight.tr(),
+            subtitle: LocaleKeys.openBlindsAndTurnOffIndoorLights.tr(),
           ),
           const SizedBox(height: 10),
-          const _TipRow(
-            title: 'Tidy up',
-            subtitle: 'Clear surfaces and make beds.',
+          _TipRow(
+            title: LocaleKeys.tidyUp.tr(),
+            subtitle: LocaleKeys.clearSurfacesAndMakeBeds.tr(),
           ),
           const SizedBox(height: 10),
-          const _TipRow(
-            title: 'Shoot horizontally',
-            subtitle: 'Landscape mode shows more of your space.',
+          _TipRow(
+            title: LocaleKeys.shootHorizontally.tr(),
+            subtitle: LocaleKeys.landscapeModeShowsMoreOfYourSpace.tr(),
+            // title: 'Shoot horizontally',
+            // subtitle: 'Landscape mode shows more of your space.',
           ),
         ],
       ),
@@ -340,14 +366,25 @@ class _TipRow extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Icon(Icons.check_circle, color: Colors.teal, size: 20),
+        const Icon(Icons.check_circle_outline, color: Colors.teal, size: 20),
         const SizedBox(width: 8),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
-              Text(subtitle, style: Theme.of(context).textTheme.bodySmall),
+              Text(
+                title,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontFamily: FontFamily.alexandria,
+                ),
+              ),
+              Text(
+                subtitle,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  fontFamily: FontFamily.alexandria,
+                ),
+              ),
             ],
           ),
         ),

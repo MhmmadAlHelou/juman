@@ -49,7 +49,9 @@ void repositories() {
   // getIt.registerFactory(() => ProfileRepository(getIt()));
   getIt.registerFactory(() => HomeRepository(getIt()));
   // getIt.registerFactory(() => MockListingsRepository());
-  getIt.registerFactory<PropertiesRepository>(() => MockListingsRepository());
+  getIt.registerLazySingleton<PropertiesRepository>(
+    () => MockListingsRepository(),
+  );
   getIt.registerLazySingleton<FileUploadService>(() => MockFileUploadService());
   // getIt.registerFactory(() => NotificationRepository(getIt()));
   // // getIt.registerFactory(() => OrdersRepository(getIt()));--------------------------------

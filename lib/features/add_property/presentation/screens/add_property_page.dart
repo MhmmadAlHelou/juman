@@ -76,12 +76,12 @@ class _AddPropertyViewState extends State<_AddPropertyView> {
                   color: Theme.of(dialogContext).colorScheme.error,
                   size: 32,
                 ),
-                title: const Text('Submission Failed'),
+                title: Text(LocaleKeys.submissionFailed.tr()),
                 content: Text(state.errorMessage!),
                 actions: [
                   TextButton(
                     onPressed: () => Navigator.pop(dialogContext),
-                    child: const Text('OK'),
+                    child: Text(LocaleKeys.oK.tr()),
                   ),
                 ],
               ),
@@ -92,7 +92,9 @@ class _AddPropertyViewState extends State<_AddPropertyView> {
           listenWhen: (prev, curr) => !prev.isSuccess && curr.isSuccess,
           listener: (context, state) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Property added successfully!')),
+              SnackBar(
+                content: Text(LocaleKeys.propertyAddedSuccessfully.tr()),
+              ),
             );
             getIt<PropertyCubit>().loadProperties();
             // Navigator.pop(context);
@@ -100,57 +102,6 @@ class _AddPropertyViewState extends State<_AddPropertyView> {
           },
         ),
       ],
-
-      //       Exception has occurred.
-      // ProviderNotFoundException (Error: Could not find the correct Provider<PropertyCubit> above this BlocListener<AddPropertyCubit, AddPropertyState> Widget
-
-      // This happens because you used a `BuildContext` that does not include the provider
-      // of your choice. There are a few common scenarios:
-
-      // - You added a new provider in your `main.dart` and performed a hot-reload.
-      //   To fix, perform a hot-restart.
-
-      // - The provider you are trying to read is in a different route.
-
-      //   Providers are "scoped". So if you insert of provider inside a route, then
-      //   other routes will not be able to access that provider.
-
-      // - You used a `BuildContext` that is an ancestor of the provider you are trying to read.
-
-      //   Make sure that BlocListener<AddPropertyCubit, AddPropertyState> is under your MultiProvider/Provider<PropertyCubit>.
-      //   This usually happens when you are creating a provider and trying to read it immediately.
-
-      //   For example, instead of:
-
-      //   ```
-      //   Widget build(BuildContext context) {
-      //     return Provider<Example>(
-      //       create: (_) => Example(),
-      //       // Will throw a ProviderNotFoundError, because `context` is associated
-      //       // to the widget that is the parent of `Provider<Example>`
-      //       child: Text(context.watch<Example>().toString()),
-      //     );
-      //   }
-      //   ```
-
-      //   consider using `builder` like so:
-
-      //   ```
-      //   Widget build(BuildContext context) {
-      //     return Provider<Example>(
-      //       create: (_) => Example(),
-      //       // we use `builder` to obtain a new `BuildContext` that has access to the provider
-      //       builder: (context, child) {
-      //         // No longer throws
-      //         return Text(context.watch<Example>().toString());
-      //       }
-      //     );
-      //   }
-      //   ```
-
-      // If none of these solutions work, consider asking for help on StackOverflow:
-      // https://stackoverflow.com/questions/tagged/flutter
-      // )
       child: Scaffold(
         appBar: const AddPropertyAppBar(),
         body: PageView(
@@ -187,7 +138,17 @@ class _AddPropertyBottomBar extends StatelessWidget {
                     onPressed: state.isSubmitting
                         ? null
                         : () => context.read<AddPropertyCubit>().previousStep(),
-                    child: const Text('Back'),
+                    child: Text(
+                      LocaleKeys.back.tr(),
+                      style: TextStyle(
+                        fontSize: 14,
+                        height: 1.4,
+                        fontWeight: FontWeight.w700,
+                        decoration: TextDecoration.underline,
+                        fontFamily: FontFamily.alexandria,
+                        color: Palette.fontColor,
+                      ),
+                    ),
                   ),
                 const Spacer(),
                 ElevatedButton(
@@ -200,13 +161,33 @@ class _AddPropertyBottomBar extends StatelessWidget {
                           }
                         }
                       : null,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Palette.primary,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 32,
+                      vertical: 12,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
                   child: state.isSubmitting
                       ? const SizedBox(
                           width: 20,
                           height: 20,
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
-                      : Text(state.isLastStep ? 'Submit' : 'Next'),
+                      : Text(
+                          state.isLastStep
+                              ? LocaleKeys.submit.tr()
+                              : LocaleKeys.next.tr(),
+                          style: TextStyle(
+                            color: Palette.white,
+                            fontSize: 14,
+                            fontFamily: FontFamily.alexandria,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
                 ),
               ],
             ),
