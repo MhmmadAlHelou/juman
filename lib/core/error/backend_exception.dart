@@ -33,23 +33,38 @@ class BackendException extends GeneralException {
     int status,
   ) {
     if (errorResponse is Map<String, dynamic>) {
+      // Handle API error object
+      final dynamic apiError = errorResponse['error'];
+
+      if (apiError is Map<String, dynamic>) {
+        final dynamic apiMessage = apiError['message'];
+
+        if (apiMessage != null && apiMessage.toString().isNotEmpty) {
+          message = apiMessage.toString();
+          return;
+        }
+      }
+
+      // Handle field errors
       if (errorResponse.containsKey('fields_errors')) {
-        // Extract field errors
         final Map<String, dynamic>? fieldErrors =
             errorResponse['fields_errors'] as Map<String, dynamic>?;
+
         errors = fieldErrors?.map((String key, dynamic value) {
           if (value is List) {
-            return MapEntry<String, String>(
-              key,
-              value.join(', '),
-            ); // Join list of messages
+            return MapEntry<String, String>(key, value.join(', '));
           }
+
           return MapEntry<String, String>(key, value.toString());
         });
-        message = errorResponse['message'] ?? "";
+
+        message = errorResponse['message']?.toString() ?? '';
         return;
-      } else if (errorResponse.containsKey('message')) {
-        message = errorResponse['message'];
+      }
+
+      // Handle old API response format
+      if (errorResponse.containsKey('message')) {
+        message = errorResponse['message']?.toString() ?? '';
         return;
       }
     }

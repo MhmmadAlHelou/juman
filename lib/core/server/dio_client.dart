@@ -47,13 +47,21 @@ class DioClient {
       InterceptorsWrapper(
         onRequest: (RequestOptions options, RequestInterceptorHandler handler) {
           String token = PrefData.token ?? '';
-          // Attach token to headers dynamically
-          if (token.isNotEmpty) {
-            options.headers['Authorization'] = 'JWT $token';
+
+          final bool isLoginRequest = options.path == EndPoint.login;
+          final bool isRefreshRequest = options.path == EndPoint.refreshToken;
+
+          if (token.isNotEmpty && !isLoginRequest && !isRefreshRequest) {
+            options.headers['Authorization'] = 'Bearer $token';
           }
+
+          // if (token.isNotEmpty) {
+          //   // options.headers['Authorization'] = 'JWT $token';
+          //   options.headers['Authorization'] = 'Bearer $token';
+          // }
           options.headers['Accept-language'] =
               LocalizationConfig.currentLanguage;
-          options.headers['X-Os-Type'] = Platform.isAndroid ? 'android' : 'ios';
+          // options.headers['X-Os-Type'] = Platform.isAndroid ? 'android' : 'ios';
           final String requestPath = '${options.baseUrl}${options.path}';
           logger.i('${options.method} request => $requestPath ');
           logger.i('${options.headers}');
@@ -71,34 +79,62 @@ class DioClient {
               handler.next(response);
             },
         onError: (DioException error, ErrorInterceptorHandler handler) async {
-          final String requestPath =
-              '${error.requestOptions.baseUrl}${error.requestOptions.path}}';
-          logger.e('${error.requestOptions.method} request => $requestPath ');
+          final String requestPath = error.requestOptions.path;
+
           logger.e(
-            'StatusCode: ${error.response?.statusCode}, Message: ${error.response?.data}',
+            '${error.requestOptions.method} request => '
+            '${error.requestOptions.baseUrl}$requestPath',
           );
 
-          if (error.response?.statusCode == 401 &&
-              !requestPath.contains(EndPoint.refreshToken)) {
-            await getRefreshToken();
+          logger.e(
+            'StatusCode: ${error.response?.statusCode}, '
+            'Message: ${error.response?.data}',
+          );
 
-            // Retry the failed request with new tokens
-            handler.resolve(await dio.fetch(error.requestOptions));
-          } else {
-            if (requestPath.contains(EndPoint.refreshToken)) {
-              PrefData.fcmTokenSent = false;
-              PrefData.fcmToken = null;
-              getIt<AppManagerCubit>().logOut();
+          final bool isLoginRequest = requestPath == EndPoint.login;
+          final bool isRefreshRequest = requestPath == EndPoint.refreshToken;
+
+          if (error.response?.statusCode == 401 &&
+              !isLoginRequest &&
+              !isRefreshRequest) {
+            try {
+              await getRefreshToken();
+
+              final RequestOptions requestOptions = error.requestOptions;
+
+              requestOptions.headers['Authorization'] =
+                  'Bearer ${PrefData.token}';
+
+              final Response<dynamic> response = await dio.fetch<dynamic>(
+                requestOptions,
+              );
+
+              handler.resolve(response);
+            } on DioException catch (e) {
+              handler.next(e);
+            } catch (e) {
+              handler.next(
+                DioException(requestOptions: error.requestOptions, error: e),
+              );
             }
-            for (final AppHttpClientErrorHandler handler in errorHandlers) {
-              handler(BackendException(dioException: error));
-            }
-            handler.next(error);
+
+            return;
           }
+
+          if (isRefreshRequest) {
+            PrefData.fcmTokenSent = false;
+            PrefData.fcmToken = null;
+            getIt<AppManagerCubit>().logOut();
+          }
+
+          for (final AppHttpClientErrorHandler errorHandler in errorHandlers) {
+            errorHandler(BackendException(dioException: error));
+          }
+
+          handler.next(error);
         },
       ),
     );
-
     return dio;
   }
 
@@ -155,14 +191,22 @@ class DioClient {
         EndPoint.refreshToken,
         data: <String, String?>{'refresh': PrefData.refreshToken},
       );
-      PrefData.token =
-          (response.data as Map<String, dynamic>)['results']['access']
-              as String?;
-      PrefData.refreshToken =
-          (response.data as Map<String, dynamic>)['results']['refresh']
-              as String?;
-    } catch (e) {
-      throw BackendException(dioException: e as DioException);
+
+      final Map<String, dynamic> data =
+          response.data['data'] as Map<String, dynamic>;
+
+      PrefData.token = data['access'] as String?;
+      PrefData.refreshToken = data['refresh'] as String?;
+    } on DioException catch (e) {
+      throw BackendException(dioException: e);
+    } catch (e, stackTrace) {
+      logger.e(
+        'Unexpected error while refreshing token',
+        error: e,
+        stackTrace: stackTrace,
+      );
+
+      rethrow;
     }
   }
 

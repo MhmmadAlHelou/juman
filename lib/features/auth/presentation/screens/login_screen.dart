@@ -102,10 +102,17 @@ class _LoginViewState extends State<LoginView> {
             }
           },
           accountNeedVerify: () {
-            // globalButtonController.value = null;
+            globalButtonController.value = null;
+
             // context.router.push(
             //   VerificationCodeRoute(authenticationBloc: _authenticationBloc),//////////////////__________
             // );
+
+            showSnackBar(
+              context: context,
+              message: "Please verify your email",
+              isError: true,
+            );
           },
 
           orElse: () {},

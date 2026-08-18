@@ -1,12 +1,25 @@
 import 'package:ewan/features/auth/data/models/city_model.dart';
 
 class AuthModel {
-  final UserData data;
+  final String access;
+  final String refresh;
+  final UserData user;
 
-  AuthModel({required this.data});
+  AuthModel({required this.access, required this.refresh, required this.user});
 
-  factory AuthModel.fromJson(Map<String, dynamic> json) =>
-      AuthModel(data: UserData.fromJson(json["results"]));
+  // factory AuthModel.fromJson(Map<String, dynamic> json) =>
+  //     AuthModel(data: UserData.fromJson(json["data"]["user"]));
+  // // AuthModel(data: UserData.fromJson(json["results"]));
+
+  factory AuthModel.fromJson(Map<String, dynamic> json) {
+    final Map<String, dynamic> data = json['data'] as Map<String, dynamic>;
+
+    return AuthModel(
+      access: data['access'] as String,
+      refresh: data['refresh'] as String,
+      user: UserData.fromJson(data['user'] as Map<String, dynamic>),
+    );
+  }
 }
 
 class UserData {

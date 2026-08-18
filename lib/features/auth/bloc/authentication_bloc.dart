@@ -65,8 +65,8 @@ class AuthenticationBloc
       late final AuthModel response;
       response = await _authRepository.signUp(signUpParams: event.signUpParams);
 
-      verificationCodeEmail = response.data.email;
-      PrefData.token = response.data.access;
+      verificationCodeEmail = response.user.email;
+      PrefData.token = response.access;
       emit(const AuthenticationState.signUpSucceed());
     } on GeneralException catch (e) {
       emit(AuthenticationState.signUpFailed(generalException: e));
@@ -88,8 +88,8 @@ class AuthenticationBloc
       );
       PrefData.isSignedIn = true;
       await Future.wait(<Future<void>>[
-        _userLocalDataSource.storeUser(response.data),
-        operationsOnUserProfile(response.data),
+        _userLocalDataSource.storeUser(response.user),
+        operationsOnUserProfile(response.user),
       ]);
       GlobalNotifiers.profileNotifier.value =
           !GlobalNotifiers.profileNotifier.value;
@@ -147,13 +147,13 @@ class AuthenticationBloc
 
       await Future.wait(<Future<void>>[
         _userLocalDataSource.storeAuthData(
-          refreshToken: response.data.refresh,
-          token: response.data.access,
-          userData: response.data,
+          refreshToken: response.refresh,
+          token: response.access,
+          userData: response.user,
         ),
-        operationsOnUserProfile(response.data),
+        operationsOnUserProfile(response.user),
       ]);
-      resetPasswordCode = response.data.resetPasswordCode;
+      resetPasswordCode = response.user.resetPasswordCode;
       emit(const AuthenticationState.redirectToResetPasswordPage());
     } catch (e) {
       emit(
@@ -222,22 +222,23 @@ class AuthenticationBloc
       );
       loginMethod = true;
 
-      if (response.data.emailVerified != true) {
-        verificationCodeEmail = response.data.email;
-        PrefData.token = response.data.access;
-        PrefData.refreshToken = response.data.refresh;
+      // TODO: Re-enable when backend returns `email_verified`.
+      // if (response.user.emailVerified != true) {
+      //   verificationCodeEmail = response.user.email;
+      //   PrefData.token = response.access;
+      //   PrefData.refreshToken = response.refresh;
 
-        emit(const AuthenticationState.accountNeedVerify());
-        return;
-      }
+      //   emit(const AuthenticationState.accountNeedVerify());
+      //   return;
+      // }
 
       await Future.wait(<Future<void>>[
         _userLocalDataSource.storeAuthData(
-          refreshToken: response.data.refresh,
-          token: response.data.access,
-          userData: response.data,
+          refreshToken: response.refresh,
+          token: response.access,
+          userData: response.user,
         ),
-        operationsOnUserProfile(response.data),
+        // operationsOnUserProfile(response.user), // TODO:
       ]);
 
       emit(const AuthenticationState.signInSucceed());
@@ -248,7 +249,7 @@ class AuthenticationBloc
 
   Future<List<Future<void>>> operationsOnUserProfile(UserData response) async {
     try {
-      // String fcmToken = await Managers.notificationManager.getFcmToken();
+      // String fcmToken = await Managers.notificationManager.getFcmToken();// TODO:
       String fcmToken = 'await Managers.notificationManager.getFcmToken()';
 
       return <Future<void>>[

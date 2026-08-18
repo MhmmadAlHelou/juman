@@ -1,13 +1,14 @@
 class EndPoint {
   EndPoint._();
 
-  static const String baseUrl = 'https://api.tallebplus.com/api/v2/';
+  static const String baseUrl = 'https://api-ewan.tallebplus.com/api/';
 
   // static const String baseUrl = 'http://127.0.0.1:8000/api/v2/';
 
   static const String register = 'users/register/';
 
-  static const String refreshToken = 'users/refresh/';
+  static const String refreshToken = 'token/refresh/';
+  // static const String refreshToken = 'users/refresh/';
 
   static const String resetPassword = 'users/reset-password/';
   static const String changePassword = 'users/change-password/';
@@ -21,7 +22,8 @@ class EndPoint {
 
   static const String sendVerificationCode = 'users/send-code/';
   static const String verify = 'users/verify/';
-  static const String login = 'users/login/';
+  // static const String login = 'users/login/';
+  static const String login = 'auth/login/';
   static const String loginByCode = 'users/code-login/';
 
   static const String cities = 'cities/cities/';
