@@ -22,7 +22,7 @@ class EditProfileParams {
 
   final PlatformFile? image;
 
-  FormData toFormData() {
+  Future<FormData> toFormData() async {
     final FormData formData = FormData.fromMap(<String, dynamic>{
       'first_name': firstName,
       'last_name': lastName,
@@ -34,7 +34,7 @@ class EditProfileParams {
     });
     if (image != null) {
       final MultipartFile imageBytes = MultipartFile.fromBytes(
-        Uint8List.fromList(image?.bytes ?? <int>[]),
+        await image?.readAsBytes() ?? Uint8List(0),
         filename: image?.name,
       );
       formData.files.add(MapEntry<String, MultipartFile>('image', imageBytes));

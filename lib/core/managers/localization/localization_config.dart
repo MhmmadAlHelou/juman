@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ewan/core/core.dart';
 
 class LocalizationConfig {
-  static List<String> supportedLanguages = <String>['ar', 'en'];
+  static List<String> supportedLanguages = <String>['en', 'ar'];
 
   static List<Locale> supportedLocales = supportedLanguages
       .map((String lang) => Locale(lang))

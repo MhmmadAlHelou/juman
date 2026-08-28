@@ -98,6 +98,7 @@ class _LoginViewState extends State<LoginView> {
               widget.onLoginSuccess!.call();
             } else {
               // context.router.replaceAll(<PageRouteInfo>[const BaseRoute()]);
+              context.router.replaceAll(<PageRouteInfo>[const HomeRoute()]);
               showSnackBar(context: context, message: "signIn Succeed!!!!!!!");
             }
           },
@@ -137,7 +138,7 @@ class _LoginViewState extends State<LoginView> {
                 // context.pushRoute(const ForgetPasswordRoute());
               },
               child: Text(
-                '${LocaleKeys.forgetPassword.tr()}?',
+                LocaleKeys.forgetPassword.tr(),
                 style: context.bodySmall?.copyWith(
                   color: Palette.primary,
                   fontWeight: FontWeight.bold,

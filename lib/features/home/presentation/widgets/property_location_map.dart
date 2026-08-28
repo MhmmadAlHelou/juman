@@ -1,8 +1,7 @@
 import 'package:ewan/core/core.dart';
 import 'package:ewan/features/home/data/models/models.dart';
-// import 'package:ewan/features/home/presentation/helper/markers/house_marker_generator.dart';
+import 'package:ewan/features/home/presentation/helper/properties_location.dart';
 import 'package:flutter/material.dart';
-// import 'package:ewan/features/home/data/models/properties_model.dart';
 
 class PropertyLocationMapPage extends StatelessWidget {
   final PropertiesModel property;
@@ -10,12 +9,24 @@ class PropertyLocationMapPage extends StatelessWidget {
   const PropertyLocationMapPage({
     super.key,
     required this.property,
-    BitmapDescriptor? houseMarkerIcon,
-  }) : houseMarkerIcon = houseMarkerIcon;
+    this.houseMarkerIcon,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final location = property.latLng;
+    final LatLng? location = property.latLng;
+
+    if (location == null) {
+      return Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ),
+        body: Center(child: Text(LocaleKeys.locationNotAvailable.tr())),
+      );
+    }
 
     return Scaffold(
       body: Stack(

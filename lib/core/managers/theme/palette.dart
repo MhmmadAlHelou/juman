@@ -6,7 +6,7 @@ class Palette {
   static const Color backgroundColor = Color.fromRGBO(251, 249, 241, 1);
 
   static const Color primary = Color.fromRGBO(107, 24, 21, 1);
-  static const Color lightPrimary = Color.fromRGBO(40, 176, 151, 0.5);
+  static const Color lightPrimary = Color.fromRGBO(185, 59, 54, 0.878);
   static const Color secondary = Color.fromRGBO(82, 82, 132, 1);
   static const Color lightSecondary = Color.fromRGBO(19, 91, 236, 1);
 

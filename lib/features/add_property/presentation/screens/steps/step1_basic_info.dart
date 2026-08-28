@@ -32,29 +32,7 @@ class AddPropertyStep1 extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          BlocBuilder<AddPropertyCubit, AddPropertyState>(
-            buildWhen: (p, c) =>
-                p.formData.propertyCategory != c.formData.propertyCategory,
-            builder: (context, state) {
-              return DropdownButtonFormField<PropertyCategory>(
-                initialValue: state.formData.propertyCategory,
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  hintText: LocaleKeys.selectCategory.tr(),
-                ),
-                items: PropertyCategory.values
-                    .map(
-                      (c) => DropdownMenuItem(value: c, child: Text(c.label)),
-                    )
-                    .toList(),
-                onChanged: (value) {
-                  if (value != null) {
-                    context.read<AddPropertyCubit>().updateCategory(value);
-                  }
-                },
-              );
-            },
-          ),
+          const _CategoryDropdown(),
           const SizedBox(height: 24),
 
           // ---- Place Type ----
@@ -66,28 +44,7 @@ class AddPropertyStep1 extends StatelessWidget {
               color: Palette.fontColor,
             ),
           ),
-          BlocBuilder<AddPropertyCubit, AddPropertyState>(
-            buildWhen: (p, c) => p.formData.placeType != c.formData.placeType,
-            builder: (context, state) {
-              return RadioGroup<PlaceType>(
-                groupValue: state.formData.placeType,
-                onChanged: (value) {
-                  if (value != null) {
-                    context.read<AddPropertyCubit>().updatePlaceType(value);
-                  }
-                },
-                child: Column(
-                  children: PlaceType.values.map((type) {
-                    return RadioListTile<PlaceType>(
-                      contentPadding: EdgeInsets.zero,
-                      title: Text(type.label),
-                      value: type,
-                    );
-                  }).toList(),
-                ),
-              );
-            },
-          ),
+          const _PlaceTypeRadioGroup(),
           const SizedBox(height: 24),
 
           // ---- Title ----
@@ -100,7 +57,7 @@ class AddPropertyStep1 extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          _TitleField(),
+          const _TitleField(),
           const SizedBox(height: 24),
 
           // ---- Description ----
@@ -113,14 +70,87 @@ class AddPropertyStep1 extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          _DescriptionField(),
+          const _DescriptionField(),
         ],
       ),
     );
   }
 }
 
+class _CategoryDropdown extends StatelessWidget {
+  const _CategoryDropdown();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AddPropertyCubit, AddPropertyState>(
+      buildWhen: (p, c) =>
+          p.formData.propertyCategory != c.formData.propertyCategory ||
+          p.categories != c.categories ||
+          p.isLoadingLocationsData != c.isLoadingLocationsData,
+      builder: (context, state) {
+        if (state.isLoadingLocationsData && state.categories.isEmpty) {
+          return const LinearProgressIndicator();
+        }
+        return DropdownButtonFormField<PropertyCategoryModel>(
+          initialValue: state.formData.propertyCategory,
+          decoration: InputDecoration(
+            border: const OutlineInputBorder(),
+            hintText: LocaleKeys.selectCategory.tr(),
+          ),
+          items: state.categories
+              .map((c) => DropdownMenuItem(value: c, child: Text(c.name)))
+              .toList(),
+          onChanged: (value) {
+            if (value != null) {
+              context.read<AddPropertyCubit>().updateBasicInfo(category: value);
+            }
+          },
+        );
+      },
+    );
+  }
+}
+
+class _PlaceTypeRadioGroup extends StatelessWidget {
+  const _PlaceTypeRadioGroup();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AddPropertyCubit, AddPropertyState>(
+      buildWhen: (p, c) =>
+          p.formData.placeType != c.formData.placeType ||
+          p.placeTypes != c.placeTypes,
+      builder: (context, state) {
+        if (state.isLoadingLocationsData && state.placeTypes.isEmpty) {
+          return const LinearProgressIndicator();
+        }
+        return RadioGroup<PlaceTypeModel>(
+          groupValue: state.formData.placeType,
+          onChanged: (value) {
+            if (value != null) {
+              context.read<AddPropertyCubit>().updateBasicInfo(
+                placeType: value,
+              );
+            }
+          },
+          child: Column(
+            children: state.placeTypes.map((type) {
+              return RadioListTile<PlaceTypeModel>(
+                contentPadding: EdgeInsets.zero,
+                title: Text(type.name),
+                value: type,
+              );
+            }).toList(),
+          ),
+        );
+      },
+    );
+  }
+}
+
 class _TitleField extends StatefulWidget {
+  const _TitleField();
+
   @override
   State<_TitleField> createState() => _TitleFieldState();
 }
@@ -159,7 +189,7 @@ class _TitleFieldState extends State<_TitleField> {
                 : null,
           ),
           onChanged: (value) =>
-              context.read<AddPropertyCubit>().updateTitle(value),
+              context.read<AddPropertyCubit>().updateBasicInfo(title: value),
         );
       },
     );
@@ -167,6 +197,8 @@ class _TitleFieldState extends State<_TitleField> {
 }
 
 class _DescriptionField extends StatefulWidget {
+  const _DescriptionField();
+
   @override
   State<_DescriptionField> createState() => _DescriptionFieldState();
 }
@@ -205,8 +237,9 @@ class _DescriptionFieldState extends State<_DescriptionField> {
                 ? LocaleKeys.atLeast50Characters.tr()
                 : null,
           ),
-          onChanged: (value) =>
-              context.read<AddPropertyCubit>().updateDescription(value),
+          onChanged: (value) => context
+              .read<AddPropertyCubit>()
+              .updateBasicInfo(description: value),
         );
       },
     );

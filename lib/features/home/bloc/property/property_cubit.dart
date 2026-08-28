@@ -15,6 +15,8 @@ part 'property_state.dart';
 class PropertyCubit extends Cubit<PropertyState> {
   final PropertiesRepository _repository;
 
+  static const int _sheetPageSize = 10;
+
   PropertyCubit({required PropertiesRepository repository})
     : _repository = repository,
       super(const PropertyState()) {
@@ -25,20 +27,22 @@ class PropertyCubit extends Cubit<PropertyState> {
     emit(state.copyWith(isLoading: true));
 
     try {
-      final propertiesList = await _repository.getListings();
+      final propertiesList = await _repository.getAllProperties();
 
       final normalIcons = <String, BitmapDescriptor>{};
       final selectedIcons = <String, BitmapDescriptor>{};
 
       for (final property in propertiesList) {
-        if (property.id == null) continue; // backup check to avoid null id
+        // Can't place a marker without coordinates — skip icon generation,
+        // property still shows up fine in the sheet list.
+        if (!property.hasValidCoordinates) continue;
 
-        normalIcons[property.id!] = await MarkerBitmapGenerator.generate(
-          price: property.price,
+        normalIcons[property.id] = await MarkerBitmapGenerator.generate(
+          price: property.pricePerNight,
           selected: false,
         );
-        selectedIcons[property.id!] = await MarkerBitmapGenerator.generate(
-          price: property.price,
+        selectedIcons[property.id] = await MarkerBitmapGenerator.generate(
+          price: property.pricePerNight,
           selected: true,
         );
       }
@@ -49,12 +53,23 @@ class PropertyCubit extends Cubit<PropertyState> {
           isLoading: false,
           normalMarkerIcons: normalIcons,
           selectedMarkerIcons: selectedIcons,
+          visibleSheetCount:
+              _sheetPageSize, // Reset pagination window on every fresh load (initial load,pull-to-refresh, or after adding a new property).
         ),
       );
     } catch (e, st) {
-      Logger().e('Failed to load properties: $e', error: st);
+      Logger().e('Failed to load properties', error: e, stackTrace: st);
       emit(state.copyWith(isLoading: false));
     }
+  }
+
+  void loadMoreSheetItems() {
+    if (!state.hasMoreSheetItems) return;
+    final int newCount = (state.visibleSheetCount + _sheetPageSize).clamp(
+      0,
+      state.properties.length,
+    );
+    emit(state.copyWith(visibleSheetCount: newCount));
   }
 
   void selectProperty(String id) {

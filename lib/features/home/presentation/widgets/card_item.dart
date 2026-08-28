@@ -66,7 +66,7 @@ class _PropertyCardState extends State<PropertyCard> {
               onPageChanged: (index) => setState(() => _currentPage = index),
               itemBuilder: (context, index) {
                 return Image.network(
-                  widget.property.images[index],
+                  widget.property.images[index].image,
                   fit: BoxFit.cover,
                   loadingBuilder: (context, child, progress) {
                     if (progress == null) return child;
@@ -168,13 +168,14 @@ class _PropertyCardState extends State<PropertyCard> {
             children: [
               Expanded(
                 child: Text(
-                  widget.property.title,
+                  widget.property.category.name,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: Palette.text,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: Palette.fontColor,
+                    fontFamily: FontFamily.alexandria,
                   ),
                 ),
               ),
@@ -196,58 +197,73 @@ class _PropertyCardState extends State<PropertyCard> {
           ),
           const SizedBox(height: 2),
           Text(
-            widget.property.propertyCategory.name,
+            widget.property.placeType.name,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontSize: 14, color: Palette.semiGray),
+            style: TextStyle(
+              fontSize: 14,
+              color: Palette.fontColor.withAlpha(200),
+              fontWeight: FontWeight.w400,
+              fontFamily: FontFamily.alexandria,
+            ),
           ),
           Text(
-            widget.property.placeType.name,
-            style: TextStyle(fontSize: 14, color: Palette.semiGray),
+            widget.property.title,
+            style: TextStyle(
+              fontSize: 14,
+              color: Palette.fontColor.withAlpha(200),
+              fontWeight: FontWeight.w400,
+              fontFamily: FontFamily.alexandria,
+            ),
           ),
           Text(
-            widget.property.description,
-            style: TextStyle(fontSize: 14, color: Palette.semiGray),
+            widget.property.area.name,
+            style: TextStyle(
+              fontSize: 14,
+              color: Palette.fontColor.withAlpha(200),
+              fontWeight: FontWeight.w400,
+              fontFamily: FontFamily.alexandria,
+            ),
           ),
 
           const SizedBox(height: 6),
           Text(
-            '${widget.property.price.toStringAsFixed(2)} SYP',
+            '${widget.property.pricePerNight.toStringAsFixed(2)} ${LocaleKeys.sypForTheNight.tr()}',
             style: TextStyle(
               fontSize: FontSize.smallTitle,
-              fontWeight: FontWeight.w600,
-              color: Palette.text,
-              decoration: TextDecoration.underline,
+              fontWeight: FontWeight.w700,
+              color: Palette.fontColor,
+              // decoration: TextDecoration.underline,
             ),
           ),
-          if (widget.property.amenities.isNotEmpty) ...[
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 6,
-              runSpacing: 6,
-              children: widget.property.amenities
-                  .map(
-                    (amenity) => Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 9,
-                        vertical: 5,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Palette.lightPrimary.withValues(alpha: 0.3),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Text(
-                        amenity.name,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: Palette.primary,
-                        ),
-                      ),
-                    ),
-                  )
-                  .toList(),
-            ),
-          ],
+          // if (widget.property.amenities.isNotEmpty) ...[
+          //   const SizedBox(height: 8),
+          //   Wrap(
+          //     spacing: 6,
+          //     runSpacing: 6,
+          //     children: widget.property.amenities
+          //         .map(
+          //           (amenity) => Container(
+          //             padding: const EdgeInsets.symmetric(
+          //               horizontal: 9,
+          //               vertical: 5,
+          //             ),
+          //             decoration: BoxDecoration(
+          //               color: Palette.lightPrimary.withValues(alpha: 0.3),
+          //               borderRadius: BorderRadius.circular(6),
+          //             ),
+          //             child: Text(
+          //               amenity.name,
+          //               style: const TextStyle(
+          //                 fontSize: 12,
+          //                 color: Palette.primary,
+          //               ),
+          //             ),
+          //           ),
+          //         )
+          //         .toList(),
+          //   ),
+          // ],
         ],
       ),
     );

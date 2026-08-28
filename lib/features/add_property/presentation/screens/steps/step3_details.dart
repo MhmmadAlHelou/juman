@@ -1,7 +1,6 @@
 import 'package:ewan/core/core.dart';
 import 'package:ewan/features/add_property/bloc/add_property_cubit.dart';
 import 'package:ewan/features/add_property/data/models/add_property_form_model.dart';
-import 'package:ewan/features/home/data/models/properties_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -76,7 +75,7 @@ class AddPropertyStep3 extends StatelessWidget {
   }
 }
 
-// ---------------- Property Size (optional plain number field) ----------------
+// ---------------- Property Size (optional) ----------------
 
 class _PropertySizeField extends StatefulWidget {
   const _PropertySizeField();
@@ -109,18 +108,16 @@ class _PropertySizeFieldState extends State<_PropertySizeField> {
   Widget build(BuildContext context) {
     return TextField(
       controller: _controller,
-      keyboardType: const TextInputType.numberWithOptions(decimal: true),
-      inputFormatters: [
-        FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
-      ],
+      keyboardType: TextInputType.number,
+      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
       decoration: InputDecoration(
-        border: OutlineInputBorder(),
+        border: const OutlineInputBorder(),
         hintText: 'e.g. 150',
         suffixText: LocaleKeys.m.tr(),
       ),
       onChanged: (value) {
-        final parsed = double.tryParse(value);
-        context.read<AddPropertyCubit>().updatePropertySize(parsed);
+        final parsed = int.tryParse(value);
+        context.read<AddPropertyCubit>().updatePropertyDetails(size: parsed);
       },
     );
   }
@@ -154,11 +151,11 @@ class _IntStepperRow extends StatelessWidget {
     final cubit = context.read<AddPropertyCubit>();
     switch (field) {
       case _IntStepperField.guests:
-        cubit.updateMaxGuests(newValue);
+        cubit.updatePropertyDetails(maxGuests: newValue);
       case _IntStepperField.bedrooms:
-        cubit.updateBedrooms(newValue);
+        cubit.updatePropertyDetails(bedrooms: newValue);
       case _IntStepperField.bathrooms:
-        cubit.updateBathrooms(newValue);
+        cubit.updatePropertyDetails(bathrooms: newValue);
     }
   }
 
@@ -212,7 +209,7 @@ class _IntStepperRow extends StatelessWidget {
   }
 }
 
-// ---------------- Amenities (Multi-select) ----------------
+// ---------------- Amenities (Multi-select, من state.amenities) ----------------
 
 class _AmenitiesGrid extends StatelessWidget {
   const _AmenitiesGrid();
@@ -220,24 +217,23 @@ class _AmenitiesGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AddPropertyCubit, AddPropertyState>(
-      buildWhen: (p, c) => p.formData.amenities != c.formData.amenities,
+      buildWhen: (p, c) =>
+          p.formData.amenities != c.formData.amenities ||
+          p.amenities != c.amenities ||
+          p.isLoadingLocationsData != c.isLoadingLocationsData,
       builder: (context, state) {
+        if (state.isLoadingLocationsData && state.amenities.isEmpty) {
+          return const Center(child: CircularProgressIndicator());
+        }
         final selected = state.formData.amenities;
         return Wrap(
           spacing: 8,
           runSpacing: 8,
-          children: Amenity.values.map((amenity) {
-            final isSelected = selected.contains(amenity);
+          children: state.amenities.map((amenity) {
+            final isSelected = selected.any((a) => a.id == amenity.id);
             return FilterChip(
               selected: isSelected,
-              avatar: Icon(
-                amenity.icon,
-                size: 18,
-                color: isSelected
-                    ? Theme.of(context).colorScheme.onPrimary
-                    : null,
-              ),
-              label: Text(amenity.label),
+              label: Text(amenity.name),
               onSelected: (_) =>
                   context.read<AddPropertyCubit>().toggleAmenity(amenity),
             );

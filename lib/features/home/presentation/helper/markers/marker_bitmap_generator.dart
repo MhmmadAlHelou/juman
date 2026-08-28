@@ -7,8 +7,7 @@ class MarkerBitmapGenerator {
     required double price,
     required bool selected,
   }) async {
-    // final priceText = '${price.toInt()}${'currency'.tr()}';
-    final priceText = '${price.toInt()} SYP';
+    final priceText = '${price.toInt()} ${LocaleKeys.currency.tr()}';
 
     const double scaleFactor = 2.5;
 
@@ -19,7 +18,7 @@ class MarkerBitmapGenerator {
       text: TextSpan(
         text: priceText,
         style: TextStyle(
-          color: selected ? Palette.white : Palette.black,
+          color: selected ? Palette.white : Palette.primary,
           fontSize: 13 * scaleFactor,
           fontWeight: FontWeight.w600,
         ),
@@ -48,13 +47,13 @@ class MarkerBitmapGenerator {
     canvas.drawRRect(
       rrect.shift(const Offset(0, 2 * scaleFactor)),
       Paint()
-        ..color = Palette.black.withValues(alpha: 0.15)
+        ..color = Palette.primary.withValues(alpha: 0.15)
         ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 3 * scaleFactor),
     );
 
     canvas.drawRRect(
       rrect,
-      Paint()..color = selected ? Palette.black : Palette.white,
+      Paint()..color = selected ? Palette.primary : Palette.white,
     );
 
     textPainter.paint(canvas, const Offset(horizontalPadding, verticalPadding));

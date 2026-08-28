@@ -798,11 +798,11 @@ class _FormSectionState extends State<FormSection> {
           children: <Widget>[
             GestureDetector(
               onTap: () async {
-                FilePickerResult? result = await FilePicker.pickFiles(
+                List<PlatformFile> result = await FilePicker.pickFiles(
                   // allowMultiple: false
                 );
-                if (result != null && result.files.single.path != null) {
-                  final PlatformFile file = result.files.single;
+                if (result.isNotEmpty && result.single.path != null) {
+                  final PlatformFile file = result.single;
                   setState(() {
                     _formValues[name] = file;
                   });

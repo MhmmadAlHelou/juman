@@ -60,7 +60,7 @@ class _ImageAppbarDetailState extends State<ImageAppbarDetails> {
                 onPageChanged: (i) => setState(() => _currentImage = i),
                 itemBuilder: (context, index) {
                   return Image.network(
-                    widget.property.images[index],
+                    widget.property.images[index].image,
                     fit: BoxFit.cover,
                     loadingBuilder: (context, child, progress) {
                       if (progress == null) return child;

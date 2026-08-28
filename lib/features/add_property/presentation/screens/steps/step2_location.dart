@@ -1,6 +1,5 @@
 import 'package:ewan/core/core.dart';
 import 'package:ewan/features/add_property/bloc/add_property_cubit.dart';
-import 'package:ewan/features/add_property/data/constants/city_areas.dart';
 import 'package:ewan/features/add_property/presentation/widgets/property_location_picker_page.dart';
 import 'package:ewan/features/home/data/models/properties_model.dart';
 import 'package:flutter/material.dart';
@@ -82,16 +81,20 @@ class _CityDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AddPropertyCubit, AddPropertyState>(
-      buildWhen: (p, c) => p.formData.city != c.formData.city,
+      buildWhen: (p, c) =>
+          p.formData.city != c.formData.city || p.cities != c.cities,
       builder: (context, state) {
-        return DropdownButtonFormField<City>(
+        if (state.isLoadingLocationsData && state.cities.isEmpty) {
+          return const LinearProgressIndicator();
+        }
+        return DropdownButtonFormField<CityModel>(
           initialValue: state.formData.city,
           decoration: InputDecoration(
-            border: OutlineInputBorder(),
+            border: const OutlineInputBorder(),
             hintText: LocaleKeys.selectCity.tr(),
           ),
-          items: City.values
-              .map((c) => DropdownMenuItem(value: c, child: Text(c.label)))
+          items: state.cities
+              .map((c) => DropdownMenuItem(value: c, child: Text(c.name)))
               .toList(),
           onChanged: (value) {
             if (value != null) {
@@ -115,14 +118,12 @@ class _AreaDropdown extends StatelessWidget {
           p.formData.area != c.formData.area,
       builder: (context, state) {
         final city = state.formData.city;
-        final areas = city != null
-            ? (kCityAreas[city] ?? const <String>[])
-            : const <String>[];
-        final validValue = areas.contains(state.formData.area)
+        final areas = state.areasForSelectedCity;
+        final validValue = areas.any((a) => a.id == state.formData.area?.id)
             ? state.formData.area
             : null;
 
-        return DropdownButtonFormField<String>(
+        return DropdownButtonFormField<AreaModel>(
           initialValue: validValue,
           decoration: InputDecoration(
             border: const OutlineInputBorder(),
@@ -131,7 +132,7 @@ class _AreaDropdown extends StatelessWidget {
                 : LocaleKeys.selectArea.tr(),
           ),
           items: areas
-              .map((a) => DropdownMenuItem(value: a, child: Text(a)))
+              .map((a) => DropdownMenuItem(value: a, child: Text(a.name)))
               .toList(),
           onChanged: city == null
               ? null
@@ -190,8 +191,9 @@ class _StreetAddressFieldState extends State<_StreetAddressField> {
                 ? LocaleKeys.atLeast5Characters.tr()
                 : null,
           ),
-          onChanged: (value) =>
-              context.read<AddPropertyCubit>().updateStreetAddress(value),
+          onChanged: (value) => context
+              .read<AddPropertyCubit>()
+              .updateLocationDetails(streetAddress: value),
         );
       },
     );
@@ -204,10 +206,13 @@ class _MapLocationPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AddPropertyCubit, AddPropertyState>(
-      buildWhen: (p, c) => p.formData.mapLocation != c.formData.mapLocation,
+      buildWhen: (p, c) =>
+          p.formData.latitude != c.formData.latitude ||
+          p.formData.longitude != c.formData.longitude,
       builder: (context, state) {
-        final location = state.formData.mapLocation;
-        final isSelected = location != null;
+        final lat = state.formData.latitude;
+        final lng = state.formData.longitude;
+        final isSelected = lat != null && lng != null;
 
         return InkWell(
           onTap: () async {
@@ -216,20 +221,15 @@ class _MapLocationPicker extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (_) => PropertyLocationPickerPage(
-                  initialLocation: isSelected
-                      ? LatLng(
-                          (location['lat'] as num).toDouble(),
-                          (location['lng'] as num).toDouble(),
-                        )
-                      : null,
+                  initialLocation: isSelected ? LatLng(lat, lng) : null,
                 ),
               ),
             );
             if (result != null) {
-              cubit.updateMapLocation({
-                'lat': result.latitude,
-                'lng': result.longitude,
-              });
+              cubit.updateLocationDetails(
+                latitude: result.latitude,
+                longitude: result.longitude,
+              );
             }
           },
           child: Container(
@@ -251,7 +251,7 @@ class _MapLocationPicker extends StatelessWidget {
                   child: Text(
                     isSelected
                         ? LocaleKeys.locationSelectedTapToChange.tr()
-                        : LocaleKeys.tapToSelectLocationOnMap,
+                        : LocaleKeys.tapToSelectLocationOnMap.tr(),
                   ),
                 ),
                 const Icon(Icons.chevron_right),

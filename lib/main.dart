@@ -6,9 +6,13 @@ import 'generated/codegen_loader.g.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await EasyLocalization.ensureInitialized(); // initialize EasyLocalization
+  await EasyLocalization.ensureInitialized();
 
   await serviceLocator();
+
+  ErrorWidget.builder = (FlutterErrorDetails details) {
+    return const SizedBox.shrink();
+  };
 
   runApp(
     EasyLocalization(

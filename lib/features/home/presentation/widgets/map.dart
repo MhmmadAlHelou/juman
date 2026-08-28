@@ -3,7 +3,6 @@ import 'package:ewan/features/home/bloc/property/property_cubit.dart';
 import 'package:ewan/features/home/presentation/widgets/card_item.dart';
 import 'package:ewan/features/home/presentation/widgets/property_detail.dart';
 import 'package:flutter/material.dart';
-import 'package:ewan/features/home/data/models/properties_model.dart';
 
 class MyMap extends StatelessWidget {
   const MyMap({super.key});
@@ -16,17 +15,15 @@ class MyMap extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
 
-        final markers = state.properties.where((l) => l.id != null).map((
-          listing,
-        ) {
+        final markers = state.properties.map((listing) {
           final isSelected = listing.id == state.selectedpropertyId;
           final icon = isSelected
               ? state.selectedMarkerIcons[listing.id]!
               : state.normalMarkerIcons[listing.id]!;
 
           return Marker(
-            markerId: MarkerId(listing.id!),
-            position: listing.latLng,
+            markerId: MarkerId(listing.id),
+            position: LatLng(listing.latitude!, listing.longitude!),
             icon: icon,
             onTap: () =>
                 context.read<PropertyCubit>().selectProperty(listing.id!),

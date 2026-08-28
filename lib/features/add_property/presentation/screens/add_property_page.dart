@@ -1,5 +1,7 @@
 import 'package:ewan/core/core.dart';
 import 'package:ewan/features/add_property/bloc/add_property_cubit.dart';
+import 'package:ewan/features/add_property/data/add_property_repository.dart';
+import 'package:ewan/features/add_property/data/locations_repository.dart';
 import 'package:ewan/features/add_property/data/services/file_upload_service.dart';
 import 'package:ewan/features/add_property/presentation/screens/steps/step1_basic_info.dart';
 import 'package:ewan/features/add_property/presentation/screens/steps/step2_location.dart';
@@ -8,7 +10,6 @@ import 'package:ewan/features/add_property/presentation/screens/steps/step4_phot
 import 'package:ewan/features/add_property/presentation/screens/steps/step5_pricing.dart';
 import 'package:ewan/features/add_property/presentation/widgets/add_property_app_bar.dart';
 import 'package:ewan/features/home/bloc/property/property_cubit.dart';
-import 'package:ewan/features/home/data/properties_repository.dart';
 import 'package:flutter/material.dart';
 
 @RoutePage()
@@ -19,9 +20,10 @@ class AddPropertyPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => AddPropertyCubit(
-        repository: getIt<PropertiesRepository>(),
+        repository: getIt<AddPropertyRepository>(),
+        locationsRepository: getIt<LocationsRepository>(),
         uploadService: getIt<FileUploadService>(),
-      ),
+      )..initWizard(),
       child: const _AddPropertyView(),
     );
   }
@@ -53,11 +55,12 @@ class _AddPropertyViewState extends State<_AddPropertyView> {
   Widget build(BuildContext context) {
     return MultiBlocListener(
       listeners: [
+        // Navigating between PageView pages when changing steps
         BlocListener<AddPropertyCubit, AddPropertyState>(
           listenWhen: (prev, curr) => prev.currentStep != curr.currentStep,
           listener: (context, state) {
             _pageController.animateToPage(
-              state.currentStep,
+              state.currentStep.index,
               duration: const Duration(milliseconds: 300),
               curve: Curves.easeInOut,
             );
@@ -89,7 +92,10 @@ class _AddPropertyViewState extends State<_AddPropertyView> {
           },
         ),
         BlocListener<AddPropertyCubit, AddPropertyState>(
-          listenWhen: (prev, curr) => !prev.isSuccess && curr.isSuccess,
+          listenWhen: (prev, curr) =>
+              prev.isSubmitting &&
+              !curr.isSubmitting &&
+              curr.errorMessage == null,
           listener: (context, state) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -128,16 +134,21 @@ class _AddPropertyBottomBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AddPropertyCubit, AddPropertyState>(
       builder: (context, state) {
+        final bool isBusy = state.isSavingStep || state.isSubmitting;
+        final bool isFirstStep = state.currentStep == AddPropertyStep.basicInfo;
+
         return SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Row(
               children: [
-                if (!state.isFirstStep)
+                if (!isFirstStep)
                   TextButton(
-                    onPressed: state.isSubmitting
+                    onPressed: isBusy
                         ? null
-                        : () => context.read<AddPropertyCubit>().previousStep(),
+                        : () => context
+                              .read<AddPropertyCubit>()
+                              .goToPreviousStep(),
                     child: Text(
                       LocaleKeys.back.tr(),
                       style: TextStyle(
@@ -152,12 +163,12 @@ class _AddPropertyBottomBar extends StatelessWidget {
                   ),
                 const Spacer(),
                 ElevatedButton(
-                  onPressed: (state.canGoNext && !state.isSubmitting)
+                  onPressed: (state.isCurrentStepValid && !isBusy)
                       ? () {
                           if (state.isLastStep) {
                             context.read<AddPropertyCubit>().submit();
                           } else {
-                            context.read<AddPropertyCubit>().nextStep();
+                            context.read<AddPropertyCubit>().goToNextStep();
                           }
                         }
                       : null,
@@ -171,7 +182,7 @@ class _AddPropertyBottomBar extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: state.isSubmitting
+                  child: isBusy
                       ? const SizedBox(
                           width: 20,
                           height: 20,

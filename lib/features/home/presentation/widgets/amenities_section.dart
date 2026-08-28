@@ -1,5 +1,6 @@
 import 'package:ewan/core/core.dart';
 import 'package:ewan/features/home/data/models/properties_model.dart';
+import 'package:ewan/features/home/presentation/widgets/safe_svg_icon.dart';
 import 'package:flutter/material.dart';
 
 class AmenitiesSection extends StatefulWidget {
@@ -9,7 +10,7 @@ class AmenitiesSection extends StatefulWidget {
     this.collapsedCount = 5,
   });
 
-  final List<Amenity> amenities;
+  final List<AmenityModel> amenities;
   final int collapsedCount;
 
   @override
@@ -35,10 +36,10 @@ class _AmenitiesSectionState extends State<AmenitiesSection> {
             padding: const EdgeInsets.symmetric(vertical: 6),
             child: Row(
               children: [
-                Icon(a.icon, size: 22, color: Palette.fontColor),
+                SafeSvgIcon(url: a.icon, size: 22, color: Palette.fontColor),
                 const SizedBox(width: 12),
                 Text(
-                  a.label,
+                  a.name,
                   style: const TextStyle(
                     fontSize: 16,
                     fontFamily: FontFamily.alexandria,

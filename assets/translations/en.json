@@ -22,6 +22,8 @@
   "showLess": "Show Less",
   "showAllAmenities": "Show All {} Amenities",
   "innn": "in",
+  "locationNotAvailable": "Location not available",
+
 
   "back": "Back",
   "submit": "Submit",
@@ -113,7 +115,7 @@
   "login": "Login",
   "enterYourEmail": "Enter your email",
   "enterPassword": "Enter password",
-  "forgetPassword": "Forget Password",
+  "forgetPassword": "Forget Password?",
   "firstName": "First Name",
   "lastName": "Last Name",
   "address": "Address",
@@ -185,7 +187,7 @@
   "oldPassword": "Old Password",
   "newPassword": "New Password",
   "yourPasswordHasChangedSuccessfully": "Your Password Has Changed Successfully",
-  "passwordComplexityError": "Password must be at least 8 characters long and include at least one letter, one number, and one special character (e.g. !@#&*~).",
+  "passwordComplexityError": "Password must be at least 8 characters long and include at least one uppercase letter and one lowercase letter, one number, and one special character (e.g. !@#&*~).",
   "categories": "Categories",
   "city": "City",
   "pending": "Pending",

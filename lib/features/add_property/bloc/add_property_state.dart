@@ -1,22 +1,44 @@
 part of 'add_property_cubit.dart';
 
-class AddPropertyState extends Equatable {
-  final int currentStep;
-  final AddPropertyFormModel formData;
-  final bool isSubmitting;
-  final String? errorMessage;
-  final bool isSuccess;
+enum AddPropertyStep { basicInfo, location, details, images, pricingAndDocs }
 
+class AddPropertyState extends Equatable {
   const AddPropertyState({
-    this.currentStep = 0,
+    this.currentStep = AddPropertyStep.basicInfo,
     this.formData = const AddPropertyFormModel(),
+    this.isInitializing = true,
+    this.isSavingStep = false,
     this.isSubmitting = false,
+    this.isUploadingImage = false,
+    this.isUploadingDocument = false,
     this.errorMessage,
-    this.isSuccess = false,
+    this.categories = const <PropertyCategoryModel>[],
+    this.placeTypes = const <PlaceTypeModel>[],
+    this.cities = const <CityModel>[],
+    this.amenities = const <AmenityModel>[],
+    this.isLoadingLocationsData = false,
   });
 
-  // ---------- Step validation ----------
-  bool get isStep1Valid =>
+  final AddPropertyStep currentStep;
+  final AddPropertyFormModel formData;
+
+  final bool isInitializing; // إنشاء/استرجاع الـ draft عند فتح الـ wizard
+  final bool isSavingStep; // PATCH جارٍ عند الضغط Next
+  final bool isSubmitting; // POST submit جارٍ
+  final bool isUploadingImage;
+  final bool isUploadingDocument;
+  final String? errorMessage;
+
+  // بيانات مرجعية محمّلة من LocationsRepository
+  final List<PropertyCategoryModel> categories;
+  final List<PlaceTypeModel> placeTypes;
+  final List<CityModel> cities;
+  final List<AmenityModel> amenities;
+  final bool isLoadingLocationsData;
+
+  // ---- التحقق من صحة كل خطوة (Step Validation) ----
+
+  bool get isBasicInfoValid =>
       formData.propertyCategory != null &&
       formData.placeType != null &&
       formData.title.trim().length >= 10 &&
@@ -24,81 +46,150 @@ class AddPropertyState extends Equatable {
       formData.description.trim().length >= 50 &&
       formData.description.trim().length <= 1000;
 
-  bool get isStep2Valid {
-    final city = formData.city;
-    final area = formData.area;
-    if (city == null || area == null || area.isEmpty) return false;
+  bool get isLocationValid =>
+      formData.city != null &&
+      formData.area != null &&
+      formData.streetAddress.trim().length >= 5 &&
+      formData.streetAddress.trim().length <= 200 &&
+      formData.latitude != null &&
+      formData.longitude != null;
 
-    final validAreasForCity = kCityAreas[city] ?? [];
-    if (!validAreasForCity.contains(area)) return false;
-
-    return formData.streetAddress.trim().length >= 5 &&
-        formData.streetAddress.trim().length <= 200 &&
-        formData.mapLocation != null;
-  }
-
-  bool get isStep3Valid =>
+  bool get isDetailsValid =>
+      (formData.propertySize == null || formData.propertySize! > 0) &&
       formData.maximumGuests >= 1 &&
       formData.bedrooms >= 0 &&
       formData.bathrooms >= 0 &&
       formData.bathrooms <= 20 &&
-      formData.amenities.isNotEmpty &&
-      formData.propertySize! >= 0;
+      formData.amenities.isNotEmpty;
 
-  bool get isStep4Valid =>
-      formData.imagePaths.length >= 5 && formData.imagePaths.length <= 30;
+  bool get isImagesValid =>
+      formData.uploadedImageUris.length >= 5 &&
+      formData.uploadedImageUris.length <= 30;
 
-  bool get isStep5Valid =>
+  bool get isPricingAndDocsValid =>
       (formData.minimumStay ?? 0) >= 1 &&
       (formData.minimumStay ?? 0) <= 365 &&
       (formData.maximumStay == null ||
           formData.maximumStay! >= (formData.minimumStay ?? 0)) &&
-      (formData.pricePerNight ?? 0) > 0 &&
-      formData.documentPaths.isNotEmpty &&
-      formData.documentPaths.length <= 2;
+      formData.pricePerNight != null &&
+      formData.pricePerNight! > 0 &&
+      formData.uploadedDocumentUris.length >= 1 &&
+      formData.uploadedDocumentUris.length <= 2;
 
-  bool get canGoNext {
+  // bool get isMediaValid => formData.uploadedImageUris.isNotEmpty;
+
+  bool get isCurrentStepValid {
     switch (currentStep) {
-      case 0:
-        return isStep1Valid;
-      case 1:
-        return isStep2Valid;
-      case 2:
-        return isStep3Valid;
-      case 3:
-        return isStep4Valid;
-      case 4:
-        return isStep5Valid;
-      default:
-        return false;
+      case AddPropertyStep.basicInfo:
+        return isBasicInfoValid;
+      case AddPropertyStep.location:
+        return isLocationValid;
+      case AddPropertyStep.details:
+        return isDetailsValid;
+      case AddPropertyStep.images:
+        return isImagesValid;
+      case AddPropertyStep.pricingAndDocs:
+        return isPricingAndDocsValid;
     }
   }
 
-  bool get isLastStep => currentStep == 4;
-  bool get isFirstStep => currentStep == 0;
+  bool get isLastStep => currentStep == AddPropertyStep.pricingAndDocs;
+
+  // مناطق المدينة المختارة فقط - للـ dropdown المتسلسل
+  List<AreaModel> get areasForSelectedCity =>
+      formData.city?.areas ?? const <AreaModel>[];
 
   AddPropertyState copyWith({
-    int? currentStep,
+    AddPropertyStep? currentStep,
     AddPropertyFormModel? formData,
+    bool? isInitializing,
+    bool? isSavingStep,
     bool? isSubmitting,
+    bool? isUploadingImage,
+    bool? isUploadingDocument,
     String? errorMessage,
-    bool? isSuccess,
+    bool clearError = false,
+    List<PropertyCategoryModel>? categories,
+    List<PlaceTypeModel>? placeTypes,
+    List<CityModel>? cities,
+    List<AmenityModel>? amenities,
+    bool? isLoadingLocationsData,
   }) {
     return AddPropertyState(
       currentStep: currentStep ?? this.currentStep,
       formData: formData ?? this.formData,
+      isInitializing: isInitializing ?? this.isInitializing,
+      isSavingStep: isSavingStep ?? this.isSavingStep,
       isSubmitting: isSubmitting ?? this.isSubmitting,
-      errorMessage: errorMessage,
-      isSuccess: isSuccess ?? this.isSuccess,
+      isUploadingImage: isUploadingImage ?? this.isUploadingImage,
+      isUploadingDocument: isUploadingDocument ?? this.isUploadingDocument,
+      errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
+      categories: categories ?? this.categories,
+      placeTypes: placeTypes ?? this.placeTypes,
+      cities: cities ?? this.cities,
+      amenities: amenities ?? this.amenities,
+      isLoadingLocationsData:
+          isLoadingLocationsData ?? this.isLoadingLocationsData,
     );
   }
 
   @override
-  List<Object?> get props => [
+  List<Object?> get props => <Object?>[
     currentStep,
     formData,
+    isInitializing,
+    isSavingStep,
     isSubmitting,
+    isUploadingImage,
+    isUploadingDocument,
     errorMessage,
-    isSuccess,
+    categories,
+    placeTypes,
+    cities,
+    amenities,
+    isLoadingLocationsData,
   ];
 }
+
+
+// ---------- Step validation ----------
+  // bool get isStep1Valid =>
+  //     formData.propertyCategory != null &&
+  //     formData.placeType != null &&
+  //     formData.title.trim().length >= 10 &&
+  //     formData.title.trim().length <= 80 &&
+  //     formData.description.trim().length >= 50 &&
+  //     formData.description.trim().length <= 1000;
+
+  // bool get isStep2Valid {
+  //   final city = formData.city;
+  //   final area = formData.area;
+  //   if (city == null || area == null || area.isEmpty) return false;
+
+  //   final validAreasForCity = kCityAreas[city] ?? [];
+  //   if (!validAreasForCity.contains(area)) return false;
+
+  //   return formData.streetAddress.trim().length >= 5 &&
+  //       formData.streetAddress.trim().length <= 200 &&
+  //       formData.mapLocation != null;
+  // }
+
+  // bool get isStep3Valid =>
+  //     formData.maximumGuests >= 1 &&
+  //     formData.bedrooms >= 0 &&
+  //     formData.bathrooms >= 0 &&
+  //     formData.bathrooms <= 20 &&
+  //     formData.amenities.isNotEmpty &&
+  //     formData.propertySize! >= 0;
+
+  // bool get isStep4Valid =>
+  //     formData.imagePaths.length >= 5 && formData.imagePaths.length <= 30;
+
+  // bool get isStep5Valid =>
+  //     (formData.minimumStay ?? 0) >= 1 &&
+  //     (formData.minimumStay ?? 0) <= 365 &&
+  //     (formData.maximumStay == null ||
+  //         formData.maximumStay! >= (formData.minimumStay ?? 0)) &&
+  //     (formData.pricePerNight ?? 0) > 0 &&
+  //     formData.documentPaths.isNotEmpty &&
+  //     formData.documentPaths.length <= 2;

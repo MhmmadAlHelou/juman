@@ -34,7 +34,7 @@ class AddPropertyAppBar extends StatelessWidget implements PreferredSizeWidget {
           BlocBuilder<AddPropertyCubit, AddPropertyState>(
             buildWhen: (p, c) => p.currentStep != c.currentStep,
             builder: (context, state) {
-              final progress = (state.currentStep + 1) / totalSteps;
+              final progress = (state.currentStep.index + 1) / totalSteps;
               return ClipRRect(
                 child: LinearProgressIndicator(
                   value: progress,
@@ -54,7 +54,7 @@ class AddPropertyAppBar extends StatelessWidget implements PreferredSizeWidget {
               return Text(
                 LocaleKeys.stepOf.tr(
                   args: [
-                    (state.currentStep + 1).toString(),
+                    (state.currentStep.index + 1).toString(),
                     totalSteps.toString(),
                   ],
                 ),

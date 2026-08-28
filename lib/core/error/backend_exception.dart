@@ -2,7 +2,8 @@ import 'dart:io';
 import '../core.dart';
 
 class BackendException extends GeneralException {
-  BackendException({DioException? dioException, super.message, super.errors}) {
+  BackendException({DioException? dioException, super.message, super.errors})
+    : statusCode = dioException?.response?.statusCode ?? 500 {
     // Extract relevant information from DioException
     final dynamic errorResponse =
         dioException?.response?.data ?? <String, dynamic>{};
@@ -16,6 +17,7 @@ class BackendException extends GeneralException {
     // Populate `message` and `errors`
     _processErrorResponse(errorResponse, noInternet, status);
   }
+  final int statusCode;
 
   // Helper to check if the error indicates a network issue
   bool _isNoInternetError(DioException? dioException) {

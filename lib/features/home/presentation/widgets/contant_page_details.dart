@@ -29,16 +29,12 @@ class _ContantPageDetailsState extends State<ContantPageDetails> {
   }
 
   double? get _lat {
-    final v =
-        widget.property.mapLocation['lat'] ??
-        widget.property.mapLocation['latitude'];
+    final v = widget.property.latitude;
     return v == null ? null : (v as num).toDouble();
   }
 
   double? get _lng {
-    final v =
-        widget.property.mapLocation['lng'] ??
-        widget.property.mapLocation['longitude'];
+    final v = widget.property.longitude;
     return v == null ? null : (v as num).toDouble();
   }
 
@@ -64,7 +60,7 @@ class _ContantPageDetailsState extends State<ContantPageDetails> {
             ),
             const SizedBox(height: 8),
             Text(
-              '${p.placeType.label} ${LocaleKeys.innn.tr()} ${p.propertyCategory.label}',
+              '${p.placeType.name} ${LocaleKeys.innn.tr()} ${p.category.name}',
               style: TextStyle(
                 fontSize: 16,
                 color: Palette.fontColor.withValues(alpha: 0.7),
@@ -73,8 +69,8 @@ class _ContantPageDetailsState extends State<ContantPageDetails> {
             ),
             const SizedBox(height: 8),
             Text(
-              '${p.maximumGuests} ${LocaleKeys.guests.tr()} · ${p.bedrooms} ${LocaleKeys.bedrooms.tr()} · ${p.bathrooms} ${LocaleKeys.bathrooms.tr()}'
-              '${p.propertySize != null ? ' · ${p.propertySize!.toStringAsFixed(0)} ${LocaleKeys.m.tr()}' : ''}',
+              '${p.maxGuests} ${LocaleKeys.guests.tr()} · ${p.bedrooms} ${LocaleKeys.bedrooms.tr()} · ${p.bathrooms} ${LocaleKeys.bathrooms.tr()}'
+              '${p.size} ${LocaleKeys.m.tr()}',
               style: TextStyle(
                 fontSize: 15,
                 color: Palette.fontColor.withValues(alpha: 0.7),
@@ -96,8 +92,8 @@ class _ContantPageDetailsState extends State<ContantPageDetails> {
             ),
             const SizedBox(height: 8),
             Text(
-              '${LocaleKeys.minimumStay.tr()} ${p.minimumStay} ${LocaleKeys.nights.tr()}'
-              '${p.maximumStay != null && p.maximumStay! > 0 ? ' · ${LocaleKeys.maximumStay.tr()} ${p.maximumStay} ${LocaleKeys.nights.tr()}' : ''}',
+              '${LocaleKeys.minimumStay.tr()} ${p.minStay} ${LocaleKeys.nights.tr()}'
+              '${p.maxStay > 0 ? ' · ${LocaleKeys.maximumStay.tr()} ${p.maxStay} ${LocaleKeys.nights.tr()}' : ''}',
               style: TextStyle(
                 fontSize: 16,
                 color: Palette.fontColor.withValues(alpha: 0.7),
@@ -171,7 +167,7 @@ class _ContantPageDetailsState extends State<ContantPageDetails> {
             ),
             const SizedBox(height: 16),
             Text(
-              '${p.area}${p.streetAddress.isNotEmpty ? '، ${p.streetAddress}' : ''}',
+              '${p.area.name}${p.detailedAddress.isNotEmpty ? '، ${p.detailedAddress}' : ''}',
               style: TextStyle(
                 fontSize: 16,
                 color: Palette.fontColor.withValues(alpha: 0.7),

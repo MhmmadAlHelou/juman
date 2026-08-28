@@ -1,4 +1,6 @@
 import 'package:ewan/features/add_property/bloc/add_property_cubit.dart';
+import 'package:ewan/features/add_property/data/add_property_repository.dart';
+import 'package:ewan/features/add_property/data/locations_repository.dart';
 import 'package:ewan/features/add_property/data/services/file_upload_service.dart';
 import 'package:ewan/features/base/data/base_repository.dart';
 import 'package:ewan/features/favourites/bloc/favourites_bloc.dart';
@@ -48,11 +50,21 @@ void repositories() {
   getIt.registerFactory(() => AuthRepository(getIt()));
   // getIt.registerFactory(() => ProfileRepository(getIt()));
   getIt.registerFactory(() => HomeRepository(getIt()));
-  // getIt.registerFactory(() => MockListingsRepository());
   getIt.registerLazySingleton<PropertiesRepository>(
-    () => MockListingsRepository(),
+    () => PropertiesRepositoryImpl(getIt<DioClient>()),
   );
-  getIt.registerLazySingleton<FileUploadService>(() => MockFileUploadService());
+
+  getIt.registerLazySingleton<LocationsRepository>(
+    () => LocationsRepositoryImpl(getIt<DioClient>()),
+  );
+  getIt.registerLazySingleton<AddPropertyRepository>(
+    () => AddPropertyRepositoryImpl(getIt<DioClient>()),
+  );
+
+  getIt.registerLazySingleton<FileUploadService>(
+    () => FileUploadServiceImpl(getIt<DioClient>()),
+  );
+
   // getIt.registerFactory(() => NotificationRepository(getIt()));
   // // getIt.registerFactory(() => OrdersRepository(getIt()));--------------------------------
   // getIt.registerFactory(() => FavouritesRepository(getIt()));
@@ -67,21 +79,18 @@ void cubits() {
   // Home Feature
   getIt.registerFactory(() => HomeBloc(getIt()));
 
-  // getIt.registerFactory(() => PropertyCubit(getIt()));
-  // getIt.registerFactory(
-  //   () => PropertyCubit(repository: getIt<PropertiesRepository>()),
-  // );
   getIt.registerLazySingleton<PropertyCubit>(
     () => PropertyCubit(repository: getIt<PropertiesRepository>()),
   );
 
   getIt.registerFactory(
     () => AddPropertyCubit(
-      repository: getIt<PropertiesRepository>(),
+      repository: getIt<AddPropertyRepository>(),
+      locationsRepository: getIt<LocationsRepository>(),
       uploadService: getIt<FileUploadService>(),
     ),
   );
 
-  // // getIt.registerFactory(() => OrdersBloc(getIt()));/////////////____________//////////////////////////////
+  // getIt.registerFactory(() => OrdersBloc(getIt()));/////////////____________//////////////////////////////
   // getIt.registerFactory(() => FavouritesBloc(getIt()));
 }

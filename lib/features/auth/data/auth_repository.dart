@@ -18,30 +18,6 @@ class AuthRepository {
       response.data as Map<String, dynamic>,
     );
 
-    // await Future<void>.delayed(const Duration(seconds: 8));
-    // final Map<String, dynamic> testResponseData = {
-    //   "results": {
-    //     "id": "user_test_id_99",
-    //     "email": signInParams.email,
-    //     "access": "test_access_token_12345",
-    //     "refresh": "test_refresh_token_12345",
-    //     "email_verified": true,
-    //     "full_name": "ewan test",
-    //     "phone_number": "0953659877",
-    //     "first_name": "ewan",
-    //     "last_name": "test",
-    //     "address": "Local Host 127.0.0.1",
-    //     "birth_date": "1997-01-01T00:00:00.000Z",
-    //     "gender": 1,
-    //     "image": null,
-    //     "city": null,
-    //     "reset_password_code": null,
-    //   },
-    // };
-    // final AuthModel authSuccessResponseModel = AuthModel.fromJson(
-    //   testResponseData,
-    // );
-
     return authSuccessResponseModel;
   }
 

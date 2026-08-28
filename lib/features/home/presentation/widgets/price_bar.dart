@@ -28,7 +28,7 @@ class PriceBar extends StatelessWidget {
                 text: TextSpan(
                   children: [
                     TextSpan(
-                      text: '${property.price.toStringAsFixed(2)} ',
+                      text: '${property.pricePerNight.toStringAsFixed(2)} ',
                       style: const TextStyle(
                         color: Palette.fontColor,
                         fontWeight: FontWeight.w700,

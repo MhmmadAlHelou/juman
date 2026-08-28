@@ -24,6 +24,7 @@ abstract class  LocaleKeys {
   static const showLess = 'showLess';
   static const showAllAmenities = 'showAllAmenities';
   static const innn = 'innn';
+  static const locationNotAvailable = 'locationNotAvailable';
   static const back = 'back';
   static const submit = 'submit';
   static const submissionFailed = 'submissionFailed';

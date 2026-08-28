@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ewan/core/core.dart';
 import 'package:ewan/features/add_property/bloc/add_property_cubit.dart';
 import 'package:ewan/features/add_property/presentation/widgets/dotted_border_box.dart';
@@ -126,7 +128,7 @@ class _MinStayFieldState extends State<_MinStayField> {
           ),
           onChanged: (text) {
             final parsed = int.tryParse(text);
-            context.read<AddPropertyCubit>().updateMinStay(parsed ?? 0);
+            context.read<AddPropertyCubit>().updatePricing(minStay: parsed);
           },
         );
       },
@@ -183,7 +185,7 @@ class _MaxStayFieldState extends State<_MaxStayField> {
           ),
           onChanged: (text) {
             final parsed = int.tryParse(text);
-            context.read<AddPropertyCubit>().updateMaxStay(parsed);
+            context.read<AddPropertyCubit>().updatePricing(maxStay: parsed);
           },
         );
       },
@@ -241,7 +243,9 @@ class _PriceFieldState extends State<_PriceField> {
           ),
           onChanged: (text) {
             final parsed = double.tryParse(text);
-            context.read<AddPropertyCubit>().updatePrice(parsed ?? 0);
+            context.read<AddPropertyCubit>().updatePricing(
+              pricePerNight: parsed,
+            );
           },
         );
       },
@@ -249,7 +253,7 @@ class _PriceFieldState extends State<_PriceField> {
   }
 }
 
-// ---------------- Documents (PDF, 1-2 files) ----------------
+// ---------------- Documents (PDF, 1-2 ملفات) ----------------
 
 class _DocumentsUploader extends StatelessWidget {
   const _DocumentsUploader();
@@ -258,33 +262,37 @@ class _DocumentsUploader extends StatelessWidget {
 
   Future<void> _pickDocuments(BuildContext context) async {
     final cubit = context.read<AddPropertyCubit>();
-    final remaining = _maxDocs - cubit.state.formData.documentPaths.length;
-    if (remaining <= 0) return;
+    final remaining =
+        _maxDocs - cubit.state.formData.uploadedDocumentUris.length;
+    if (remaining <= 0 || cubit.state.isUploadingDocument) return;
 
-    final result = await FilePicker.pickFiles(
+    final List<PlatformFile> result = await FilePicker.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['pdf'],
-      // allowMultiple: true,
     );
+    if (result.isEmpty) return;
 
-    if (result == null) return;
-
-    final paths = result.files
+    final paths = result
         .where((f) => f.path != null)
         .map((f) => f.path!)
         .take(remaining)
         .toList();
 
-    cubit.addDocuments(paths);
+    for (final path in paths) {
+      await cubit.pickAndUploadDocument(File(path));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AddPropertyCubit, AddPropertyState>(
-      buildWhen: (p, c) => p.formData.documentPaths != c.formData.documentPaths,
+      buildWhen: (p, c) =>
+          p.formData.uploadedDocumentUris != c.formData.uploadedDocumentUris ||
+          p.isUploadingDocument != c.isUploadingDocument,
       builder: (context, state) {
-        final docs = state.formData.documentPaths;
+        final docs = state.formData.uploadedDocumentUris;
         final isFull = docs.length >= _maxDocs;
+        final isBusy = state.isUploadingDocument;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -292,7 +300,7 @@ class _DocumentsUploader extends StatelessWidget {
             if (!isFull)
               Center(
                 child: InkWell(
-                  onTap: () => _pickDocuments(context),
+                  onTap: isBusy ? null : () => _pickDocuments(context),
                   child: DottedBorderBox(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
@@ -301,15 +309,22 @@ class _DocumentsUploader extends StatelessWidget {
                       ),
                       child: Column(
                         children: [
-                          Icon(
-                            Icons.picture_as_pdf_outlined,
-                            size: 36,
-                            color: Colors.grey.shade700,
-                          ),
+                          if (isBusy)
+                            const SizedBox(
+                              width: 36,
+                              height: 36,
+                              child: CircularProgressIndicator(),
+                            )
+                          else
+                            Icon(
+                              Icons.picture_as_pdf_outlined,
+                              size: 36,
+                              color: Colors.grey.shade700,
+                            ),
                           const SizedBox(height: 10),
                           Text(
                             LocaleKeys.tapToUploadPDF.tr(),
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontFamily: FontFamily.alexandria,
                             ),
@@ -331,12 +346,13 @@ class _DocumentsUploader extends StatelessWidget {
             if (docs.isNotEmpty) ...[
               const SizedBox(height: 12),
               ...docs.map(
-                (path) => Padding(
+                (url) => Padding(
                   padding: const EdgeInsets.only(bottom: 8),
                   child: _DocumentTile(
-                    path: path,
-                    onRemove: () =>
-                        context.read<AddPropertyCubit>().removeDocument(path),
+                    url: url,
+                    onRemove: () => context
+                        .read<AddPropertyCubit>()
+                        .removeUploadedDocument(url),
                   ),
                 ),
               ),
@@ -349,14 +365,14 @@ class _DocumentsUploader extends StatelessWidget {
 }
 
 class _DocumentTile extends StatelessWidget {
-  final String path;
+  final String url;
   final VoidCallback onRemove;
 
-  const _DocumentTile({required this.path, required this.onRemove});
+  const _DocumentTile({required this.url, required this.onRemove});
 
   @override
   Widget build(BuildContext context) {
-    final fileName = path.split('/').last;
+    final fileName = url.split('/').last;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(

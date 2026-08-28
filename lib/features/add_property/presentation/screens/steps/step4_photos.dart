@@ -13,24 +13,25 @@ class AddPropertyStep4 extends StatelessWidget {
 
   Future<void> _pickImages(BuildContext context) async {
     final cubit = context.read<AddPropertyCubit>();
-    final remaining = _maxImages - cubit.state.formData.imagePaths.length;
-    if (remaining <= 0) return;
+    final remaining =
+        _maxImages - cubit.state.formData.uploadedImageUris.length;
+    if (remaining <= 0 || cubit.state.isUploadingImage) return;
 
-    final result = await FilePicker.pickFiles(
+    final List<PlatformFile> result = await FilePicker.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['jpg', 'jpeg', 'png', 'webp'],
-      // allowMultiple: true,
     );
+    if (result.isEmpty) return;
 
-    if (result == null) return;
-
-    final paths = result.files
+    final paths = result
         .where((f) => f.path != null)
         .map((f) => f.path!)
-        .take(remaining) // ما نتجاوز الحد الأقصى حتى لو المستخدم اختار أكتر
+        .take(remaining)
         .toList();
 
-    cubit.addImages(paths);
+    for (final path in paths) {
+      await cubit.pickAndUploadImage(File(path));
+    }
   }
 
   @override
@@ -62,13 +63,16 @@ class AddPropertyStep4 extends StatelessWidget {
           // ---- Dropzone ----
           BlocBuilder<AddPropertyCubit, AddPropertyState>(
             buildWhen: (p, c) =>
-                p.formData.imagePaths.length != c.formData.imagePaths.length,
+                p.formData.uploadedImageUris.length !=
+                    c.formData.uploadedImageUris.length ||
+                p.isUploadingImage != c.isUploadingImage,
             builder: (context, state) {
-              final count = state.formData.imagePaths.length;
+              final count = state.formData.uploadedImageUris.length;
               final isFull = count >= _maxImages;
+              final isBusy = state.isUploadingImage;
               return Center(
                 child: InkWell(
-                  onTap: isFull ? null : () => _pickImages(context),
+                  onTap: (isFull || isBusy) ? null : () => _pickImages(context),
                   child: DottedBorderBox(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
@@ -77,13 +81,20 @@ class AddPropertyStep4 extends StatelessWidget {
                       ),
                       child: Column(
                         children: [
-                          Icon(
-                            Icons.cloud_upload_outlined,
-                            size: 40,
-                            color: isFull
-                                ? Colors.grey.shade400
-                                : Colors.grey.shade700,
-                          ),
+                          if (isBusy)
+                            const SizedBox(
+                              width: 40,
+                              height: 40,
+                              child: CircularProgressIndicator(),
+                            )
+                          else
+                            Icon(
+                              Icons.cloud_upload_outlined,
+                              size: 40,
+                              color: isFull
+                                  ? Colors.grey.shade400
+                                  : Colors.grey.shade700,
+                            ),
                           const SizedBox(height: 12),
                           Text(
                             isFull
@@ -112,20 +123,17 @@ class AddPropertyStep4 extends StatelessWidget {
           ),
           const SizedBox(height: 24),
 
-          // ---- Cover Photo + Grid ----
+          // ---- Grid ----
           const _ImagesGrid(),
 
           const SizedBox(height: 8),
           BlocBuilder<AddPropertyCubit, AddPropertyState>(
-            buildWhen: (p, c) =>
-                p.formData.imagePaths.length != c.formData.imagePaths.length,
+            buildWhen: (p, c) => p.isImagesValid != c.isImagesValid,
             builder: (context, state) {
-              final count = state.formData.imagePaths.length;
-
-              if (count == 0 || count >= _minImages) {
+              final count = state.formData.uploadedImageUris.length;
+              if (state.isImagesValid || count == 0) {
                 return const SizedBox.shrink();
               }
-
               return Padding(
                 padding: const EdgeInsets.only(top: 8),
                 child: Text(
@@ -142,14 +150,14 @@ class AddPropertyStep4 extends StatelessWidget {
           ),
 
           const SizedBox(height: 24),
-          _PhotoTipsCard(),
+          const _PhotoTipsCard(),
         ],
       ),
     );
   }
 }
 
-// ---------------- Grid: Cover + thumbnails ----------------
+// ---------------- Grid: thumbnails فقط، بدون Cover ----------------
 
 class _ImagesGrid extends StatelessWidget {
   const _ImagesGrid();
@@ -157,125 +165,51 @@ class _ImagesGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AddPropertyCubit, AddPropertyState>(
-      buildWhen: (p, c) => p.formData.imagePaths != c.formData.imagePaths,
+      buildWhen: (p, c) =>
+          p.formData.uploadedImageUris != c.formData.uploadedImageUris,
       builder: (context, state) {
-        final images = state.formData.imagePaths;
+        final images = state.formData.uploadedImageUris;
         if (images.isEmpty) return const SizedBox.shrink();
 
-        final cover = images.first;
-        final rest = images.skip(1).toList();
-
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Cover photo
-            Stack(
+        return GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: images.length,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 12,
+            childAspectRatio: 1.3,
+          ),
+          itemBuilder: (context, index) {
+            final url = images[index];
+            return Stack(
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.file(
-                    File(cover),
-                    width: double.infinity,
-                    height: 180,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                Positioned(
-                  top: 8,
-                  left: 8,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: Text(
-                      LocaleKeys.coverPhoto.tr(),
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12,
+                Positioned.fill(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.network(
+                      url,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, _, _) => Container(
+                        color: Colors.grey.shade300,
+                        child: const Icon(Icons.broken_image_outlined),
                       ),
                     ),
                   ),
                 ),
                 Positioned(
-                  top: 8,
-                  right: 8,
+                  top: 6,
+                  right: 6,
                   child: _RemoveButton(
-                    onTap: () =>
-                        context.read<AddPropertyCubit>().removeImage(cover),
+                    onTap: () => context
+                        .read<AddPropertyCubit>()
+                        .removeUploadedImage(url),
                   ),
                 ),
               ],
-            ),
-            if (rest.isNotEmpty) const SizedBox(height: 12),
-
-            // Rest as 2-column grid
-            if (rest.isNotEmpty)
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: rest.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 12,
-                  childAspectRatio: 1.3,
-                ),
-                itemBuilder: (context, index) {
-                  final path = rest[index];
-                  return Stack(
-                    children: [
-                      Positioned.fill(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: Image.file(File(path), fit: BoxFit.cover),
-                        ),
-                      ),
-                      Positioned(
-                        top: 6,
-                        right: 6,
-                        child: _RemoveButton(
-                          onTap: () => context
-                              .read<AddPropertyCubit>()
-                              .removeImage(path),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 6,
-                        left: 6,
-                        child: GestureDetector(
-                          onTap: () => context
-                              .read<AddPropertyCubit>()
-                              .setCoverImage(path),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 6,
-                              vertical: 3,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.black54,
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            child: Text(
-                              LocaleKeys.setAsCover.tr(),
-                              // 'Set as cover',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 10,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              ),
-          ],
+            );
+          },
         );
       },
     );
@@ -305,6 +239,8 @@ class _RemoveButton extends StatelessWidget {
 // ---------------- Photo Tips ----------------
 
 class _PhotoTipsCard extends StatelessWidget {
+  const _PhotoTipsCard();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -325,7 +261,7 @@ class _PhotoTipsCard extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 LocaleKeys.photoTips.tr(),
-                style: TextStyle(
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                   fontFamily: FontFamily.alexandria,
@@ -347,8 +283,6 @@ class _PhotoTipsCard extends StatelessWidget {
           _TipRow(
             title: LocaleKeys.shootHorizontally.tr(),
             subtitle: LocaleKeys.landscapeModeShowsMoreOfYourSpace.tr(),
-            // title: 'Shoot horizontally',
-            // subtitle: 'Landscape mode shows more of your space.',
           ),
         ],
       ),

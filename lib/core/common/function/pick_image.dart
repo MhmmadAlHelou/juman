@@ -8,19 +8,19 @@ Future<PlatformFile?> pickImage() async {
     // if (await _requestStoragePermission()) {
     // If permission is granted, pick the image
     // final FilePickerResult? result = await FilePicker.platform.pickFiles(
-    final FilePickerResult? result = await FilePicker.pickFiles(
+    final List<PlatformFile> result = await FilePicker.pickFiles(
       type: FileType.image,
       withData: true,
     );
 
-    if (result != null) {
-      return result.files.firstOrNull;
-    }
+    // if (result != null) {
+    return result.firstOrNull;
+    // }
     // } else {
     // await Permission.storage.request();
     // log('Storage permission denied');
     // }
-    return null;
+    // return null;
   } catch (e) {
     return null;
   }
@@ -30,15 +30,15 @@ Future<List<PlatformFile>> pickFiles() async {
   // Check and request storage permission
   if (await _requestStoragePermission()) {
     // If permission is granted, pick the image
-    final FilePickerResult? result = await FilePicker.pickFiles(
+    final List<PlatformFile> result = await FilePicker.pickFiles(
       type: FileType.custom,
       allowedExtensions: <String>['pdf'],
-      withData: true,
-      allowMultiple: true,
+      // withData: true,
+      // allowMultiple: true,
     );
 
-    if (result != null) {
-      return result.files;
+    if (result.isNotEmpty) {
+      return result;
     }
   } else {
     log('Storage permission denied');
