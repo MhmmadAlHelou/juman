@@ -26,7 +26,7 @@ class MyMap extends StatelessWidget {
             position: LatLng(listing.latitude!, listing.longitude!),
             icon: icon,
             onTap: () =>
-                context.read<PropertyCubit>().selectProperty(listing.id!),
+                context.read<PropertyCubit>().selectProperty(listing.id),
           );
         }).toSet();
 

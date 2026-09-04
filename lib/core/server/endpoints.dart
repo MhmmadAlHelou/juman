@@ -3,7 +3,7 @@ class EndPoint {
 
   static const String baseUrl = 'https://api-ewan.tallebplus.com/api/';
 
-  // static const String baseUrl = 'http://127.0.0.1:8000/api/v2/';
+  // static const String baseUrl = 'http://192.168.43.100:8000/api';
 
   // ─────────────────────────────────────────────
   // Authentication
@@ -76,6 +76,13 @@ class EndPoint {
   // ─────────────────────────────────────────────
 
   static const String uploadImage = 'uploads/image/';
+  static const String uploadDocument = 'uploads/document/';
+
+  // ─────────────────────────────────────────────
+  // reservations
+  // ─────────────────────────────────────────────
+
+  static const String reservations = 'reservations/reservations/';
 
   ///////////////////////////////////
   static const String register = 'users/register/';

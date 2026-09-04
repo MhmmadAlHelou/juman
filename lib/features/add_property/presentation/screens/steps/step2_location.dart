@@ -87,8 +87,15 @@ class _CityDropdown extends StatelessWidget {
         if (state.isLoadingLocationsData && state.cities.isEmpty) {
           return const LinearProgressIndicator();
         }
+        CityModel? selected;
+        for (final c in state.cities) {
+          if (c.id == state.formData.city?.id) {
+            selected = c;
+            break;
+          }
+        }
         return DropdownButtonFormField<CityModel>(
-          initialValue: state.formData.city,
+          initialValue: selected,
           decoration: InputDecoration(
             border: const OutlineInputBorder(),
             hintText: LocaleKeys.selectCity.tr(),
@@ -119,12 +126,17 @@ class _AreaDropdown extends StatelessWidget {
       builder: (context, state) {
         final city = state.formData.city;
         final areas = state.areasForSelectedCity;
-        final validValue = areas.any((a) => a.id == state.formData.area?.id)
-            ? state.formData.area
-            : null;
+
+        AreaModel? selected;
+        for (final a in areas) {
+          if (a.id == state.formData.area?.id) {
+            selected = a;
+            break;
+          }
+        }
 
         return DropdownButtonFormField<AreaModel>(
-          initialValue: validValue,
+          initialValue: selected,
           decoration: InputDecoration(
             border: const OutlineInputBorder(),
             hintText: city == null

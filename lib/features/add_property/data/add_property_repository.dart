@@ -8,7 +8,10 @@ abstract class AddPropertyRepository {
     String propertyId,
     Map<String, dynamic> fields,
   );
-  Future<AddPropertyFormModel> submitProperty(String propertyId);
+  Future<AddPropertyFormModel> submitProperty(
+    String propertyId,
+    Map<String, dynamic> payload,
+  );
   Future<AddPropertyFormModel?> getMyDraft();
 }
 
@@ -43,10 +46,14 @@ class AddPropertyRepositoryImpl implements AddPropertyRepository {
   }
 
   @override
-  Future<AddPropertyFormModel> submitProperty(String propertyId) async {
+  Future<AddPropertyFormModel> submitProperty(
+    String propertyId,
+    Map<String, dynamic> payload,
+  ) async {
     final Response<dynamic> response = await _dioClient.sendRequest(
-      RequestType.post,
+      RequestType.put,
       '${EndPoint.properties}$propertyId/submit/',
+      data: payload,
     );
     final Map<String, dynamic> body = response.data as Map<String, dynamic>;
     return AddPropertyFormModel.fromJson(body);
@@ -60,9 +67,28 @@ class AddPropertyRepositoryImpl implements AddPropertyRepository {
         EndPoint.myProperties,
       );
       final Map<String, dynamic> data = response.data as Map<String, dynamic>;
-      final AddPropertyFormModel model = AddPropertyFormModel.fromJson(data);
-      // احتياط: لو رجعت عقار مو DRAFT (مثلاً APPROVED)، تجاهله - مو draft نستأنفه
-      return model.status == PropertyStatus.draft ? model : null;
+      final List<dynamic> results =
+          data['results'] as List<dynamic>? ?? <dynamic>[];
+
+      if (results.isEmpty) return null;
+
+      final List<AddPropertyFormModel> allProperties = results
+          .map(
+            (dynamic e) =>
+                AddPropertyFormModel.fromJson(e as Map<String, dynamic>),
+          )
+          .toList();
+
+      // The API usually returns created at descending order (from newest to oldest),
+      // But we verify this ourselves instead of relying on the server's order.
+      final List<AddPropertyFormModel> drafts = allProperties
+          .where((AddPropertyFormModel p) => p.status == PropertyStatus.draft)
+          .toList();
+
+      if (drafts.isEmpty) return null;
+
+      // We only restore the most recent draft - we ignore the rest of the older drafts (experimental/abandoned).
+      return drafts.first;
     } on BackendException catch (e) {
       if (e.statusCode == 404) {
         return null;

@@ -105,8 +105,8 @@ class AddPropertyFormModel {
     );
   }
 
-  /// يبني الحالة من رد الـ API (POST الفارغ، أو PATCH، أو GET عند الـ resume)
-  /// كل الحقول المتداخلة nullable لأن الـ draft ممكن يكون فاضي جزئياً
+  // The state is built from the API response (empty POST, PATCH, or GET on the resume)
+  // All nested fields are nullable because the draft might be partially empty
   factory AddPropertyFormModel.fromJson(Map<String, dynamic> json) {
     return AddPropertyFormModel(
       id: json['id'] as String?,
@@ -137,22 +137,19 @@ class AddPropertyFormModel {
       amenities: (json['amenities'] as List<dynamic>? ?? <dynamic>[])
           .map((dynamic e) => AmenityModel.fromJson(e as Map<String, dynamic>))
           .toList(),
-      // الصور الراجعة من GET/PATCH هي كائنات {id, image, is_cover} كاملة،
-      // مو URIs خام - نستخرج .image فقط لأنها مرفوعة أصلاً (مو محتاجة إعادة رفع)
+      // Images returned from GET/PATCH are complete {id, image, is_cover} objects,
+      // Not raw URIs - we only extract .images because they are already uploaded (don't need to be re-uploaded)
       uploadedImageUris: (json['images'] as List<dynamic>? ?? <dynamic>[])
           .map((dynamic e) => (e as Map<String, dynamic>)['image'] as String)
           .toList(),
       minimumStay: json['min_stay'] as int?,
       maximumStay: json['max_stay'] as int?,
       pricePerNight: double.tryParse(json['price_per_night']?.toString() ?? ''),
-      // نفس منطق الصور - نفترض شكل مشابه {id, document} لحين تأكيد Swagger
       uploadedDocumentUris: (json['documents'] as List<dynamic>? ?? <dynamic>[])
           .map((dynamic e) => (e as Map<String, dynamic>)['file'] as String)
           .toList(),
     );
   }
-
-  // ---- بناء الـ payload الجزئي لكل خطوة (بديل PropertyCreatePayload) ----
 
   Map<String, dynamic> toBasicInfoJson() => <String, dynamic>{
     if (propertyCategory != null) 'category': propertyCategory!.id,
@@ -186,6 +183,30 @@ class AddPropertyFormModel {
     if (maximumStay != null) 'max_stay': maximumStay,
     if (pricePerNight != null)
       'price_per_night': pricePerNight!.toStringAsFixed(2),
+    if (uploadedDocumentUris.isNotEmpty)
+      'uploaded_documents': uploadedDocumentUris,
+  };
+
+  Map<String, dynamic> toFullJson() => <String, dynamic>{
+    if (title.isNotEmpty) 'title': title,
+    if (description.isNotEmpty) 'description': description,
+    if (streetAddress.isNotEmpty) 'detailed_address': streetAddress,
+    if (latitude != null) 'latitude': latitude!.toStringAsFixed(6),
+    if (longitude != null) 'longitude': longitude!.toStringAsFixed(6),
+    if (propertySize != null) 'size': propertySize,
+    'max_guests': maximumGuests,
+    'bedrooms': bedrooms,
+    'bathrooms': bathrooms,
+    if (minimumStay != null) 'min_stay': minimumStay,
+    if (maximumStay != null) 'max_stay': maximumStay,
+    if (pricePerNight != null)
+      'price_per_night': pricePerNight!.toStringAsFixed(2),
+    if (propertyCategory != null) 'category': propertyCategory!.id,
+    if (placeType != null) 'place_type': placeType!.id,
+    if (city != null) 'city': city!.id,
+    if (area != null) 'area': area!.id,
+    'amenities': amenities.map((a) => a.id).toList(),
+    if (uploadedImageUris.isNotEmpty) 'uploaded_images': uploadedImageUris,
     if (uploadedDocumentUris.isNotEmpty)
       'uploaded_documents': uploadedDocumentUris,
   };

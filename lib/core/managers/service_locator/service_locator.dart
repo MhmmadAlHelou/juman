@@ -10,6 +10,7 @@ import 'package:ewan/features/home/data/properties_repository.dart';
 // import 'package:ewan/features/orders/bloc/orders_bloc.dart';/////////////////////
 
 import 'package:ewan/features/profile/profile.dart';
+import 'package:ewan/features/reservation/data/reservation_repository.dart';
 import 'package:get_it/get_it.dart';
 import '../../../features/auth/bloc/authentication_bloc.dart';
 import '../../../features/auth/data/data.dart';
@@ -63,6 +64,10 @@ void repositories() {
 
   getIt.registerLazySingleton<FileUploadService>(
     () => FileUploadServiceImpl(getIt<DioClient>()),
+  );
+
+  getIt.registerLazySingleton<ReservationRepository>(
+    () => ReservationRepositoryImpl(getIt<DioClient>()),
   );
 
   // getIt.registerFactory(() => NotificationRepository(getIt()));

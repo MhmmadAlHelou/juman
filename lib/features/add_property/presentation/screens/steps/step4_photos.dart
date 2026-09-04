@@ -157,8 +157,6 @@ class AddPropertyStep4 extends StatelessWidget {
   }
 }
 
-// ---------------- Grid: thumbnails فقط، بدون Cover ----------------
-
 class _ImagesGrid extends StatelessWidget {
   const _ImagesGrid();
 

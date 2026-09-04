@@ -22,21 +22,21 @@ class AddPropertyState extends Equatable {
   final AddPropertyStep currentStep;
   final AddPropertyFormModel formData;
 
-  final bool isInitializing; // إنشاء/استرجاع الـ draft عند فتح الـ wizard
-  final bool isSavingStep; // PATCH جارٍ عند الضغط Next
-  final bool isSubmitting; // POST submit جارٍ
+  final bool isInitializing;
+  final bool isSavingStep; // PATCH = Next
+  final bool isSubmitting; // POST = submit
   final bool isUploadingImage;
   final bool isUploadingDocument;
   final String? errorMessage;
 
-  // بيانات مرجعية محمّلة من LocationsRepository
+  // Reference data loaded from LocationsRepository
   final List<PropertyCategoryModel> categories;
   final List<PlaceTypeModel> placeTypes;
   final List<CityModel> cities;
   final List<AmenityModel> amenities;
   final bool isLoadingLocationsData;
 
-  // ---- التحقق من صحة كل خطوة (Step Validation) ----
+  // ----  (Step Validation) ----
 
   bool get isBasicInfoValid =>
       formData.propertyCategory != null &&
@@ -73,10 +73,8 @@ class AddPropertyState extends Equatable {
           formData.maximumStay! >= (formData.minimumStay ?? 0)) &&
       formData.pricePerNight != null &&
       formData.pricePerNight! > 0 &&
-      formData.uploadedDocumentUris.length >= 1 &&
+      formData.uploadedDocumentUris.isNotEmpty &&
       formData.uploadedDocumentUris.length <= 2;
-
-  // bool get isMediaValid => formData.uploadedImageUris.isNotEmpty;
 
   bool get isCurrentStepValid {
     switch (currentStep) {
@@ -95,7 +93,6 @@ class AddPropertyState extends Equatable {
 
   bool get isLastStep => currentStep == AddPropertyStep.pricingAndDocs;
 
-  // مناطق المدينة المختارة فقط - للـ dropdown المتسلسل
   List<AreaModel> get areasForSelectedCity =>
       formData.city?.areas ?? const <AreaModel>[];
 

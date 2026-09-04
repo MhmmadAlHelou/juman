@@ -16,6 +16,7 @@
   "minimumStay": "الحد الأدنى للإقامة",
   "maximumStay": "الحد الأقصى للإقامة",
   "nights": "ليلة",
+  "night": "ليلة",
   "sypForTheNight": "ل.س / لكل ليلة",
   "reserve": "احجز الآن",
   "showMore": "اظهر المزيد",
@@ -23,6 +24,9 @@
   "showAllAmenities": "+{} اظهر جميع الميزات",
   "innn": "في",
   "locationNotAvailable": "الموقع غير متوفر",
+  "selectDates": "أختر التوريخ",
+  "total": "المجموع",
+  "clear": "تصفير",
 
   "back": "رجوع",
   "submit": "ارسال",

@@ -85,14 +85,22 @@ class _CategoryDropdown extends StatelessWidget {
     return BlocBuilder<AddPropertyCubit, AddPropertyState>(
       buildWhen: (p, c) =>
           p.formData.propertyCategory != c.formData.propertyCategory ||
-          p.categories != c.categories ||
-          p.isLoadingLocationsData != c.isLoadingLocationsData,
+          p.categories != c.categories,
       builder: (context, state) {
         if (state.isLoadingLocationsData && state.categories.isEmpty) {
           return const LinearProgressIndicator();
         }
+        // We need to match the ID and return the same instance from the reference list,
+        // Not the object coming directly from formData (different instances even if the data is the same)
+        PropertyCategoryModel? selected;
+        for (final c in state.categories) {
+          if (c.id == state.formData.propertyCategory?.id) {
+            selected = c;
+            break;
+          }
+        }
         return DropdownButtonFormField<PropertyCategoryModel>(
-          initialValue: state.formData.propertyCategory,
+          initialValue: selected,
           decoration: InputDecoration(
             border: const OutlineInputBorder(),
             hintText: LocaleKeys.selectCategory.tr(),
@@ -124,8 +132,15 @@ class _PlaceTypeRadioGroup extends StatelessWidget {
         if (state.isLoadingLocationsData && state.placeTypes.isEmpty) {
           return const LinearProgressIndicator();
         }
+        PlaceTypeModel? selected;
+        for (final t in state.placeTypes) {
+          if (t.id == state.formData.placeType?.id) {
+            selected = t;
+            break;
+          }
+        }
         return RadioGroup<PlaceTypeModel>(
-          groupValue: state.formData.placeType,
+          groupValue: selected,
           onChanged: (value) {
             if (value != null) {
               context.read<AddPropertyCubit>().updateBasicInfo(

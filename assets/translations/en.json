@@ -16,6 +16,7 @@
   "minimumStay": "Minimum stay:",
   "maximumStay": "Maximum stay:",
   "nights": "nights",
+  "night": "night",
   "sypForTheNight": "SYP/ night",
   "reserve": "Reserve",
   "showMore": "Show More",
@@ -23,6 +24,9 @@
   "showAllAmenities": "Show All {} Amenities",
   "innn": "in",
   "locationNotAvailable": "Location not available",
+  "selectDates": "Select Dates",
+  "total": "Total",
+  "clear": "Clear",
 
 
   "back": "Back",

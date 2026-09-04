@@ -134,7 +134,7 @@ class _IntStepperRow extends StatelessWidget {
   const _IntStepperRow({required this.label, required this.field});
 
   int get _min => field == _IntStepperField.guests ? 1 : 0;
-  int get _max => field == _IntStepperField.bathrooms ? 20 : 999;
+  int get _max => field == _IntStepperField.bathrooms ? 20 : 100;
 
   int _currentValue(AddPropertyFormModel data) {
     switch (field) {
@@ -209,7 +209,7 @@ class _IntStepperRow extends StatelessWidget {
   }
 }
 
-// ---------------- Amenities (Multi-select, من state.amenities) ----------------
+// ---------------- Amenities (Multi-select, from state.amenities) ----------------
 
 class _AmenitiesGrid extends StatelessWidget {
   const _AmenitiesGrid();

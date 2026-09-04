@@ -25,7 +25,7 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
   final LocationsRepository _locationsRepository;
   final FileUploadService _uploadService;
 
-  /// يُستدعى عند فتح AddPropertyPage - يقرر resume أو إنشاء draft جديد
+  /// When AddPropertyPage is opened, it is called – it decides whether to resume or create a new draft.
   Future<void> initWizard() async {
     emit(state.copyWith(isInitializing: true, clearError: true));
 
@@ -46,7 +46,7 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
         return;
       }
       existingDraft =
-          null; // فشل مؤقت في جلب draft قديم - نكمل بإنشاء واحد جديد
+          null; // Temporary failure to fetch an old draft - we continue by creating a new one
     }
 
     try {
@@ -66,7 +66,7 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
       await locationsFuture;
       emit(state.copyWith(isInitializing: false, errorMessage: e.message));
     } catch (e) {
-      // أي خطأ غير متوقع (زي parsing/type errors) - ما نسيبش الواجهة تفتح فاضية بصمت
+      // Any unexpected error (like parsing/type errors) - we won't let the interface open blank silently
       await locationsFuture;
       emit(
         state.copyWith(
@@ -105,7 +105,7 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
     }
   }
 
-  // عند resume لـ draft قديم، نحدد آخر خطوة وصلها المستخدم بناءً على اكتمال الحقول
+  // When resuming an old draft, we determine the last step the user reached based on the completeness of the fields.
   AddPropertyStep _stepFromFormData(AddPropertyFormModel f) {
     if (f.propertyCategory == null || f.title.isEmpty) {
       return AddPropertyStep.basicInfo;
@@ -116,7 +116,7 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
     return AddPropertyStep.pricingAndDocs;
   }
 
-  // ---- تحديثات محلية فورية (بدون نداء API) ----
+  // ---- Instant local updates (without API call) ----
 
   void updateBasicInfo({
     PropertyCategoryModel? category,
@@ -138,7 +138,7 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
   }
 
   void updateCity(CityModel city) {
-    // تغيير المدينة يفرغ المنطقة المختارة سابقاً - كانت تابعة لمدينة تانية
+    // Changing the city vacates the previously selected area - it was part of another city.
     emit(
       state.copyWith(
         formData: state.formData.copyWith(city: city, area: null),
@@ -210,13 +210,14 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
     emit(state.copyWith(formData: state.formData.copyWith(amenities: current)));
   }
 
-  // ---- رفع الصور - منفصل تماماً عن الـ PATCH ----
+  // ---- Uploading images - completely separate from PATCH ----
 
   Future<void> pickAndUploadImage(File imageFile) async {
     emit(state.copyWith(isUploadingImage: true, clearError: true));
     try {
-      final UploadedFileModel uploaded = await _uploadService.uploadFiles(
+      final UploadedFileModel uploaded = await _uploadService.uploadImage(
         imageFile,
+        propertyId: state.formData.id,
       );
       final List<String> updated = List<String>.from(
         state.formData.uploadedImageUris,
@@ -243,13 +244,14 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
     );
   }
 
-  // ---- رفع المستندات (PDF) - نفس منطق الصور، مسار منفصل ----
+  // ---- Uploading documents (PDF) - Same logic as images, separate path ----
 
   Future<void> pickAndUploadDocument(File documentFile) async {
     emit(state.copyWith(isUploadingDocument: true, clearError: true));
     try {
-      final UploadedFileModel uploaded = await _uploadService.uploadFiles(
+      final UploadedFileModel uploaded = await _uploadService.uploadDocument(
         documentFile,
+        propertyId: state.formData.id,
       );
       final List<String> updated = List<String>.from(
         state.formData.uploadedDocumentUris,
@@ -276,7 +278,7 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
     );
   }
 
-  // ---- التنقل بين الخطوات - هون يصير الـ PATCH فعلياً ----
+  // ---- Navigating between steps - here where the PATCH truly becomes a reality ----
 
   Future<void> goToNextStep() async {
     print(
@@ -299,7 +301,7 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
 
       if (state.isLastStep) {
         emit(state.copyWith(formData: updated, isSavingStep: false));
-        return; // آخر خطوة - الانتقال الفعلي يصير بـ submit() من الـ UI
+        return; // The final step – the actual transition – happens with `submit()` from the UI.
       }
 
       emit(
@@ -339,8 +341,6 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
     );
   }
 
-  // ---- الإنهاء ----
-
   Future<bool> submit() async {
     if (!state.isPricingAndDocsValid || state.formData.id == null) {
       return false;
@@ -350,6 +350,7 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
     try {
       final AddPropertyFormModel submitted = await _repository.submitProperty(
         state.formData.id!,
+        state.formData.toFullJson(),
       );
 
       emit(state.copyWith(formData: submitted, isSubmitting: false));

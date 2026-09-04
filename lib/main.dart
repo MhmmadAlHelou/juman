@@ -21,6 +21,7 @@ void main() async {
       fallbackLocale: LocalizationConfig.defaultLocale,
       useFallbackTranslations: true,
       assetLoader: const CodegenLoader(),
+      // startLocale: Locale('ar'),
       startLocale: LocalizationConfig.defaultLocale,
       child: App.instance,
     ),

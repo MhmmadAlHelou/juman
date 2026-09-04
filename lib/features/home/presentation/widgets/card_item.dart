@@ -125,8 +125,8 @@ class _PropertyCardState extends State<PropertyCard> {
 
             // --- Optional left/right arrows (nice on tablet / web / desktop) ---
             if (widget.property.images.length > 1) ...[
-              Positioned(
-                left: 8,
+              PositionedDirectional(
+                start: 8,
                 top: 0,
                 bottom: 0,
                 child: Center(
@@ -136,8 +136,8 @@ class _PropertyCardState extends State<PropertyCard> {
                   ),
                 ),
               ),
-              Positioned(
-                right: 8,
+              PositionedDirectional(
+                end: 8,
                 top: 0,
                 bottom: 0,
                 child: Center(
