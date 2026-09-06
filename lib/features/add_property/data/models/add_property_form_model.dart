@@ -174,40 +174,44 @@ class AddPropertyFormModel {
     'amenities': amenities.map((a) => a.id).toList(),
   };
 
-  Map<String, dynamic> toImagesJson() => {
-    if (uploadedImageUris.isNotEmpty) 'uploaded_images': uploadedImageUris,
-  };
+  // Map<String, dynamic> toImagesJson() => {
+  //   if (uploadedImageUris.isNotEmpty) 'uploaded_images': uploadedImageUris,
+  // };
+  // Images are now directly linked to the property during upload via property_id
+  // (endpoint /api/uploads/image/), so there's no need to send them here.
+  // This step is now only for verifying isImagesValid and proceeding to the next step.
+  Map<String, dynamic> toImagesJson() => <String, dynamic>{};
 
   Map<String, dynamic> toPricingJson() => {
     if (minimumStay != null) 'min_stay': minimumStay,
     if (maximumStay != null) 'max_stay': maximumStay,
     if (pricePerNight != null)
       'price_per_night': pricePerNight!.toStringAsFixed(2),
-    if (uploadedDocumentUris.isNotEmpty)
-      'uploaded_documents': uploadedDocumentUris,
+    // if (uploadedDocumentUris.isNotEmpty)
+    //   'uploaded_documents': uploadedDocumentUris,
   };
 
-  Map<String, dynamic> toFullJson() => <String, dynamic>{
-    if (title.isNotEmpty) 'title': title,
-    if (description.isNotEmpty) 'description': description,
-    if (streetAddress.isNotEmpty) 'detailed_address': streetAddress,
-    if (latitude != null) 'latitude': latitude!.toStringAsFixed(6),
-    if (longitude != null) 'longitude': longitude!.toStringAsFixed(6),
-    if (propertySize != null) 'size': propertySize,
-    'max_guests': maximumGuests,
-    'bedrooms': bedrooms,
-    'bathrooms': bathrooms,
-    if (minimumStay != null) 'min_stay': minimumStay,
-    if (maximumStay != null) 'max_stay': maximumStay,
-    if (pricePerNight != null)
-      'price_per_night': pricePerNight!.toStringAsFixed(2),
-    if (propertyCategory != null) 'category': propertyCategory!.id,
-    if (placeType != null) 'place_type': placeType!.id,
-    if (city != null) 'city': city!.id,
-    if (area != null) 'area': area!.id,
-    'amenities': amenities.map((a) => a.id).toList(),
-    if (uploadedImageUris.isNotEmpty) 'uploaded_images': uploadedImageUris,
-    if (uploadedDocumentUris.isNotEmpty)
-      'uploaded_documents': uploadedDocumentUris,
-  };
+  // Map<String, dynamic> toFullJson() => <String, dynamic>{
+  //   if (title.isNotEmpty) 'title': title,
+  //   if (description.isNotEmpty) 'description': description,
+  //   if (streetAddress.isNotEmpty) 'detailed_address': streetAddress,
+  //   if (latitude != null) 'latitude': latitude!.toStringAsFixed(6),
+  //   if (longitude != null) 'longitude': longitude!.toStringAsFixed(6),
+  //   if (propertySize != null) 'size': propertySize,
+  //   'max_guests': maximumGuests,
+  //   'bedrooms': bedrooms,
+  //   'bathrooms': bathrooms,
+  //   if (minimumStay != null) 'min_stay': minimumStay,
+  //   if (maximumStay != null) 'max_stay': maximumStay,
+  //   if (pricePerNight != null)
+  //     'price_per_night': pricePerNight!.toStringAsFixed(2),
+  //   if (propertyCategory != null) 'category': propertyCategory!.id,
+  //   if (placeType != null) 'place_type': placeType!.id,
+  //   if (city != null) 'city': city!.id,
+  //   if (area != null) 'area': area!.id,
+  //   'amenities': amenities.map((a) => a.id).toList(),
+  //   // if (uploadedImageUris.isNotEmpty) 'uploaded_images': uploadedImageUris,
+  //   // if (uploadedDocumentUris.isNotEmpty)
+  //   //   'uploaded_documents': uploadedDocumentUris,
+  // };
 }

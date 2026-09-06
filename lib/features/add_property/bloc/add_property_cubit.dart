@@ -26,27 +26,30 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
   final FileUploadService _uploadService;
 
   /// When AddPropertyPage is opened, it is called – it decides whether to resume or create a new draft.
-  Future<void> initWizard() async {
+  Future<void> initWizard({bool forceNew = false}) async {
     emit(state.copyWith(isInitializing: true, clearError: true));
 
     final Future<void> locationsFuture = _loadLocationsData();
 
     AddPropertyFormModel? existingDraft;
-    try {
-      existingDraft = await _repository.getMyDraft();
-    } on BackendException catch (e) {
-      if (e.statusCode == 401) {
-        await locationsFuture;
-        emit(
-          state.copyWith(
-            isInitializing: false,
-            errorMessage: 'You must log in first to add a property',
-          ),
-        );
-        return;
+
+    if (!forceNew) {
+      try {
+        existingDraft = await _repository.getMyDraft();
+      } on BackendException catch (e) {
+        if (e.statusCode == 401) {
+          await locationsFuture;
+          emit(
+            state.copyWith(
+              isInitializing: false,
+              errorMessage: 'You must log in first to add a property',
+            ),
+          );
+          return;
+        }
+        existingDraft =
+            null; // Temporary failure to fetch an old draft - we continue by creating a new one
       }
-      existingDraft =
-          null; // Temporary failure to fetch an old draft - we continue by creating a new one
     }
 
     try {
@@ -281,12 +284,8 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
   // ---- Navigating between steps - here where the PATCH truly becomes a reality ----
 
   Future<void> goToNextStep() async {
-    print(
-      '${state.formData.id} llllllllllllllllllllllllllllllfffffffffffffffffffffffffffffffffffffffff',
-    );
-    print(
-      '${state.isCurrentStepValid} llllllllllllllllllllllllllllllfffffffffffffffffffffffffffffffffffffffff',
-    );
+    Logger().i('Draft Iddddddddddddd: ${state.formData.id}');
+    Logger().i('is CurrentStepValid: ${state.isCurrentStepValid}');
     if (!state.isCurrentStepValid || state.formData.id == null) return;
 
     emit(state.copyWith(isSavingStep: true, clearError: true));
@@ -346,17 +345,35 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
       return false;
     }
 
-    emit(state.copyWith(isSubmitting: true, clearError: true));
+    emit(state.copyWith(isSavingStep: true, clearError: true));
     try {
-      final AddPropertyFormModel submitted = await _repository.submitProperty(
+      // We must save the data for the last step (price, minimum/maximum stay) before submitting,
+      // because the submit endpoint checks the data stored in the database, not the request body itself.
+      final AddPropertyFormModel afterPatch = await _repository.patchStep(
         state.formData.id!,
-        state.formData.toFullJson(),
+        state.formData.toPricingJson(),
       );
 
-      emit(state.copyWith(formData: submitted, isSubmitting: false));
+      emit(
+        state.copyWith(
+          formData: afterPatch,
+          isSavingStep: false,
+          isSubmitting: true,
+        ),
+      );
+      await _repository.submitProperty(state.formData.id!);
+
+      emit(state.copyWith(isSubmitting: false));
+      await initWizard(forceNew: true);
       return true;
     } on BackendException catch (e) {
-      emit(state.copyWith(isSubmitting: false, errorMessage: e.message));
+      emit(
+        state.copyWith(
+          isSavingStep: false,
+          isSubmitting: false,
+          errorMessage: e.message,
+        ),
+      );
       return false;
     }
   }

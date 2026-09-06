@@ -14,7 +14,9 @@ import 'package:flutter/material.dart';
 
 @RoutePage()
 class AddPropertyPage extends StatelessWidget {
-  const AddPropertyPage({super.key});
+  const AddPropertyPage({super.key, this.forceNew = false});
+
+  final bool forceNew;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,7 @@ class AddPropertyPage extends StatelessWidget {
         repository: getIt<AddPropertyRepository>(),
         locationsRepository: getIt<LocationsRepository>(),
         uploadService: getIt<FileUploadService>(),
-      )..initWizard(),
+      )..initWizard(forceNew: forceNew),
       child: const _AddPropertyView(),
     );
   }

@@ -8,6 +8,7 @@ class SelectDatesState extends Equatable {
     this.unavailableDates = const [],
     this.checkIn,
     this.checkOut,
+    this.numberOfGuests = 1,
     this.errorMessage,
   });
 
@@ -15,6 +16,7 @@ class SelectDatesState extends Equatable {
   final List<DateTime> unavailableDates;
   final DateTime? checkIn;
   final DateTime? checkOut;
+  final int numberOfGuests;
   final String? errorMessage;
 
   int get numberOfNights {
@@ -36,6 +38,7 @@ class SelectDatesState extends Equatable {
     List<DateTime>? unavailableDates,
     DateTime? checkIn,
     DateTime? checkOut,
+    int? numberOfGuests,
     String? errorMessage,
     bool clearCheckIn = false,
     bool clearCheckOut = false,
@@ -45,6 +48,7 @@ class SelectDatesState extends Equatable {
       unavailableDates: unavailableDates ?? this.unavailableDates,
       checkIn: clearCheckIn ? null : (checkIn ?? this.checkIn),
       checkOut: clearCheckOut ? null : (checkOut ?? this.checkOut),
+      numberOfGuests: numberOfGuests ?? this.numberOfGuests,
       errorMessage: errorMessage,
     );
   }
@@ -55,6 +59,7 @@ class SelectDatesState extends Equatable {
     unavailableDates,
     checkIn,
     checkOut,
+    numberOfGuests,
     errorMessage,
   ];
 }

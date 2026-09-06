@@ -19,6 +19,8 @@ abstract class  LocaleKeys {
   static const maximumStay = 'maximumStay';
   static const nights = 'nights';
   static const night = 'night';
+  static const nightsSelected = 'nightsSelected';
+  static const nightSelected = 'nightSelected';
   static const sypForTheNight = 'sypForTheNight';
   static const reserve = 'reserve';
   static const showMore = 'showMore';
@@ -26,6 +28,7 @@ abstract class  LocaleKeys {
   static const showAllAmenities = 'showAllAmenities';
   static const innn = 'innn';
   static const locationNotAvailable = 'locationNotAvailable';
+  static const planYourStay = 'planYourStay';
   static const selectDates = 'selectDates';
   static const total = 'total';
   static const clear = 'clear';

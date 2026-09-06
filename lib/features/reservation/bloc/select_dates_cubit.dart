@@ -5,11 +5,15 @@ import 'package:ewan/features/reservation/data/reservation_repository.dart';
 part 'select_dates_state.dart';
 
 class SelectDatesCubit extends Cubit<SelectDatesState> {
-  SelectDatesCubit(this._reservationRepository, {required this.propertyId})
-    : super(const SelectDatesState());
+  SelectDatesCubit(
+    this._reservationRepository, {
+    required this.propertyId,
+    required this.maxGuests,
+  }) : super(const SelectDatesState());
 
   final ReservationRepository _reservationRepository;
   final String propertyId;
+  final int maxGuests;
 
   Future<void> loadUnavailableDates() async {
     emit(state.copyWith(status: SelectDatesStatus.loading));
@@ -30,6 +34,18 @@ class SelectDatesCubit extends Cubit<SelectDatesState> {
           errorMessage: e.message,
         ),
       );
+    }
+  }
+
+  void incrementGuests() {
+    if (state.numberOfGuests < maxGuests) {
+      emit(state.copyWith(numberOfGuests: state.numberOfGuests + 1));
+    }
+  }
+
+  void decrementGuests() {
+    if (state.numberOfGuests > 1) {
+      emit(state.copyWith(numberOfGuests: state.numberOfGuests - 1));
     }
   }
 
@@ -71,6 +87,12 @@ class SelectDatesCubit extends Cubit<SelectDatesState> {
   }
 
   void clearSelection() {
-    emit(state.copyWith(clearCheckIn: true, clearCheckOut: true));
+    emit(
+      state.copyWith(
+        clearCheckIn: true,
+        clearCheckOut: true,
+        numberOfGuests: 1,
+      ),
+    );
   }
 }

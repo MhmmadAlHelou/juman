@@ -27,6 +27,7 @@ class _PriceBarState extends State<PriceBar> {
       context,
       propertyId: widget.property.id,
       pricePerNight: widget.property.pricePerNight,
+      maxGuests: widget.property.maxGuests,
     );
 
     if (result != null) {
@@ -111,7 +112,7 @@ class _PriceBarState extends State<PriceBar> {
                     child: Text(
                       _hasSelectedDates
                           ? '${_formatDate(_checkIn!)} - ${_formatDate(_checkOut!)}'
-                          : LocaleKeys.selectDates.tr(),
+                          : LocaleKeys.planYourStay.tr(),
                       style: const TextStyle(
                         color: Palette.fontColor,
                         fontWeight: FontWeight.w700,

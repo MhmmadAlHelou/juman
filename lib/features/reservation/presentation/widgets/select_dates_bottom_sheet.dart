@@ -1,6 +1,7 @@
 import 'package:ewan/core/core.dart';
 import 'package:ewan/features/reservation/bloc/select_dates_cubit.dart';
 import 'package:ewan/features/reservation/data/reservation_repository.dart';
+import 'package:ewan/features/reservation/presentation/widgets/select_guests_counter.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -14,12 +15,13 @@ class SelectDatesBottomSheet extends StatelessWidget {
   final String propertyId;
   final double pricePerNight;
 
-  static Future<Map<String, DateTime>?> show(
+  static Future<Map<String, dynamic>?> show(
     BuildContext context, {
     required String propertyId,
     required double pricePerNight,
+    required int maxGuests,
   }) {
-    return showModalBottomSheet<Map<String, DateTime>?>(
+    return showModalBottomSheet<Map<String, dynamic>?>(
       context: context,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
@@ -29,6 +31,7 @@ class SelectDatesBottomSheet extends StatelessWidget {
         create: (_) => SelectDatesCubit(
           getIt<ReservationRepository>(),
           propertyId: propertyId,
+          maxGuests: maxGuests,
         )..loadUnavailableDates(),
         child: SelectDatesBottomSheet(
           propertyId: propertyId,
@@ -65,7 +68,14 @@ class SelectDatesBottomSheet extends StatelessWidget {
                       ? const Center(child: CircularProgressIndicator())
                       : ListView(
                           controller: scrollController,
-                          children: [_buildCalendar(context, state)],
+                          children: [
+                            _buildCalendar(context, state),
+                            const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 24),
+                              child: Divider(height: 1),
+                            ),
+                            _buildGuestsCounter(context, state),
+                          ],
                         ),
                 ),
                 if (state.hasValidRange) _buildBottomBar(context, state),
@@ -91,7 +101,7 @@ class SelectDatesBottomSheet extends StatelessWidget {
             children: [
               Text(
                 state.hasValidRange
-                    ? '${state.numberOfNights} ${state.numberOfNights == 1 ? LocaleKeys.night.tr() : LocaleKeys.nights.tr()}'
+                    ? '${state.numberOfNights} ${state.numberOfNights == 1 ? LocaleKeys.nightSelected.tr() : LocaleKeys.nightsSelected.tr()}'
                     : LocaleKeys.selectDates.tr(),
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontFamily: FontFamily.alexandria,
@@ -167,6 +177,9 @@ class SelectDatesBottomSheet extends StatelessWidget {
       onDaySelected: (selectedDay, focusedDay) {
         cubit.selectDate(selectedDay);
       },
+      calendarStyle: CalendarStyle(
+        rangeHighlightColor: Palette.primary.withValues(alpha: 0.15),
+      ),
       calendarBuilders: CalendarBuilders(
         disabledBuilder: (context, day, focusedDay) {
           return Center(
@@ -193,6 +206,34 @@ class SelectDatesBottomSheet extends StatelessWidget {
             ),
           );
         },
+        rangeStartBuilder: (context, day, focusedDay) {
+          return Container(
+            margin: const EdgeInsets.all(4),
+            decoration: const BoxDecoration(
+              color: Palette.primary,
+              shape: BoxShape.circle,
+            ),
+            alignment: Alignment.center,
+            child: Text(
+              '${day.day}',
+              style: const TextStyle(color: Palette.white),
+            ),
+          );
+        },
+        rangeEndBuilder: (context, day, focusedDay) {
+          return Container(
+            margin: const EdgeInsets.all(4),
+            decoration: const BoxDecoration(
+              color: Palette.primary,
+              shape: BoxShape.circle,
+            ),
+            alignment: Alignment.center,
+            child: Text(
+              '${day.day}',
+              style: const TextStyle(color: Palette.white),
+            ),
+          );
+        },
         withinRangeBuilder: (context, day, focusedDay) {
           return Container(
             color: Palette.white.withValues(alpha: 0.15),
@@ -200,6 +241,52 @@ class SelectDatesBottomSheet extends StatelessWidget {
             child: Text('${day.day}'),
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildGuestsCounter(BuildContext context, SelectDatesState state) {
+    final cubit = context.read<SelectDatesCubit>();
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            LocaleKeys.guests.tr(),
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              fontFamily: FontFamily.alexandria,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          Row(
+            children: [
+              CounterButton(
+                icon: Icons.remove,
+                onTap: state.numberOfGuests > 1 ? cubit.decrementGuests : null,
+              ),
+              SizedBox(
+                width: 32,
+                child: Text(
+                  '${state.numberOfGuests}',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontFamily: FontFamily.alexandria,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              CounterButton(
+                icon: Icons.add,
+                onTap: state.numberOfGuests < cubit.maxGuests
+                    ? cubit.incrementGuests
+                    : null,
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -236,6 +323,7 @@ class SelectDatesBottomSheet extends StatelessWidget {
               Navigator.pop(context, {
                 'checkIn': state.checkIn!,
                 'checkOut': state.checkOut!,
+                'numberOfGuests': state.numberOfGuests,
               });
             },
             style: ElevatedButton.styleFrom(

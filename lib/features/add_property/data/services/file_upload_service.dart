@@ -23,34 +23,6 @@ class FileUploadServiceImpl implements FileUploadService {
     return _upload(file, EndPoint.uploadDocument, propertyId);
   }
 
-  // Future<UploadedFileModel> _upload(
-  //   File file,
-  //   String endpoint,
-  //   String? propertyId,
-  // ) async {
-  //   final String fileName = file.path.split(Platform.pathSeparator).last;
-
-  //   final MultipartFile multipartFile = await MultipartFile.fromFile(
-  //     file.path,
-  //     filename: fileName,
-  //   );
-
-  //   final FormData formData = FormData.fromMap({
-  //     'file': multipartFile,
-  //     if (propertyId != null) 'property_id': propertyId,
-  //   });
-
-  //   final Response<dynamic> response = await _dioClient.sendRequest(
-  //     RequestType.post,
-  //     endpoint,
-  //     formData: formData,
-  //   );
-
-  //   final Map<String, dynamic> body = response.data as Map<String, dynamic>;
-
-  //   return UploadedFileModel.fromJson(body);
-  // }
-
   Future<UploadedFileModel> _upload(
     File file,
     String endpoint,
@@ -68,8 +40,11 @@ class FileUploadServiceImpl implements FileUploadService {
       formData: formData,
     );
 
+    // print('UPLOAD RESPONSE RAW: ${response.data}');
+
     final Map<String, dynamic> body = response.data as Map<String, dynamic>;
+    final Map<String, dynamic> data = body['data'] as Map<String, dynamic>;
     // print(file);
-    return UploadedFileModel.fromJson(body);
+    return UploadedFileModel.fromJson(data);
   }
 }

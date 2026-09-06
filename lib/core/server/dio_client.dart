@@ -36,7 +36,8 @@ class DioClient {
     final Dio dio = Dio(
       BaseOptions(
         baseUrl: baseUrl ?? EndPoint.baseUrl,
-        headers: <String, dynamic>{'Content-Type': 'application/json'},
+        // headers: <String, dynamic>{'Content-Type': 'application/json'},
+        headers: null,
         sendTimeout: ConstantManager.timeOutDuration,
         receiveTimeout: ConstantManager.timeOutDuration,
         connectTimeout: ConstantManager.timeOutDuration,
@@ -147,6 +148,12 @@ class DioClient {
     CancelToken? cancelToken,
   }) async {
     try {
+      // If FormData is requested, it needs the content type inherited from BaseOptions
+      //(which is a constant 'application/json'), so Dio calculates the multipart + border itself.
+      final Options? options = formData != null
+          ? Options(contentType: 'multipart/form-data')
+          : null;
+
       switch (method) {
         case RequestType.get:
           return await _dio.get(
@@ -159,18 +166,21 @@ class DioClient {
             url,
             queryParameters: queryParameters,
             data: data ?? formData,
+            options: options,
           );
         case RequestType.patch:
           return await _dio.patch(
             url,
             queryParameters: queryParameters,
             data: data ?? formData,
+            options: options,
           );
         case RequestType.put:
           return await _dio.put(
             url,
             queryParameters: queryParameters,
             data: data ?? formData,
+            options: options,
           );
         case RequestType.delete:
           return await _dio.delete(

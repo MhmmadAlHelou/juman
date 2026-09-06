@@ -4,15 +4,12 @@ import 'package:ewan/features/home/data/models/properties_model.dart';
 
 abstract class AddPropertyRepository {
   Future<AddPropertyFormModel> createDraft();
+  Future<AddPropertyFormModel?> getMyDraft();
   Future<AddPropertyFormModel> patchStep(
     String propertyId,
     Map<String, dynamic> fields,
   );
-  Future<AddPropertyFormModel> submitProperty(
-    String propertyId,
-    Map<String, dynamic> payload,
-  );
-  Future<AddPropertyFormModel?> getMyDraft();
+  Future<void> submitProperty(String propertyId);
 }
 
 class AddPropertyRepositoryImpl implements AddPropertyRepository {
@@ -39,24 +36,19 @@ class AddPropertyRepositoryImpl implements AddPropertyRepository {
     final Response<dynamic> response = await _dioClient.sendRequest(
       RequestType.patch,
       '${EndPoint.properties}$propertyId/',
-      data: fields,
+      // data: fields,
+      formData: FormData.fromMap(fields),
     );
     final Map<String, dynamic> body = response.data as Map<String, dynamic>;
     return AddPropertyFormModel.fromJson(body);
   }
 
   @override
-  Future<AddPropertyFormModel> submitProperty(
-    String propertyId,
-    Map<String, dynamic> payload,
-  ) async {
-    final Response<dynamic> response = await _dioClient.sendRequest(
+  Future<void> submitProperty(String propertyId) async {
+    await _dioClient.sendRequest(
       RequestType.put,
       '${EndPoint.properties}$propertyId/submit/',
-      data: payload,
     );
-    final Map<String, dynamic> body = response.data as Map<String, dynamic>;
-    return AddPropertyFormModel.fromJson(body);
   }
 
   @override
