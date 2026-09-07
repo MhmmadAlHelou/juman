@@ -85,12 +85,12 @@ class _BaseScreenState extends State<BaseScreen> {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         animationCurve: Curves.bounceIn,
         animationDuration: const Duration(milliseconds: 100),
-        routes: const <PageRouteInfo>[
-          HomeRoute(),
+        routes: <PageRouteInfo>[
+          const HomeRoute(),
           AddPropertyPage(),
           // FavouritesRoute(),
           // OrdersRoute(),
-          // ProfileRoute(),
+          const ProfileRoute(),
         ],
         bottomNavigationBuilder: (_, TabsRouter tabsRouter) {
           _tabsRouter = tabsRouter;
@@ -136,25 +136,25 @@ class _BaseScreenState extends State<BaseScreen> {
                 ),
                 title: context.tr(LocaleKeys.saved),
               ),
-              CustomTabBarItem(
-                icon: AssetsManager.svg.orders.svg(
-                  height: 20,
-                  width: 20,
-                  colorFilter: ColorFilter.mode(
-                    context.colorScheme.onSurfaceVariant,
-                    BlendMode.srcIn,
-                  ),
-                ),
-                activeIcon: AssetsManager.svg.orders.svg(
-                  height: 20,
-                  width: 20,
-                  colorFilter: ColorFilter.mode(
-                    context.colorScheme.surface,
-                    BlendMode.srcIn,
-                  ),
-                ),
-                title: context.tr(LocaleKeys.services),
-              ),
+              // CustomTabBarItem(
+              //   icon: AssetsManager.svg.orders.svg(
+              //     height: 20,
+              //     width: 20,
+              //     colorFilter: ColorFilter.mode(
+              //       context.colorScheme.onSurfaceVariant,
+              //       BlendMode.srcIn,
+              //     ),
+              //   ),
+              //   activeIcon: AssetsManager.svg.orders.svg(
+              //     height: 20,
+              //     width: 20,
+              //     colorFilter: ColorFilter.mode(
+              //       context.colorScheme.surface,
+              //       BlendMode.srcIn,
+              //     ),
+              //   ),
+              //   title: context.tr(LocaleKeys.services),
+              // ),
               CustomTabBarItem(
                 icon: AssetsManager.svg.profile.svg(
                   height: 20,

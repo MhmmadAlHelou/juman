@@ -50,7 +50,7 @@ class AppRouter extends RootStackRouter {
       children: [
         CustomRoute(page: HomeRoute.page),
         CustomRoute(page: AddPropertyPage.page),
-        // CustomRoute(page: ProfileRoute.page),
+        CustomRoute(page: ProfileRoute.page),
         // CustomRoute(page: OrdersRoute.page),/////////////////////////////////-----------------------
         // CustomRoute(page: FavouritesRoute.page),
       ],
