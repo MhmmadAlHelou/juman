@@ -7,6 +7,8 @@ import 'package:ewan/features/favourites/bloc/favourites_bloc.dart';
 import 'package:ewan/features/favourites/data/favourites_repository.dart';
 import 'package:ewan/features/home/bloc/property/property_cubit.dart';
 import 'package:ewan/features/home/data/properties_repository.dart';
+import 'package:ewan/features/my_properties/bloc/my_properties_cubit.dart';
+import 'package:ewan/features/my_properties/data/my_properties_repository.dart';
 // import 'package:ewan/features/orders/bloc/orders_bloc.dart';/////////////////////
 
 import 'package:ewan/features/reservation/data/reservation_repository.dart';
@@ -65,6 +67,10 @@ void repositories() {
     () => FileUploadServiceImpl(getIt<DioClient>()),
   );
 
+  getIt.registerLazySingleton<MyPropertiesRepository>(
+    () => MyPropertiesRepositoryImpl(getIt<DioClient>()),
+  );
+
   getIt.registerLazySingleton<ReservationRepository>(
     () => ReservationRepositoryImpl(getIt<DioClient>()),
   );
@@ -83,7 +89,7 @@ void cubits() {
   // Home Feature
   getIt.registerFactory(() => HomeBloc(getIt()));
 
-  getIt.registerLazySingleton<PropertyCubit>(
+  getIt.registerFactory<PropertyCubit>(
     () => PropertyCubit(repository: getIt<PropertiesRepository>()),
   );
 
@@ -95,6 +101,9 @@ void cubits() {
     ),
   );
 
+  getIt.registerFactory(
+    () => MyPropertiesCubit(getIt<MyPropertiesRepository>()),
+  );
   // getIt.registerFactory(() => OrdersBloc(getIt()));/////////////____________//////////////////////////////
   // getIt.registerFactory(() => FavouritesBloc(getIt()));
 }

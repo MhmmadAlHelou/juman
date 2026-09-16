@@ -87,10 +87,11 @@ class _BaseScreenState extends State<BaseScreen> {
         animationDuration: const Duration(milliseconds: 100),
         routes: <PageRouteInfo>[
           const HomeRoute(),
-          AddPropertyPage(),
+          const ProfileRoute(),
+
+          // AddPropertyPage(),
           // FavouritesRoute(),
           // OrdersRoute(),
-          const ProfileRoute(),
         ],
         bottomNavigationBuilder: (_, TabsRouter tabsRouter) {
           _tabsRouter = tabsRouter;
@@ -117,25 +118,25 @@ class _BaseScreenState extends State<BaseScreen> {
                 ),
                 title: context.tr(LocaleKeys.home),
               ),
-              CustomTabBarItem(
-                icon: AssetsManager.svg.bookmark.svg(
-                  height: 20,
-                  width: 20,
-                  colorFilter: ColorFilter.mode(
-                    context.colorScheme.onSurfaceVariant,
-                    BlendMode.srcIn,
-                  ),
-                ),
-                activeIcon: AssetsManager.svg.bookmark.svg(
-                  height: 20,
-                  width: 20,
-                  colorFilter: ColorFilter.mode(
-                    context.colorScheme.surface,
-                    BlendMode.srcIn,
-                  ),
-                ),
-                title: context.tr(LocaleKeys.saved),
-              ),
+              // CustomTabBarItem(
+              //   icon: AssetsManager.svg.bookmark.svg(
+              //     height: 20,
+              //     width: 20,
+              //     colorFilter: ColorFilter.mode(
+              //       context.colorScheme.onSurfaceVariant,
+              //       BlendMode.srcIn,
+              //     ),
+              //   ),
+              //   activeIcon: AssetsManager.svg.bookmark.svg(
+              //     height: 20,
+              //     width: 20,
+              //     colorFilter: ColorFilter.mode(
+              //       context.colorScheme.surface,
+              //       BlendMode.srcIn,
+              //     ),
+              //   ),
+              //   title: context.tr(LocaleKeys.saved),
+              // ),
               // CustomTabBarItem(
               //   icon: AssetsManager.svg.orders.svg(
               //     height: 20,

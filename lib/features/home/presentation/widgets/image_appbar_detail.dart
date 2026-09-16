@@ -3,9 +3,14 @@ import 'package:ewan/features/home/data/data.dart';
 import 'package:flutter/material.dart';
 
 class ImageAppbarDetails extends StatefulWidget {
-  const ImageAppbarDetails({super.key, required this.property});
+  const ImageAppbarDetails({
+    super.key,
+    required this.property,
+    this.showFavorite = true,
+  });
 
   final PropertiesModel property;
+  final bool showFavorite;
 
   @override
   State<ImageAppbarDetails> createState() => _ImageAppbarDetailState();
@@ -36,18 +41,19 @@ class _ImageAppbarDetailState extends State<ImageAppbarDetails> {
         ),
       ),
       actions: [
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: _RoundIconButton(icon: Icons.share_outlined, onTap: () {}),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: _RoundIconButton(
-            icon: _isFavorite ? Icons.favorite : Icons.favorite_border,
-            iconColor: _isFavorite ? Palette.red : Palette.black,
-            onTap: () => setState(() => _isFavorite = !_isFavorite),
+        // Padding(
+        //   padding: const EdgeInsets.all(8),
+        //   child: _RoundIconButton(icon: Icons.share_outlined, onTap: () {}),
+        // ),
+        if (widget.showFavorite)
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: _RoundIconButton(
+              icon: _isFavorite ? Icons.favorite : Icons.favorite_border,
+              iconColor: _isFavorite ? Palette.red : Palette.black,
+              onTap: () => setState(() => _isFavorite = !_isFavorite),
+            ),
           ),
-        ),
       ],
       flexibleSpace: FlexibleSpaceBar(
         background: RepaintBoundary(

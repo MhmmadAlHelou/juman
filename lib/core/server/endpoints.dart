@@ -10,7 +10,7 @@ class EndPoint {
   // ─────────────────────────────────────────────
 
   static const String login = 'auth/login/';
-  static const String refreshToken = 'token/refresh/';
+  static const String refreshToken = 'auth/refresh/';
 
   // ─────────────────────────────────────────────
   // Amenities
@@ -82,7 +82,7 @@ class EndPoint {
   // reservations
   // ─────────────────────────────────────────────
 
-  static const String reservations = 'reservations/reservations/';
+  static const String reservations = 'reservations/';
 
   ///////////////////////////////////
   static const String register = 'users/register/';

@@ -5,6 +5,7 @@ import 'package:ewan/features/home/data/models/properties_model.dart';
 abstract class AddPropertyRepository {
   Future<AddPropertyFormModel> createDraft();
   Future<AddPropertyFormModel?> getMyDraft();
+  Future<AddPropertyFormModel> getDraftById(String id);
   Future<AddPropertyFormModel> patchStep(
     String propertyId,
     Map<String, dynamic> fields,
@@ -87,5 +88,15 @@ class AddPropertyRepositoryImpl implements AddPropertyRepository {
       }
       rethrow;
     }
+  }
+
+  @override
+  Future<AddPropertyFormModel> getDraftById(String id) async {
+    final Response<dynamic> response = await _dioClient.sendRequest(
+      RequestType.get,
+      '${EndPoint.properties}$id/',
+    );
+    final Map<String, dynamic> body = response.data as Map<String, dynamic>;
+    return AddPropertyFormModel.fromJson(body);
   }
 }

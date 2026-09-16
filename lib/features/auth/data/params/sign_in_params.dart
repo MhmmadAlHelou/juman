@@ -5,7 +5,7 @@ class SignInParams {
   final String password;
 
   Map<String, dynamic> toJson() => <String, String>{
-    'identifier': email.trim(),
+    'email': email.trim(),
     'password': password.trim(),
   };
 }

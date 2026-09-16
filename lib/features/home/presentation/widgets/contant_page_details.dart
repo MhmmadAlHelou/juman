@@ -70,7 +70,7 @@ class _ContantPageDetailsState extends State<ContantPageDetails> {
             const SizedBox(height: 8),
             Text(
               '${p.maxGuests} ${LocaleKeys.guests.tr()} · ${p.bedrooms} ${LocaleKeys.bedrooms.tr()} · ${p.bathrooms} ${LocaleKeys.bathrooms.tr()}'
-              '${p.size} ${LocaleKeys.m.tr()}',
+              ' . ${p.size} ${LocaleKeys.m.tr()}',
               style: TextStyle(
                 fontSize: 15,
                 color: Palette.fontColor.withValues(alpha: 0.7),

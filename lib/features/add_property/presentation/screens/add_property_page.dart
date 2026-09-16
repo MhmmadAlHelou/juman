@@ -14,9 +14,10 @@ import 'package:flutter/material.dart';
 
 @RoutePage()
 class AddPropertyPage extends StatelessWidget {
-  const AddPropertyPage({super.key, this.forceNew = false});
+  const AddPropertyPage({super.key, this.propertyId});
 
-  final bool forceNew;
+  final String? propertyId;
+  // final bool forceNew;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class AddPropertyPage extends StatelessWidget {
         repository: getIt<AddPropertyRepository>(),
         locationsRepository: getIt<LocationsRepository>(),
         uploadService: getIt<FileUploadService>(),
-      )..initWizard(forceNew: forceNew),
+      )..initWizard(propertyId: propertyId, forceNew: propertyId == null),
       child: const _AddPropertyView(),
     );
   }
@@ -104,9 +105,19 @@ class _AddPropertyViewState extends State<_AddPropertyView> {
                 content: Text(LocaleKeys.propertyAddedSuccessfully.tr()),
               ),
             );
-            getIt<PropertyCubit>().loadProperties();
-            // Navigator.pop(context);
-            AutoTabsRouter.of(context).setActiveIndex(0);
+            // getIt<PropertyCubit>().loadProperties();
+            Navigator.pop(context);
+            // AutoTabsRouter.of(context).setActiveIndex(0);
+            // final AutoTabsRouterState? tabsRouter = AutoTabsRouter.maybeOf(
+            //   context,
+            // );
+            // if (tabsRouter != null) {
+            //   // فُتحت من تاب "+" الأصلي داخل AutoTabsRouter
+            //   tabsRouter.setActiveIndex(0);
+            // } else {
+            //   // فُتحت كـ route مستقل (من My Properties / Resubmit)
+            //   context.router.maybePop();
+            // }
           },
         ),
       ],

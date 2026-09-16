@@ -236,34 +236,6 @@ class _PropertyCardState extends State<PropertyCard> {
               // decoration: TextDecoration.underline,
             ),
           ),
-          // if (widget.property.amenities.isNotEmpty) ...[
-          //   const SizedBox(height: 8),
-          //   Wrap(
-          //     spacing: 6,
-          //     runSpacing: 6,
-          //     children: widget.property.amenities
-          //         .map(
-          //           (amenity) => Container(
-          //             padding: const EdgeInsets.symmetric(
-          //               horizontal: 9,
-          //               vertical: 5,
-          //             ),
-          //             decoration: BoxDecoration(
-          //               color: Palette.lightPrimary.withValues(alpha: 0.3),
-          //               borderRadius: BorderRadius.circular(6),
-          //             ),
-          //             child: Text(
-          //               amenity.name,
-          //               style: const TextStyle(
-          //                 fontSize: 12,
-          //                 color: Palette.primary,
-          //               ),
-          //             ),
-          //           ),
-          //         )
-          //         .toList(),
-          //   ),
-          // ],
         ],
       ),
     );

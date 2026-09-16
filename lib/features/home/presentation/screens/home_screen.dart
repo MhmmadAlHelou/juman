@@ -1,4 +1,3 @@
-// import 'package:ewan/features/add_property/bloc/add_property_cubit.dart';
 import 'package:ewan/features/home/bloc/property/property_cubit.dart';
 import 'package:ewan/features/home/presentation/helper/map_sheet_controller.dart';
 import 'package:ewan/features/home/presentation/widgets/card_item.dart';
@@ -23,9 +22,6 @@ class HomeScreen extends StatelessWidget {
         BlocProvider<PropertyCubit>(
           create: (BuildContext context) => getIt<PropertyCubit>(),
         ),
-        // BlocProvider<AddPropertyCubit>(
-        //   create: (BuildContext context) => getIt<AddPropertyCubit>(),
-        // ),
       ],
       child: const HomeView(),
     );
@@ -44,48 +40,6 @@ class _HomeViewState extends State<HomeView> with MapSheetController<HomeView> {
   // with MapSheetController<HomeView>, HomeHelper {
   // late HomeBloc _homeBloc;
   late PropertyCubit propertyCubit;
-  // late AddPropertyCubit addPropertyCubit;
-
-  // late PropertiesRepository repository;
-  // late List<PropertiesModel> repoModel;
-  // final PropertiesModel dummyProperty = PropertiesModel(
-  //   id: 'dummy_001',
-  //   propertyCategory: PropertyCategory.furnishedApartments,
-  //   placeType: PlaceType.entirePlace,
-  //   title: "Casanova Elegance, with balcony and 4 bedrooms",
-  //   description:
-  //       "A spacious and bright apartment located in the heart of Barcelona, ​​with space for up to 9 people. "
-  //       "It contains 4 fully equipped bedrooms, a spacious living room, and a modern kitchen. "
-  //       "Close to transportation, restaurants and major tourist attractions.",
-  //   city: City.ruralDamascus,
-  //   area: 'Barcelona, ​​Spain',
-  //   streetAddress: 'Carrer de Casanova, 12',
-  //   mapLocation: const {'lat': 41.3874, 'lng': 2.1686},
-  //   propertySize: 120,
-  //   maximumGuests: 9,
-  //   bedrooms: 4,
-  //   bathrooms: 2,
-  //   amenities: const [
-  //     Amenity.wifi,
-  //     Amenity.kitchen,
-  //     Amenity.tv,
-  //     Amenity.elevator,
-  //     Amenity.washingMachine,
-  //     Amenity.airConditioning,
-  //     Amenity.freeParking,
-  //   ],
-  //   images: const [
-  //     'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80',
-  //     'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=800&q=80',
-  //     'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=800&q=80',
-  //     'https://images.unsplash.com/photo-1595576508898-0ad5c879a061?w=800&q=80',
-  //     'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=800&q=80',
-  //   ],
-  //   minimumStay: 2,
-  //   maximumStay: 30,
-  //   price: 251,
-  //   document: const [],
-  // );
 
   @override
   void initState() {
@@ -97,14 +51,9 @@ class _HomeViewState extends State<HomeView> with MapSheetController<HomeView> {
     //   const OrdersEvent.getAllOrder(page: 1, serviceId: null),
     // );
 
-    // addPropertyCubit = context.read<AddPropertyCubit>();
-
     propertyCubit = context.read<PropertyCubit>();
     getIt<PropertyCubit>().loadProperties();
 
-    // repoModel = await repository.getListings();
-
-    // _sheetController.addListener(_onSheetChanged);
     sheetController.addListener(onSheetChanged);
 
     super.initState();
@@ -131,8 +80,6 @@ class _HomeViewState extends State<HomeView> with MapSheetController<HomeView> {
               //   const OrdersEvent.getAllOrder(page: 1, serviceId: null),
               // );
               getIt<PropertyCubit>().loadProperties();
-
-              // repoModel = await repository.getListings();
 
               await Future<void>.delayed(const Duration(milliseconds: 300));
             },

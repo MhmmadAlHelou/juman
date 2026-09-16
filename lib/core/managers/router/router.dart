@@ -21,7 +21,7 @@ class AppRouter extends RootStackRouter {
     // ),
     CustomRoute(
       page: LoginRoute.page,
-      initial: true,
+      // initial: true,
       transitionsBuilder: TransitionsBuilders.fadeIn,
     ),
     // CustomRoute(
@@ -46,14 +46,26 @@ class AppRouter extends RootStackRouter {
     // ),
     CustomRoute(
       page: BaseRoute.page,
-      // initial: true,
+      initial: true,
       children: [
         CustomRoute(page: HomeRoute.page),
-        CustomRoute(page: AddPropertyPage.page),
+
         CustomRoute(page: ProfileRoute.page),
         // CustomRoute(page: OrdersRoute.page),/////////////////////////////////-----------------------
         // CustomRoute(page: FavouritesRoute.page),
       ],
+    ),
+    CustomRoute(
+      page: AddPropertyPage.page,
+      transitionsBuilder: TransitionsBuilders.fadeIn,
+    ),
+    CustomRoute(
+      page: MyPropertiesRoute.page,
+      transitionsBuilder: TransitionsBuilders.fadeIn,
+    ),
+    CustomRoute(
+      page: MyPropertyDetailRoute.page,
+      transitionsBuilder: TransitionsBuilders.fadeIn,
     ),
     // CustomRoute(
     //   page: EditProfileRoute.page,

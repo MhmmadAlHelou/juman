@@ -25,15 +25,39 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
   final LocationsRepository _locationsRepository;
   final FileUploadService _uploadService;
 
-  /// When AddPropertyPage is opened, it is called – it decides whether to resume or create a new draft.
-  Future<void> initWizard({bool forceNew = false}) async {
+  Future<void> initWizard({String? propertyId, bool forceNew = false}) async {
     emit(state.copyWith(isInitializing: true, clearError: true));
 
     final Future<void> locationsFuture = _loadLocationsData();
 
     AddPropertyFormModel? existingDraft;
 
-    if (!forceNew) {
+    if (propertyId != null) {
+      // Open a specific draft for it - there is no backup to create a new one if it fails
+      try {
+        existingDraft = await _repository.getDraftById(propertyId);
+      } on BackendException catch (e) {
+        await locationsFuture;
+        if (e.statusCode == 401) {
+          emit(
+            state.copyWith(
+              isInitializing: false,
+              errorMessage: 'You must log in first to add a property',
+            ),
+          );
+          return;
+        }
+        emit(
+          state.copyWith(
+            isInitializing: false,
+            errorMessage:
+                'Could not load this draft. It may have been deleted.',
+          ),
+        );
+        return;
+      }
+    } else if (!forceNew) {
+      // Old behavior - fetch the last public draft (remains in use only if needed later)
       try {
         existingDraft = await _repository.getMyDraft();
       } on BackendException catch (e) {
@@ -47,10 +71,10 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
           );
           return;
         }
-        existingDraft =
-            null; // Temporary failure to fetch an old draft - we continue by creating a new one
+        existingDraft = null;
       }
     }
+    // forceNew == true && propertyId == null → existingDraft → null → create new Draft always
 
     try {
       final AddPropertyFormModel formData =
@@ -69,7 +93,6 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
       await locationsFuture;
       emit(state.copyWith(isInitializing: false, errorMessage: e.message));
     } catch (e) {
-      // Any unexpected error (like parsing/type errors) - we won't let the interface open blank silently
       await locationsFuture;
       emit(
         state.copyWith(

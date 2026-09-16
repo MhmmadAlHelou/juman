@@ -212,8 +212,8 @@ return getSubServices(_that.page,_that.search,_that.serviceId);case _:
 /// @nodoc
 
 
-class _FilterServices implements HomeEvent {
-  const _FilterServices({this.page = 1, this.search = "", this.isFromAdminOnly, this.hasActiveOrderOnly});
+class _FilterServices extends HomeEvent {
+  const _FilterServices({this.page = 1, this.search = "", this.isFromAdminOnly, this.hasActiveOrderOnly}): super._();
   
 
 @override@JsonKey() final  int page;
@@ -284,8 +284,8 @@ as bool?,
 /// @nodoc
 
 
-class _GetSubServices implements HomeEvent {
-  const _GetSubServices({this.page = 1, this.search = "", required this.serviceId});
+class _GetSubServices extends HomeEvent {
+  const _GetSubServices({this.page = 1, this.search = "", required this.serviceId}): super._();
   
 
 @override@JsonKey() final  int page;

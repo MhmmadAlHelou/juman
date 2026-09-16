@@ -202,11 +202,12 @@ class DioClient {
         data: <String, String?>{'refresh': PrefData.refreshToken},
       );
 
-      final Map<String, dynamic> data =
-          response.data['data'] as Map<String, dynamic>;
+      // final Map<String, dynamic> data =
+      //     response.data['data'] as Map<String, dynamic>;
+      final Map<String, dynamic> data = response.data as Map<String, dynamic>;
 
       PrefData.token = data['access'] as String?;
-      PrefData.refreshToken = data['refresh'] as String?;
+      // PrefData.refreshToken = data['refresh'] as String?;
     } on DioException catch (e) {
       throw BackendException(dioException: e);
     } catch (e, stackTrace) {
