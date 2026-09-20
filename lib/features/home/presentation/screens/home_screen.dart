@@ -1,12 +1,14 @@
-import 'package:ewan/features/home/bloc/property/property_cubit.dart';
+import 'package:ewan/features/home/bloc/locations_cubit.dart';
+import 'package:ewan/features/home/bloc/property_cubit.dart';
 import 'package:ewan/features/home/presentation/helper/map_sheet_controller.dart';
 import 'package:ewan/features/home/presentation/widgets/card_item.dart';
 import 'package:ewan/features/home/presentation/widgets/map.dart';
-import 'package:ewan/features/home/presentation/widgets/property_detail.dart';
+import 'package:ewan/features/home/presentation/widgets/no_properties_found.dart';
+import 'package:ewan/features/home/presentation/screens/property_detail.dart';
+import 'package:ewan/features/home/presentation/widgets/property_filter_bottom_sheet.dart';
+import 'package:ewan/features/home/presentation/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:ewan/core/core.dart';
-
-import '../../home.dart';
 
 @RoutePage()
 class HomeScreen extends StatelessWidget {
@@ -16,11 +18,12 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        // BlocProvider<HomeBloc>(
-        //   create: (BuildContext context) => getIt<HomeBloc>(),
-        // ),
         BlocProvider<PropertyCubit>(
           create: (BuildContext context) => getIt<PropertyCubit>(),
+        ),
+        BlocProvider<LocationsCubit>(
+          create: (BuildContext context) =>
+              getIt<LocationsCubit>()..loadReferenceData(),
         ),
       ],
       child: const HomeView(),
@@ -35,22 +38,54 @@ class HomeView extends StatefulWidget {
   State<HomeView> createState() => _HomeViewState();
 }
 
-// class _HomeViewState extends State<HomeView> with HomeHelper {
 class _HomeViewState extends State<HomeView> with MapSheetController<HomeView> {
-  // with MapSheetController<HomeView>, HomeHelper {
-  // late HomeBloc _homeBloc;
   late PropertyCubit propertyCubit;
+
+  void _onSearchTextChanged(String value) {
+    final filters = propertyCubit.state.activeFilters.copyWith(
+      search: () => value.isEmpty ? null : value,
+    );
+    filters.isEmpty
+        ? propertyCubit.resetSearch()
+        : propertyCubit.searchProperties(filters);
+    _expandSheet();
+  }
+
+  void _onCategoryQuickSelect(String? categoryId) {
+    final filters = propertyCubit.state.activeFilters.copyWith(
+      category: () => categoryId,
+    );
+    filters.isEmpty
+        ? propertyCubit.resetSearch()
+        : propertyCubit.searchProperties(filters);
+    _expandSheet();
+  }
+
+  void _openFilterSheet() {
+    PropertyFilterBottomSheet.show(
+      context,
+      initialFilters: propertyCubit.state.activeFilters,
+      onApply: (filters) {
+        filters.isEmpty
+            ? propertyCubit.resetSearch()
+            : propertyCubit.searchProperties(filters);
+        _expandSheet();
+      },
+      onReset: () => propertyCubit.resetSearch(),
+    );
+  }
+
+  void _expandSheet() {
+    if (!sheetController.isAttached) return;
+    sheetController.animateTo(
+      1.0,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
 
   @override
   void initState() {
-    // _homeBloc = context.read<HomeBloc>();
-    // _homeBloc.add(const HomeEvent.getAds());
-    // _homeBloc.add(const HomeEvent.getHomeAd());
-    // _homeBloc.add(const HomeEvent.filterServices(hasActiveOrderOnly: true));
-    // context.read<OrdersBloc>().add(
-    //   const OrdersEvent.getAllOrder(page: 1, serviceId: null),
-    // );
-
     propertyCubit = context.read<PropertyCubit>();
     getIt<PropertyCubit>().loadProperties();
 
@@ -73,20 +108,11 @@ class _HomeViewState extends State<HomeView> with MapSheetController<HomeView> {
         builder: (context, state) {
           return RefreshIndicator(
             onRefresh: () async {
-              // _homeBloc.add(
-              //   const HomeEvent.filterServices(hasActiveOrderOnly: true),
-              // );
-              // context.read<OrdersBloc>().add(
-              //   const OrdersEvent.getAllOrder(page: 1, serviceId: null),
-              // );
               getIt<PropertyCubit>().loadProperties();
-
               await Future<void>.delayed(const Duration(milliseconds: 300));
             },
             child: Stack(
               children: <Widget>[
-                // const HomeHeaderWidget(),
-                // const SizedBox(height: 16),
                 Positioned.fill(child: const MyMap()),
 
                 if (state.selectedpropertyId == null)
@@ -127,48 +153,55 @@ class _HomeViewState extends State<HomeView> with MapSheetController<HomeView> {
                               ),
                             ),
                             Expanded(
-                              child: ListView.builder(
-                                controller: innerScrollController!,
-                                itemCount:
-                                    state.sheetProperties.length +
-                                    (state.hasMoreSheetItems ? 1 : 0),
-                                itemBuilder: (context, index) {
-                                  if (index >= state.sheetProperties.length) {
-                                    return const Center(
-                                      child: Padding(
-                                        padding: EdgeInsets.all(16),
-                                        child: CircularProgressIndicator(),
-                                      ),
-                                    );
-                                  }
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 24,
-                                      horizontal: 16,
-                                    ),
-                                    child: PropertyCard(
-                                      property: state.sheetProperties[index],
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (_) => PropertyDetailPage(
-                                              property:
-                                                  state.sheetProperties[index],
+                              child: state.noResultsFound
+                                  ? const NoPropertiesFound()
+                                  : ListView.builder(
+                                      controller: innerScrollController!,
+                                      itemCount:
+                                          state.sheetProperties.length +
+                                          (state.hasMoreSheetItems ? 1 : 0),
+                                      itemBuilder: (context, index) {
+                                        if (index >=
+                                            state.sheetProperties.length) {
+                                          return const Center(
+                                            child: Padding(
+                                              padding: EdgeInsets.all(16),
+                                              child:
+                                                  CircularProgressIndicator(),
                                             ),
+                                          );
+                                        }
+                                        return Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 24,
+                                            horizontal: 16,
+                                          ),
+                                          child: PropertyCard(
+                                            property:
+                                                state.sheetProperties[index],
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (_) =>
+                                                      PropertyDetailPage(
+                                                        property: state
+                                                            .sheetProperties[index],
+                                                      ),
+                                                ),
+                                              );
+                                            },
                                           ),
                                         );
                                       },
                                     ),
-                                  );
-                                },
-                              ),
                             ),
                           ],
                         ),
                       );
                     },
                   ),
+
                 if (showMapButton)
                   Positioned(
                     bottom: 24,
@@ -182,6 +215,18 @@ class _HomeViewState extends State<HomeView> with MapSheetController<HomeView> {
                       ),
                     ),
                   ),
+
+                Positioned(
+                  top: 6,
+                  left: 16,
+                  right: 16,
+                  child: HomePropertySearchBar(
+                    onSearchChanged: _onSearchTextChanged,
+                    onFilterTap: _openFilterSheet,
+                    onCategorySelected: _onCategoryQuickSelect,
+                    selectedCategoryId: state.activeFilters.category,
+                  ),
+                ),
               ],
             ),
           );

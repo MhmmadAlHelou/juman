@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import 'app.dart' show App;
 import 'package:ewan/core/core.dart';
 import 'package:flutter/material.dart';
@@ -10,9 +12,11 @@ void main() async {
 
   await serviceLocator();
 
-  ErrorWidget.builder = (FlutterErrorDetails details) {
-    return const SizedBox.shrink();
-  };
+  if (kReleaseMode) {
+    ErrorWidget.builder = (FlutterErrorDetails details) {
+      return const SizedBox.shrink();
+    };
+  }
 
   runApp(
     EasyLocalization(

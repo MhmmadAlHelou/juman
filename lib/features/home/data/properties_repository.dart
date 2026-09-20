@@ -2,11 +2,14 @@ import 'package:ewan/core/core.dart';
 import 'package:ewan/features/home/data/models/properties_model.dart';
 
 abstract class PropertiesRepository {
-  Future<List<PropertiesModel>> getAllProperties();
+  Future<List<PropertiesModel>> getAllProperties({
+    Map<String, dynamic>? filters,
+  });
 
   Future<PaginatedResult<PropertiesModel>> getProperties({
     int page = 1,
     int pageSize = 10,
+    Map<String, dynamic>? filters,
   });
 
   // Future<PaginatedResult<PropertiesModel>> getMyProperties();
@@ -26,11 +29,16 @@ class PropertiesRepositoryImpl implements PropertiesRepository {
   Future<PaginatedResult<PropertiesModel>> getProperties({
     int page = 1,
     int pageSize = 10,
+    Map<String, dynamic>? filters,
   }) async {
     final Response<dynamic> response = await _dioClient.sendRequest(
       RequestType.get,
       EndPoint.properties,
-      queryParameters: <String, dynamic>{'page': page, 'page_size': pageSize},
+      queryParameters: <String, dynamic>{
+        'page': page,
+        'page_size': pageSize,
+        ...?filters,
+      },
     );
 
     final Map<String, dynamic> data = response.data as Map<String, dynamic>;
@@ -50,7 +58,9 @@ class PropertiesRepositoryImpl implements PropertiesRepository {
   }
 
   @override
-  Future<List<PropertiesModel>> getAllProperties() async {
+  Future<List<PropertiesModel>> getAllProperties({
+    Map<String, dynamic>? filters,
+  }) async {
     final List<PropertiesModel> all = <PropertiesModel>[];
     int page = 1;
 
@@ -58,6 +68,7 @@ class PropertiesRepositoryImpl implements PropertiesRepository {
       final PaginatedResult<PropertiesModel> pageResult = await getProperties(
         page: page,
         pageSize: _mapFetchPageSize,
+        filters: filters,
       );
       all.addAll(pageResult.results);
 

@@ -9,7 +9,6 @@ import 'package:ewan/features/add_property/presentation/screens/steps/step3_deta
 import 'package:ewan/features/add_property/presentation/screens/steps/step4_photos.dart';
 import 'package:ewan/features/add_property/presentation/screens/steps/step5_pricing.dart';
 import 'package:ewan/features/add_property/presentation/widgets/add_property_app_bar.dart';
-import 'package:ewan/features/home/bloc/property/property_cubit.dart';
 import 'package:flutter/material.dart';
 
 @RoutePage()

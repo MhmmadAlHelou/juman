@@ -1,7 +1,7 @@
 import 'package:ewan/core/core.dart';
-import 'package:ewan/features/home/bloc/property/property_cubit.dart';
+import 'package:ewan/features/home/bloc/property_cubit.dart';
 import 'package:ewan/features/home/presentation/widgets/card_item.dart';
-import 'package:ewan/features/home/presentation/widgets/property_detail.dart';
+import 'package:ewan/features/home/presentation/screens/property_detail.dart';
 import 'package:flutter/material.dart';
 
 class MyMap extends StatelessWidget {

@@ -3,21 +3,16 @@ import 'package:ewan/features/add_property/data/add_property_repository.dart';
 import 'package:ewan/features/add_property/data/locations_repository.dart';
 import 'package:ewan/features/add_property/data/services/file_upload_service.dart';
 import 'package:ewan/features/base/data/base_repository.dart';
-import 'package:ewan/features/favourites/bloc/favourites_bloc.dart';
-import 'package:ewan/features/favourites/data/favourites_repository.dart';
-import 'package:ewan/features/home/bloc/property/property_cubit.dart';
+import 'package:ewan/features/home/bloc/locations_cubit.dart';
+import 'package:ewan/features/home/bloc/property_cubit.dart';
 import 'package:ewan/features/home/data/properties_repository.dart';
 import 'package:ewan/features/my_properties/bloc/my_properties_cubit.dart';
 import 'package:ewan/features/my_properties/data/my_properties_repository.dart';
-// import 'package:ewan/features/orders/bloc/orders_bloc.dart';/////////////////////
 
 import 'package:ewan/features/reservation/data/reservation_repository.dart';
 import 'package:get_it/get_it.dart';
 import '../../../features/auth/bloc/authentication_bloc.dart';
 import '../../../features/auth/data/data.dart';
-import '../../../features/home/bloc/home_bloc.dart';
-import '../../../features/home/data/home_repository.dart';
-import '../../../features/notifications/notifications.dart';
 import '../../core.dart';
 
 GetIt getIt = GetIt.instance;
@@ -51,7 +46,6 @@ void repositories() {
   // Base Feature
   getIt.registerFactory(() => AuthRepository(getIt()));
   // getIt.registerFactory(() => ProfileRepository(getIt()));
-  getIt.registerFactory(() => HomeRepository(getIt()));
   getIt.registerLazySingleton<PropertiesRepository>(
     () => PropertiesRepositoryImpl(getIt<DioClient>()),
   );
@@ -87,10 +81,13 @@ void cubits() {
   // getIt.registerFactory(() => NotificationBloc(getIt()));
 
   // Home Feature
-  getIt.registerFactory(() => HomeBloc(getIt()));
+  // getIt.registerFactory(() => HomeBloc(getIt()));
 
   getIt.registerFactory<PropertyCubit>(
     () => PropertyCubit(repository: getIt<PropertiesRepository>()),
+  );
+  getIt.registerLazySingleton<LocationsCubit>(
+    () => LocationsCubit(repository: getIt<LocationsRepository>()),
   );
 
   getIt.registerFactory(

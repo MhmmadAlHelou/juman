@@ -11,6 +11,8 @@ class PropertyState extends Equatable {
   final Map<String, BitmapDescriptor> normalMarkerIcons;
   final Map<String, BitmapDescriptor> selectedMarkerIcons;
   final int visibleSheetCount;
+  final bool isSearchActive;
+  final PropertySearchFilterModel activeFilters;
 
   const PropertyState({
     this.properties = const [],
@@ -19,6 +21,8 @@ class PropertyState extends Equatable {
     this.normalMarkerIcons = const {},
     this.selectedMarkerIcons = const {},
     this.visibleSheetCount = 10,
+    this.isSearchActive = false,
+    this.activeFilters = const PropertySearchFilterModel(),
   });
 
   PropertiesModel? get selectedListing {
@@ -35,6 +39,8 @@ class PropertyState extends Equatable {
 
   bool get hasMoreSheetItems => visibleSheetCount < properties.length;
 
+  bool get noResultsFound => isSearchActive && !isLoading && properties.isEmpty;
+
   PropertyState copyWith({
     List<PropertiesModel>? properties,
     String? selectedpropertyId,
@@ -43,6 +49,8 @@ class PropertyState extends Equatable {
     Map<String, BitmapDescriptor>? normalMarkerIcons,
     Map<String, BitmapDescriptor>? selectedMarkerIcons,
     int? visibleSheetCount,
+    bool? isSearchActive,
+    PropertySearchFilterModel? activeFilters,
   }) {
     return PropertyState(
       properties: properties ?? this.properties,
@@ -53,6 +61,8 @@ class PropertyState extends Equatable {
       normalMarkerIcons: normalMarkerIcons ?? this.normalMarkerIcons,
       selectedMarkerIcons: selectedMarkerIcons ?? this.selectedMarkerIcons,
       visibleSheetCount: visibleSheetCount ?? this.visibleSheetCount,
+      isSearchActive: isSearchActive ?? this.isSearchActive,
+      activeFilters: activeFilters ?? this.activeFilters,
     );
   }
 
@@ -64,5 +74,7 @@ class PropertyState extends Equatable {
     normalMarkerIcons.length,
     selectedMarkerIcons.length,
     visibleSheetCount,
+    isSearchActive,
+    activeFilters,
   ];
 }

@@ -22,10 +22,10 @@ import 'package:ewan/features/home/data/data.dart' as _i13;
 import 'package:ewan/features/home/home.dart' as _i14;
 import 'package:ewan/features/home/presentation/screens/home_screen.dart'
     as _i4;
-import 'package:ewan/features/home/presentation/screens/service_screen.dart'
-    as _i9;
-import 'package:ewan/features/home/presentation/screens/services_screen.dart'
-    as _i10;
+// import 'package:ewan/features/home/presentation/screens/service_screen.dart'
+//     as _i9;
+// import 'package:ewan/features/home/presentation/screens/services_screen.dart'
+//     as _i10;
 import 'package:ewan/features/my_properties/presentation/screens/my_properties_screen.dart'
     as _i6;
 import 'package:ewan/features/my_properties/presentation/screens/my_property_detail_screen.dart'
@@ -263,82 +263,82 @@ class ProfileRoute extends _i11.PageRouteInfo<void> {
   );
 }
 
-/// generated route for
-/// [_i9.ServiceScreen]
-class ServiceRoute extends _i11.PageRouteInfo<ServiceRouteArgs> {
-  ServiceRoute({
-    _i12.Key? key,
-    required _i14.ServiceResult serviceData,
-    required bool isView,
-    List<_i11.PageRouteInfo>? children,
-  }) : super(
-         ServiceRoute.name,
-         args: ServiceRouteArgs(
-           key: key,
-           serviceData: serviceData,
-           isView: isView,
-         ),
-         initialChildren: children,
-       );
+// /// generated route for
+// /// [_i9.ServiceScreen]
+// class ServiceRoute extends _i11.PageRouteInfo<ServiceRouteArgs> {
+//   ServiceRoute({
+//     _i12.Key? key,
+//     required _i14.ServiceResult serviceData,
+//     required bool isView,
+//     List<_i11.PageRouteInfo>? children,
+//   }) : super(
+//          ServiceRoute.name,
+//          args: ServiceRouteArgs(
+//            key: key,
+//            serviceData: serviceData,
+//            isView: isView,
+//          ),
+//          initialChildren: children,
+//        );
 
-  static const String name = 'ServiceRoute';
+//   static const String name = 'ServiceRoute';
 
-  static _i11.PageInfo page = _i11.PageInfo(
-    name,
-    builder: (data) {
-      final args = data.argsAs<ServiceRouteArgs>();
-      return _i9.ServiceScreen(
-        key: args.key,
-        serviceData: args.serviceData,
-        isView: args.isView,
-      );
-    },
-  );
-}
+//   static _i11.PageInfo page = _i11.PageInfo(
+//     name,
+//     builder: (data) {
+//       final args = data.argsAs<ServiceRouteArgs>();
+//       return _i9.ServiceScreen(
+//         key: args.key,
+//         serviceData: args.serviceData,
+//         isView: args.isView,
+//       );
+//     },
+//   );
+// }
 
-class ServiceRouteArgs {
-  const ServiceRouteArgs({
-    this.key,
-    required this.serviceData,
-    required this.isView,
-  });
+// class ServiceRouteArgs {
+//   const ServiceRouteArgs({
+//     this.key,
+//     required this.serviceData,
+//     required this.isView,
+//   });
 
-  final _i12.Key? key;
+//   final _i12.Key? key;
 
-  final _i14.ServiceResult serviceData;
+//   final _i14.ServiceResult serviceData;
 
-  final bool isView;
+//   final bool isView;
 
-  @override
-  String toString() {
-    return 'ServiceRouteArgs{key: $key, serviceData: $serviceData, isView: $isView}';
-  }
+//   @override
+//   String toString() {
+//     return 'ServiceRouteArgs{key: $key, serviceData: $serviceData, isView: $isView}';
+//   }
 
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    if (other is! ServiceRouteArgs) return false;
-    return key == other.key &&
-        serviceData == other.serviceData &&
-        isView == other.isView;
-  }
+//   @override
+//   bool operator ==(Object other) {
+//     if (identical(this, other)) return true;
+//     if (other is! ServiceRouteArgs) return false;
+//     return key == other.key &&
+//         serviceData == other.serviceData &&
+//         isView == other.isView;
+//   }
 
-  @override
-  int get hashCode => key.hashCode ^ serviceData.hashCode ^ isView.hashCode;
-}
+//   @override
+//   int get hashCode => key.hashCode ^ serviceData.hashCode ^ isView.hashCode;
+// }
 
-/// generated route for
-/// [_i10.ServicesScreen]
-class ServicesRoute extends _i11.PageRouteInfo<void> {
-  const ServicesRoute({List<_i11.PageRouteInfo>? children})
-    : super(ServicesRoute.name, initialChildren: children);
+// /// generated route for
+// /// [_i10.ServicesScreen]
+// class ServicesRoute extends _i11.PageRouteInfo<void> {
+//   const ServicesRoute({List<_i11.PageRouteInfo>? children})
+//     : super(ServicesRoute.name, initialChildren: children);
 
-  static const String name = 'ServicesRoute';
+//   static const String name = 'ServicesRoute';
 
-  static _i11.PageInfo page = _i11.PageInfo(
-    name,
-    builder: (data) {
-      return const _i10.ServicesScreen();
-    },
-  );
-}
+//   static _i11.PageInfo page = _i11.PageInfo(
+//     name,
+//     builder: (data) {
+//       return const _i10.ServicesScreen();
+//     },
+//   );
+// }

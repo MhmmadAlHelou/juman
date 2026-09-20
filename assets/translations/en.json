@@ -5,6 +5,15 @@
   "currency": "SYP",
   "map": "Map",
 
+  "tryDifferentFilters": "Try Different Filters",
+  "noPropertiesFound": "No Properties Found",
+  "any": "any",
+  "showResults": "Show Results",
+  "resetFilters": "Reset Filters",
+  "priceRange": "Price Range",
+  "filters": "Filters",
+  "searchAnywhere": "Search Any Where",
+
   "m": "m²",
   "guests": "guests",
   "bedrooms": "bedrooms",

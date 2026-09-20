@@ -5,6 +5,15 @@
   "currency": "ليرة سورية",
   "map": "الخريطة",
 
+  "tryDifferentFilters": "جرب مرشحات مختلفة",
+  "noPropertiesFound": "لا توجد عقارات متوفرة",
+  "any": "أي",
+  "showResults": "عرض النتائج",
+  "resetFilters": "تصفير المرشحات",
+  "priceRange": "نطاق السعر",
+  "filters": "المرشحات",
+  "searchAnywhere": "البحث في أي مكان",
+
   "m": "م²",
   "guests": "ضيف",
   "bedrooms": "غرفة نوم",

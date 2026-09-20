@@ -7,6 +7,14 @@ abstract class  LocaleKeys {
   static const change_lang = 'change_lang';
   static const currency = 'currency';
   static const map = 'map';
+  static const tryDifferentFilters = 'tryDifferentFilters';
+  static const noPropertiesFound = 'noPropertiesFound';
+  static const any = 'any';
+  static const showResults = 'showResults';
+  static const resetFilters = 'resetFilters';
+  static const priceRange = 'priceRange';
+  static const filters = 'filters';
+  static const searchAnywhere = 'searchAnywhere';
   static const m = 'm';
   static const guests = 'guests';
   static const bedrooms = 'bedrooms';

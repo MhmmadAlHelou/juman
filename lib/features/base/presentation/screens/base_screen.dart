@@ -63,6 +63,14 @@ class _BaseScreenState extends State<BaseScreen> {
   //   }
   //   super.initState();
   // }
+  @override
+  void initState() {
+    if (!PrefData.isSignedIn) {
+      ///////////////////////////////////////////////
+      context.router.replaceAll(<PageRouteInfo<dynamic>>[LoginRoute()]);
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -24,6 +24,7 @@ mixin MapSheetController<T extends StatefulWidget> on State<T> {
         curve: Curves.easeOut,
       );
     }
+    if (!sheetController.isAttached) return;
     await sheetController.animateTo(
       0.09,
       duration: const Duration(milliseconds: 300),
