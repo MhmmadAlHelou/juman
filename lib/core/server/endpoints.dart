@@ -84,6 +84,12 @@ class EndPoint {
 
   static const String reservations = 'reservations/';
 
+  // ─────────────────────────────────────────────
+  // payment-methods
+  // ─────────────────────────────────────────────
+
+  static const String paymentMethods = 'payment-methods/';
+
   ///////////////////////////////////
   static const String register = 'users/register/';
 

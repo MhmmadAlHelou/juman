@@ -14,6 +14,7 @@ class PriceBar extends StatefulWidget {
 class _PriceBarState extends State<PriceBar> {
   DateTime? _checkIn;
   DateTime? _checkOut;
+  int _numberOfGuests = 1;
 
   int get _numberOfNights {
     if (_checkIn == null || _checkOut == null) return 0;
@@ -28,14 +29,30 @@ class _PriceBarState extends State<PriceBar> {
       propertyId: widget.property.id,
       pricePerNight: widget.property.pricePerNight,
       maxGuests: widget.property.maxGuests,
+      initialCheckIn: _checkIn,
+      initialCheckOut: _checkOut,
+      initialGuests: _numberOfGuests,
     );
 
     if (result != null) {
       setState(() {
         _checkIn = result['checkIn'];
         _checkOut = result['checkOut'];
+        _numberOfGuests = result['numberOfGuests'] as int;
       });
     }
+  }
+
+  void _goToReserve() {
+    if (!_hasSelectedDates) return;
+    context.router.push(
+      ReserveRoute(
+        property: widget.property,
+        checkIn: _checkIn!,
+        checkOut: _checkOut!,
+        numberOfGuests: _numberOfGuests,
+      ),
+    );
   }
 
   String _formatDate(DateTime date) {
@@ -127,11 +144,10 @@ class _PriceBarState extends State<PriceBar> {
             ),
             const SizedBox(width: 16),
             ElevatedButton(
-              onPressed: () {
-                // TODO: The logic of booking or contacting the owner
-              },
+              onPressed: _hasSelectedDates ? _goToReserve : null,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Palette.primary,
+                disabledBackgroundColor: Palette.semiGray,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 32,
                   vertical: 12,

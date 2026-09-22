@@ -67,38 +67,33 @@ class AppRouter extends RootStackRouter {
       page: MyPropertyDetailRoute.page,
       transitionsBuilder: TransitionsBuilders.fadeIn,
     ),
+    CustomRoute(
+      page: ReserveRoute.page,
+      transitionsBuilder: TransitionsBuilders.fadeIn,
+    ),
+    CustomRoute(
+      page: ReservationConfirmedRoute.page,
+      transitionsBuilder: TransitionsBuilders.fadeIn,
+    ),
+    CustomRoute(
+      page: UploadReceiptRoute.page,
+      transitionsBuilder: TransitionsBuilders.fadeIn,
+    ),
     // CustomRoute(
     //   page: EditProfileRoute.page,
-    //   transitionsBuilder: TransitionsBuilders.fadeIn,
-    // ),
-    // CustomRoute(
-    //   page: ServiceRoute.page,
-    //   transitionsBuilder: TransitionsBuilders.fadeIn,
-    // ),
-    // CustomRoute(
-    //   page: ServicesRoute.page,
     //   transitionsBuilder: TransitionsBuilders.fadeIn,
     // ),
     // CustomRoute(
     //   page: NotificationRoute.page,
     //   transitionsBuilder: TransitionsBuilders.fadeIn,
     // ),
-
     // CustomRoute(
     //   page: ContactUsRoute.page,
     //   transitionsBuilder: TransitionsBuilders.fadeIn,
     // ),
     // CustomRoute(
-    //   page: OrderRoute.page,
-    //   transitionsBuilder: TransitionsBuilders.fadeIn,
-    // ),////////////////////////////////////---------------------------------------------------------
-    // CustomRoute(
     //   page: ChangePasswordRoute.page,
     //   transitionsBuilder: TransitionsBuilders.fadeIn,
     // ),
-    // CustomRoute(
-    //   page: NewOrderRoute.page,
-    //   transitionsBuilder: TransitionsBuilders.fadeIn,
-    // ),/////////////////////////----------------------------------------------------------
   ];
 }

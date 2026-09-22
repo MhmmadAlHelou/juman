@@ -20,6 +20,9 @@ class SelectDatesBottomSheet extends StatelessWidget {
     required String propertyId,
     required double pricePerNight,
     required int maxGuests,
+    DateTime? initialCheckIn,
+    DateTime? initialCheckOut,
+    int? initialGuests,
   }) {
     return showModalBottomSheet<Map<String, dynamic>?>(
       context: context,
@@ -32,6 +35,9 @@ class SelectDatesBottomSheet extends StatelessWidget {
           getIt<ReservationRepository>(),
           propertyId: propertyId,
           maxGuests: maxGuests,
+          initialCheckIn: initialCheckIn,
+          initialCheckOut: initialCheckOut,
+          initialGuests: initialGuests,
         )..loadUnavailableDates(),
         child: SelectDatesBottomSheet(
           propertyId: propertyId,

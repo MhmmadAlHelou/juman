@@ -8,6 +8,7 @@ import 'package:ewan/features/home/bloc/property_cubit.dart';
 import 'package:ewan/features/home/data/properties_repository.dart';
 import 'package:ewan/features/my_properties/bloc/my_properties_cubit.dart';
 import 'package:ewan/features/my_properties/data/my_properties_repository.dart';
+import 'package:ewan/features/reservation/data/payment_methods_repository.dart';
 
 import 'package:ewan/features/reservation/data/reservation_repository.dart';
 import 'package:get_it/get_it.dart';
@@ -45,7 +46,7 @@ void initPrefManager(SharedPreferences preferences) =>
 void repositories() {
   // Base Feature
   getIt.registerFactory(() => AuthRepository(getIt()));
-  // getIt.registerFactory(() => ProfileRepository(getIt()));
+
   getIt.registerLazySingleton<PropertiesRepository>(
     () => PropertiesRepositoryImpl(getIt<DioClient>()),
   );
@@ -69,8 +70,14 @@ void repositories() {
     () => ReservationRepositoryImpl(getIt<DioClient>()),
   );
 
+  getIt.registerLazySingleton<PaymentMethodsRepository>(
+    () => MockPaymentMethodsRepository(),
+  );
+  //  getIt.registerLazySingleton<ReservationRepository>( //TODO:
+  //   () => ReservationRepositoryImpl(getIt<DioClient>()),
+  // );
+
   // getIt.registerFactory(() => NotificationRepository(getIt()));
-  // // getIt.registerFactory(() => OrdersRepository(getIt()));--------------------------------
   // getIt.registerFactory(() => FavouritesRepository(getIt()));
 }
 

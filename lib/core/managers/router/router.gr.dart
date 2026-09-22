@@ -9,7 +9,7 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:auto_route/auto_route.dart' as _i11;
+import 'package:auto_route/auto_route.dart' as _i12;
 import 'package:ewan/features/add_property/presentation/screens/add_property_page.dart'
     as _i1;
 import 'package:ewan/features/auth/presentation/screens/create_account_screen.dart'
@@ -18,29 +18,33 @@ import 'package:ewan/features/auth/presentation/screens/login_screen.dart'
     as _i5;
 import 'package:ewan/features/base/presentation/screens/base_screen.dart'
     as _i2;
-import 'package:ewan/features/home/data/data.dart' as _i13;
-import 'package:ewan/features/home/home.dart' as _i14;
+import 'package:ewan/features/home/data/data.dart' as _i14;
+import 'package:ewan/features/home/data/models/properties_model.dart' as _i16;
 import 'package:ewan/features/home/presentation/screens/home_screen.dart'
     as _i4;
-// import 'package:ewan/features/home/presentation/screens/service_screen.dart'
-//     as _i9;
-// import 'package:ewan/features/home/presentation/screens/services_screen.dart'
-//     as _i10;
 import 'package:ewan/features/my_properties/presentation/screens/my_properties_screen.dart'
     as _i6;
 import 'package:ewan/features/my_properties/presentation/screens/my_property_detail_screen.dart'
     as _i7;
 import 'package:ewan/features/profile/presentation/screens/profile_screen.dart'
     as _i8;
-import 'package:flutter/material.dart' as _i12;
+import 'package:ewan/features/reservation/data/models/reservation_model.dart'
+    as _i15;
+import 'package:ewan/features/reservation/presentation/Screens/reeserve_screen.dart'
+    as _i10;
+import 'package:ewan/features/reservation/presentation/Screens/reservation_confirmed_screen.dart'
+    as _i9;
+import 'package:ewan/features/reservation/presentation/Screens/upload_receipt_screen.dart'
+    as _i11;
+import 'package:flutter/material.dart' as _i13;
 
 /// generated route for
 /// [_i1.AddPropertyPage]
-class AddPropertyPage extends _i11.PageRouteInfo<AddPropertyPageArgs> {
+class AddPropertyPage extends _i12.PageRouteInfo<AddPropertyPageArgs> {
   AddPropertyPage({
-    _i12.Key? key,
+    _i13.Key? key,
     String? propertyId,
-    List<_i11.PageRouteInfo>? children,
+    List<_i12.PageRouteInfo>? children,
   }) : super(
          AddPropertyPage.name,
          args: AddPropertyPageArgs(key: key, propertyId: propertyId),
@@ -49,7 +53,7 @@ class AddPropertyPage extends _i11.PageRouteInfo<AddPropertyPageArgs> {
 
   static const String name = 'AddPropertyPage';
 
-  static _i11.PageInfo page = _i11.PageInfo(
+  static _i12.PageInfo page = _i12.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<AddPropertyPageArgs>(
@@ -63,7 +67,7 @@ class AddPropertyPage extends _i11.PageRouteInfo<AddPropertyPageArgs> {
 class AddPropertyPageArgs {
   const AddPropertyPageArgs({this.key, this.propertyId});
 
-  final _i12.Key? key;
+  final _i13.Key? key;
 
   final String? propertyId;
 
@@ -85,13 +89,13 @@ class AddPropertyPageArgs {
 
 /// generated route for
 /// [_i2.BaseScreen]
-class BaseRoute extends _i11.PageRouteInfo<void> {
-  const BaseRoute({List<_i11.PageRouteInfo>? children})
+class BaseRoute extends _i12.PageRouteInfo<void> {
+  const BaseRoute({List<_i12.PageRouteInfo>? children})
     : super(BaseRoute.name, initialChildren: children);
 
   static const String name = 'BaseRoute';
 
-  static _i11.PageInfo page = _i11.PageInfo(
+  static _i12.PageInfo page = _i12.PageInfo(
     name,
     builder: (data) {
       return const _i2.BaseScreen();
@@ -101,13 +105,13 @@ class BaseRoute extends _i11.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i3.CreateAccountScreen]
-class CreateAccountRoute extends _i11.PageRouteInfo<void> {
-  const CreateAccountRoute({List<_i11.PageRouteInfo>? children})
+class CreateAccountRoute extends _i12.PageRouteInfo<void> {
+  const CreateAccountRoute({List<_i12.PageRouteInfo>? children})
     : super(CreateAccountRoute.name, initialChildren: children);
 
   static const String name = 'CreateAccountRoute';
 
-  static _i11.PageInfo page = _i11.PageInfo(
+  static _i12.PageInfo page = _i12.PageInfo(
     name,
     builder: (data) {
       return const _i3.CreateAccountScreen();
@@ -117,13 +121,13 @@ class CreateAccountRoute extends _i11.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i4.HomeScreen]
-class HomeRoute extends _i11.PageRouteInfo<void> {
-  const HomeRoute({List<_i11.PageRouteInfo>? children})
+class HomeRoute extends _i12.PageRouteInfo<void> {
+  const HomeRoute({List<_i12.PageRouteInfo>? children})
     : super(HomeRoute.name, initialChildren: children);
 
   static const String name = 'HomeRoute';
 
-  static _i11.PageInfo page = _i11.PageInfo(
+  static _i12.PageInfo page = _i12.PageInfo(
     name,
     builder: (data) {
       return const _i4.HomeScreen();
@@ -133,11 +137,11 @@ class HomeRoute extends _i11.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i5.LoginScreen]
-class LoginRoute extends _i11.PageRouteInfo<LoginRouteArgs> {
+class LoginRoute extends _i12.PageRouteInfo<LoginRouteArgs> {
   LoginRoute({
-    _i12.Key? key,
-    _i12.VoidCallback? onLoginSuccess,
-    List<_i11.PageRouteInfo>? children,
+    _i13.Key? key,
+    _i13.VoidCallback? onLoginSuccess,
+    List<_i12.PageRouteInfo>? children,
   }) : super(
          LoginRoute.name,
          args: LoginRouteArgs(key: key, onLoginSuccess: onLoginSuccess),
@@ -146,7 +150,7 @@ class LoginRoute extends _i11.PageRouteInfo<LoginRouteArgs> {
 
   static const String name = 'LoginRoute';
 
-  static _i11.PageInfo page = _i11.PageInfo(
+  static _i12.PageInfo page = _i12.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<LoginRouteArgs>(
@@ -163,9 +167,9 @@ class LoginRoute extends _i11.PageRouteInfo<LoginRouteArgs> {
 class LoginRouteArgs {
   const LoginRouteArgs({this.key, this.onLoginSuccess});
 
-  final _i12.Key? key;
+  final _i13.Key? key;
 
-  final _i12.VoidCallback? onLoginSuccess;
+  final _i13.VoidCallback? onLoginSuccess;
 
   @override
   String toString() {
@@ -185,13 +189,13 @@ class LoginRouteArgs {
 
 /// generated route for
 /// [_i6.MyPropertiesScreen]
-class MyPropertiesRoute extends _i11.PageRouteInfo<void> {
-  const MyPropertiesRoute({List<_i11.PageRouteInfo>? children})
+class MyPropertiesRoute extends _i12.PageRouteInfo<void> {
+  const MyPropertiesRoute({List<_i12.PageRouteInfo>? children})
     : super(MyPropertiesRoute.name, initialChildren: children);
 
   static const String name = 'MyPropertiesRoute';
 
-  static _i11.PageInfo page = _i11.PageInfo(
+  static _i12.PageInfo page = _i12.PageInfo(
     name,
     builder: (data) {
       return const _i6.MyPropertiesScreen();
@@ -202,11 +206,11 @@ class MyPropertiesRoute extends _i11.PageRouteInfo<void> {
 /// generated route for
 /// [_i7.MyPropertyDetailScreen]
 class MyPropertyDetailRoute
-    extends _i11.PageRouteInfo<MyPropertyDetailRouteArgs> {
+    extends _i12.PageRouteInfo<MyPropertyDetailRouteArgs> {
   MyPropertyDetailRoute({
-    _i12.Key? key,
-    required _i13.PropertiesModel property,
-    List<_i11.PageRouteInfo>? children,
+    _i13.Key? key,
+    required _i14.PropertiesModel property,
+    List<_i12.PageRouteInfo>? children,
   }) : super(
          MyPropertyDetailRoute.name,
          args: MyPropertyDetailRouteArgs(key: key, property: property),
@@ -215,7 +219,7 @@ class MyPropertyDetailRoute
 
   static const String name = 'MyPropertyDetailRoute';
 
-  static _i11.PageInfo page = _i11.PageInfo(
+  static _i12.PageInfo page = _i12.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<MyPropertyDetailRouteArgs>();
@@ -227,9 +231,9 @@ class MyPropertyDetailRoute
 class MyPropertyDetailRouteArgs {
   const MyPropertyDetailRouteArgs({this.key, required this.property});
 
-  final _i12.Key? key;
+  final _i13.Key? key;
 
-  final _i13.PropertiesModel property;
+  final _i14.PropertiesModel property;
 
   @override
   String toString() {
@@ -249,13 +253,13 @@ class MyPropertyDetailRouteArgs {
 
 /// generated route for
 /// [_i8.ProfileScreen]
-class ProfileRoute extends _i11.PageRouteInfo<void> {
-  const ProfileRoute({List<_i11.PageRouteInfo>? children})
+class ProfileRoute extends _i12.PageRouteInfo<void> {
+  const ProfileRoute({List<_i12.PageRouteInfo>? children})
     : super(ProfileRoute.name, initialChildren: children);
 
   static const String name = 'ProfileRoute';
 
-  static _i11.PageInfo page = _i11.PageInfo(
+  static _i12.PageInfo page = _i12.PageInfo(
     name,
     builder: (data) {
       return const _i8.ProfileScreen();
@@ -263,82 +267,189 @@ class ProfileRoute extends _i11.PageRouteInfo<void> {
   );
 }
 
-// /// generated route for
-// /// [_i9.ServiceScreen]
-// class ServiceRoute extends _i11.PageRouteInfo<ServiceRouteArgs> {
-//   ServiceRoute({
-//     _i12.Key? key,
-//     required _i14.ServiceResult serviceData,
-//     required bool isView,
-//     List<_i11.PageRouteInfo>? children,
-//   }) : super(
-//          ServiceRoute.name,
-//          args: ServiceRouteArgs(
-//            key: key,
-//            serviceData: serviceData,
-//            isView: isView,
-//          ),
-//          initialChildren: children,
-//        );
+/// generated route for
+/// [_i9.ReservationConfirmedScreen]
+class ReservationConfirmedRoute
+    extends _i12.PageRouteInfo<ReservationConfirmedRouteArgs> {
+  ReservationConfirmedRoute({
+    _i13.Key? key,
+    required _i15.ReservationModel reservation,
+    List<_i12.PageRouteInfo>? children,
+  }) : super(
+         ReservationConfirmedRoute.name,
+         args: ReservationConfirmedRouteArgs(
+           key: key,
+           reservation: reservation,
+         ),
+         initialChildren: children,
+       );
 
-//   static const String name = 'ServiceRoute';
+  static const String name = 'ReservationConfirmedRoute';
 
-//   static _i11.PageInfo page = _i11.PageInfo(
-//     name,
-//     builder: (data) {
-//       final args = data.argsAs<ServiceRouteArgs>();
-//       return _i9.ServiceScreen(
-//         key: args.key,
-//         serviceData: args.serviceData,
-//         isView: args.isView,
-//       );
-//     },
-//   );
-// }
+  static _i12.PageInfo page = _i12.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ReservationConfirmedRouteArgs>();
+      return _i9.ReservationConfirmedScreen(
+        key: args.key,
+        reservation: args.reservation,
+      );
+    },
+  );
+}
 
-// class ServiceRouteArgs {
-//   const ServiceRouteArgs({
-//     this.key,
-//     required this.serviceData,
-//     required this.isView,
-//   });
+class ReservationConfirmedRouteArgs {
+  const ReservationConfirmedRouteArgs({this.key, required this.reservation});
 
-//   final _i12.Key? key;
+  final _i13.Key? key;
 
-//   final _i14.ServiceResult serviceData;
+  final _i15.ReservationModel reservation;
 
-//   final bool isView;
+  @override
+  String toString() {
+    return 'ReservationConfirmedRouteArgs{key: $key, reservation: $reservation}';
+  }
 
-//   @override
-//   String toString() {
-//     return 'ServiceRouteArgs{key: $key, serviceData: $serviceData, isView: $isView}';
-//   }
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ReservationConfirmedRouteArgs) return false;
+    return key == other.key && reservation == other.reservation;
+  }
 
-//   @override
-//   bool operator ==(Object other) {
-//     if (identical(this, other)) return true;
-//     if (other is! ServiceRouteArgs) return false;
-//     return key == other.key &&
-//         serviceData == other.serviceData &&
-//         isView == other.isView;
-//   }
+  @override
+  int get hashCode => key.hashCode ^ reservation.hashCode;
+}
 
-//   @override
-//   int get hashCode => key.hashCode ^ serviceData.hashCode ^ isView.hashCode;
-// }
+/// generated route for
+/// [_i10.ReserveScreen]
+class ReserveRoute extends _i12.PageRouteInfo<ReserveRouteArgs> {
+  ReserveRoute({
+    _i13.Key? key,
+    required _i16.PropertiesModel property,
+    required DateTime checkIn,
+    required DateTime checkOut,
+    required int numberOfGuests,
+    List<_i12.PageRouteInfo>? children,
+  }) : super(
+         ReserveRoute.name,
+         args: ReserveRouteArgs(
+           key: key,
+           property: property,
+           checkIn: checkIn,
+           checkOut: checkOut,
+           numberOfGuests: numberOfGuests,
+         ),
+         initialChildren: children,
+       );
 
-// /// generated route for
-// /// [_i10.ServicesScreen]
-// class ServicesRoute extends _i11.PageRouteInfo<void> {
-//   const ServicesRoute({List<_i11.PageRouteInfo>? children})
-//     : super(ServicesRoute.name, initialChildren: children);
+  static const String name = 'ReserveRoute';
 
-//   static const String name = 'ServicesRoute';
+  static _i12.PageInfo page = _i12.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ReserveRouteArgs>();
+      return _i10.ReserveScreen(
+        key: args.key,
+        property: args.property,
+        checkIn: args.checkIn,
+        checkOut: args.checkOut,
+        numberOfGuests: args.numberOfGuests,
+      );
+    },
+  );
+}
 
-//   static _i11.PageInfo page = _i11.PageInfo(
-//     name,
-//     builder: (data) {
-//       return const _i10.ServicesScreen();
-//     },
-//   );
-// }
+class ReserveRouteArgs {
+  const ReserveRouteArgs({
+    this.key,
+    required this.property,
+    required this.checkIn,
+    required this.checkOut,
+    required this.numberOfGuests,
+  });
+
+  final _i13.Key? key;
+
+  final _i16.PropertiesModel property;
+
+  final DateTime checkIn;
+
+  final DateTime checkOut;
+
+  final int numberOfGuests;
+
+  @override
+  String toString() {
+    return 'ReserveRouteArgs{key: $key, property: $property, checkIn: $checkIn, checkOut: $checkOut, numberOfGuests: $numberOfGuests}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ReserveRouteArgs) return false;
+    return key == other.key &&
+        property == other.property &&
+        checkIn == other.checkIn &&
+        checkOut == other.checkOut &&
+        numberOfGuests == other.numberOfGuests;
+  }
+
+  @override
+  int get hashCode =>
+      key.hashCode ^
+      property.hashCode ^
+      checkIn.hashCode ^
+      checkOut.hashCode ^
+      numberOfGuests.hashCode;
+}
+
+/// generated route for
+/// [_i11.UploadReceiptScreen]
+class UploadReceiptRoute extends _i12.PageRouteInfo<UploadReceiptRouteArgs> {
+  UploadReceiptRoute({
+    _i13.Key? key,
+    required _i15.ReservationModel reservation,
+    List<_i12.PageRouteInfo>? children,
+  }) : super(
+         UploadReceiptRoute.name,
+         args: UploadReceiptRouteArgs(key: key, reservation: reservation),
+         initialChildren: children,
+       );
+
+  static const String name = 'UploadReceiptRoute';
+
+  static _i12.PageInfo page = _i12.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<UploadReceiptRouteArgs>();
+      return _i11.UploadReceiptScreen(
+        key: args.key,
+        reservation: args.reservation,
+      );
+    },
+  );
+}
+
+class UploadReceiptRouteArgs {
+  const UploadReceiptRouteArgs({this.key, required this.reservation});
+
+  final _i13.Key? key;
+
+  final _i15.ReservationModel reservation;
+
+  @override
+  String toString() {
+    return 'UploadReceiptRouteArgs{key: $key, reservation: $reservation}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! UploadReceiptRouteArgs) return false;
+    return key == other.key && reservation == other.reservation;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ reservation.hashCode;
+}

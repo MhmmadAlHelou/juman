@@ -9,7 +9,16 @@ class SelectDatesCubit extends Cubit<SelectDatesState> {
     this._reservationRepository, {
     required this.propertyId,
     required this.maxGuests,
-  }) : super(const SelectDatesState());
+    DateTime? initialCheckIn,
+    DateTime? initialCheckOut,
+    int? initialGuests,
+  }) : super(
+         SelectDatesState(
+           checkIn: initialCheckIn,
+           checkOut: initialCheckOut,
+           numberOfGuests: initialGuests ?? 1,
+         ),
+       );
 
   final ReservationRepository _reservationRepository;
   final String propertyId;
