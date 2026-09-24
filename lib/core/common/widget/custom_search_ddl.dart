@@ -105,9 +105,9 @@ class _SearchableDDLState<T> extends State<SearchableDDL<T>> {
         itemBuilder:
             (BuildContext context, T item, bool isDisabled, bool isSelected) {
               String? text;
-              if (item.runtimeType == CityResult) {
-                text = (item as CityResult).name ?? "";
-              }
+              // if (item.runtimeType == CityResult) {
+              //   text = (item as CityResult).name ?? "";
+              // }
               return Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Text(
@@ -250,9 +250,9 @@ class _SearchableDDLState<T> extends State<SearchableDDL<T>> {
       ),
       validator: widget.validator,
       itemAsString: (T item) {
-        if (item.runtimeType == CityResult) {
-          return (item as CityResult).name ?? "";
-        }
+        // if (item.runtimeType == CityResult) {
+        //   return (item as CityResult).name ?? "";
+        // }
         return "";
       },
     );

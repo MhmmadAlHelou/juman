@@ -140,6 +140,9 @@
   "view": "View",
   "edit": "Edit",
 
+  "mobileNumber": "Mobile Number",
+  "phoneNumberIsRequired": "Phone number is required",
+
   "noInternetConnectionError": "No internet connection, please try again",
   "genericError": "Something went wrong, please try again",
   "unknownError": "Internal server error, please try again",

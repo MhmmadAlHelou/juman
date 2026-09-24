@@ -10,6 +10,11 @@ class EndPoint {
   // ─────────────────────────────────────────────
 
   static const String login = 'auth/login/';
+  static const String signup = 'auth/signup/';
+  static const String forgotPassword = 'auth/forgot-password/';
+  static const String resetPassword = 'auth/reset-password/';
+  static const String verifyOtp = 'auth/verify-otp/';
+  static const String resendOtp = 'auth/resend-otp/';
   static const String refreshToken = 'auth/refresh/';
 
   // ─────────────────────────────────────────────
@@ -91,12 +96,12 @@ class EndPoint {
   static const String paymentMethods = 'payment-methods/';
 
   ///////////////////////////////////
-  static const String register = 'users/register/';
+  // static const String register = 'users/register/';
 
   // static const String refreshToken = 'users/refresh/';
 
-  static const String resetPassword = 'users/reset-password/';
-  static const String changePassword = 'users/change-password/';
+  // static const String resetPassword = 'users/reset-password/';
+  // static const String changePassword = 'users/change-password/';
   static const String changeEmail = 'users/change-email/';
 
   static const String deleteAccount = 'users/delete/';
@@ -105,8 +110,8 @@ class EndPoint {
   static const String appInfo = 'system-info/app-info/';
   static const String contactUs = 'contact-messages/submit/';
 
-  static const String sendVerificationCode = 'users/send-code/';
-  static const String verify = 'users/verify/';
+  // static const String sendVerificationCode = 'users/send-code/';
+  // static const String verify = 'users/verify/';
   // static const String login = 'users/login/';
   static const String loginByCode = 'users/code-login/';
 

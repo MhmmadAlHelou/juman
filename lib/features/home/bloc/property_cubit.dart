@@ -24,51 +24,13 @@ class PropertyCubit extends Cubit<PropertyState> {
     loadProperties();
   }
 
-  // Future<void> loadProperties() async {
-  //   emit(state.copyWith(isLoading: true));
-
-  //   try {
-  //     final propertiesList = await _repository.getAllProperties();
-
-  //     final normalIcons = <String, BitmapDescriptor>{};
-  //     final selectedIcons = <String, BitmapDescriptor>{};
-
-  //     for (final property in propertiesList) {
-  //       // Can't place a marker without coordinates — skip icon generation,
-  //       // property still shows up fine in the sheet list.
-  //       if (!property.hasValidCoordinates) continue;
-
-  //       normalIcons[property.id] = await MarkerBitmapGenerator.generate(
-  //         price: property.pricePerNight,
-  //         selected: false,
-  //       );
-  //       selectedIcons[property.id] = await MarkerBitmapGenerator.generate(
-  //         price: property.pricePerNight,
-  //         selected: true,
-  //       );
-  //     }
-
-  //     emit(
-  //       state.copyWith(
-  //         properties: propertiesList,
-  //         isLoading: false,
-  //         normalMarkerIcons: normalIcons,
-  //         selectedMarkerIcons: selectedIcons,
-  //         visibleSheetCount:
-  //             _sheetPageSize, // Reset pagination window on every fresh load (initial load,pull-to-refresh, or after adding a new property).
-  //       ),
-  //     );
-  //   } catch (e, st) {
-  //     Logger().e('Failed to load properties', error: e, stackTrace: st);
-  //     emit(state.copyWith(isLoading: false));
-  //   }
-  // }
-
   Future<void> loadProperties() async {
     emit(state.copyWith(isLoading: true));
     try {
       final propertiesList = await _repository.getAllProperties();
       final markers = await _generateMarkers(propertiesList);
+
+      if (isClosed) return;
 
       emit(
         state.copyWith(
@@ -82,6 +44,7 @@ class PropertyCubit extends Cubit<PropertyState> {
         ),
       );
     } catch (e, st) {
+      if (isClosed) return;
       Logger().e('Failed to load properties', error: e, stackTrace: st);
       emit(state.copyWith(isLoading: false));
     }

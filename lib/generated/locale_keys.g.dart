@@ -135,6 +135,8 @@ abstract class  LocaleKeys {
   static const resubmit = 'resubmit';
   static const view = 'view';
   static const edit = 'edit';
+  static const mobileNumber = 'mobileNumber';
+  static const phoneNumberIsRequired = 'phoneNumberIsRequired';
   static const noInternetConnectionError = 'noInternetConnectionError';
   static const genericError = 'genericError';
   static const unknownError = 'unknownError';

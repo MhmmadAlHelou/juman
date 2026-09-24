@@ -1,3 +1,5 @@
+import 'package:ewan/features/auth/data/models/sign_up_model.dart';
+
 import '../../../core/core.dart';
 import '../../base/data/base_repository.dart';
 import '../auth.dart';
@@ -44,13 +46,15 @@ class AuthenticationBloc
 
   String? verificationCodeEmail;
   bool verifyEmailForProfile = false;
-  String? resetPasswordCode;
+  // String? resetPasswordCode;
+  String? resetPasswordOtp;
   bool redirectToResetPasswordPage = false;
   Timer? timer;
 
   String languageCode = LocalizationConfig.currentLanguage;
   String? currencyId = PrefData.currencyIdPhone;
   bool loginMethod = false;
+  String? _pendingPassword;
 
   Future<void> signUp(
     AuthenticationEvent event,
@@ -62,11 +66,12 @@ class AuthenticationBloc
 
       verificationCodeEmail = null;
       emit(const AuthenticationState.loadingSignUp());
-      late final AuthModel response;
-      response = await _authRepository.signUp(signUpParams: event.signUpParams);
+      await _authRepository.signUp(signUpParams: event.signUpParams);
 
-      verificationCodeEmail = response.user.email;
-      PrefData.token = response.access;
+      // لا يوجد token هنا بعد — الإيميل معروف من نفس الـ params اللي بعتها
+      verificationCodeEmail = event.signUpParams.email;
+      _pendingPassword =
+          event.signUpParams.password; // خزّنها مؤقتًا لتسجيل الدخول بعد التحقق
       emit(const AuthenticationState.signUpSucceed());
     } on GeneralException catch (e) {
       emit(AuthenticationState.signUpFailed(generalException: e));
@@ -83,10 +88,18 @@ class AuthenticationBloc
 
       emit(const AuthenticationState.loadingVerifyAccount());
 
-      final AuthModel response = await _authRepository.verifyAccount(
+      await _authRepository.verifyAccount(
         verifyAccountParams: event.verifyAccountParams,
       );
+
+      final AuthModel response = await _authRepository.signIn(
+        signInParams: SignInParams(
+          email: verificationCodeEmail!,
+          password: _pendingPassword!,
+        ),
+      );
       PrefData.isSignedIn = true;
+      PrefData.token = response.access;
       await Future.wait(<Future<void>>[
         _userLocalDataSource.storeUser(response.user),
         operationsOnUserProfile(response.user),
@@ -95,7 +108,7 @@ class AuthenticationBloc
           !GlobalNotifiers.profileNotifier.value;
 
       emit(const AuthenticationState.verifyAccountSucceed());
-    } catch (e) {
+    } on GeneralException catch (e) {
       emit(
         AuthenticationState.verifyAccountFailed(
           generalException: LocalException(message: e.toString()),
@@ -114,12 +127,15 @@ class AuthenticationBloc
 
       emit(const AuthenticationState.loadingResendVerificationCode());
 
-      await _authRepository.resendVerificationCodeOnEmail(
-        email: verificationCodeEmail ??= event.email,
-      );
-
       if (event.toResetPassword) {
+        await _authRepository.forgotPassword(
+          identifier: verificationCodeEmail ??= event.email,
+        );
         redirectToResetPasswordPage = true;
+      } else {
+        await _authRepository.resendVerificationCodeOnEmail(
+          email: verificationCodeEmail ??= event.email,
+        );
       }
       emit(const AuthenticationState.resendVerificationCodeSucceed());
     } catch (e) {
@@ -139,22 +155,25 @@ class AuthenticationBloc
       // event as _$SignInByCodeImpl;
       if (event is! _SignInByCode) return;
 
-      emit(const AuthenticationState.loadingVerifyAccount());
-
-      final AuthModel response = await _authRepository.signInByCode(
-        verifyAccountParams: event.verifyAccountParams,
-      );
-
-      await Future.wait(<Future<void>>[
-        _userLocalDataSource.storeAuthData(
-          refreshToken: response.refresh,
-          token: response.access,
-          userData: response.user,
-        ),
-        operationsOnUserProfile(response.user),
-      ]);
-      resetPasswordCode = response.user.resetPasswordCode;
+      resetPasswordOtp = event.verifyAccountParams.code;
       emit(const AuthenticationState.redirectToResetPasswordPage());
+
+      // emit(const AuthenticationState.loadingVerifyAccount());
+
+      // final AuthModel response = await _authRepository.signInByCode(
+      //   verifyAccountParams: event.verifyAccountParams,
+      // );
+
+      // await Future.wait(<Future<void>>[
+      //   _userLocalDataSource.storeAuthData(
+      //     refreshToken: response.refresh,
+      //     token: response.access,
+      //     userData: response.user,
+      //   ),
+      //   operationsOnUserProfile(response.user),
+      // ]);
+      // resetPasswordCode = response.user.resetPasswordCode;
+      // emit(const AuthenticationState.redirectToResetPasswordPage());
     } catch (e) {
       emit(
         AuthenticationState.verifyAccountFailed(
@@ -174,13 +193,14 @@ class AuthenticationBloc
       emit(const AuthenticationState.loadingResetPassword());
 
       await _authRepository.resetPassword(
-        password: event.password,
-        resetPasswordCode: resetPasswordCode!,
+        identifier: verificationCodeEmail!,
+        otp: resetPasswordOtp!,
+        newPassword: event.password,
       );
 
       emit(const AuthenticationState.resetPasswordSucceed());
     } on GeneralException catch (e) {
-      emit(AuthenticationState.signUpFailed(generalException: e));
+      emit(AuthenticationState.resetPasswordFailed(generalException: e));
     }
   }
 

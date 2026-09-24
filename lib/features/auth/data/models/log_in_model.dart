@@ -38,12 +38,12 @@ class UserData {
   final int? gender;
   final String? image;
   final String? resetPasswordCode;
-  final CityResult? city;
+  // final CityResult? city;
 
   UserData({
     required this.id,
     this.email,
-    this.city,
+    // this.city,
     this.emailVerified,
     this.access,
     this.refresh,
@@ -74,7 +74,7 @@ class UserData {
     String? lastName,
     DateTime? birthDate,
     int? gender,
-    CityResult? city,
+    // CityResult? city,
     dynamic image,
 
     String? resetPasswordCode,
@@ -92,7 +92,7 @@ class UserData {
     gender: gender ?? this.gender,
     image: image ?? this.image,
     address: address ?? this.address,
-    city: city ?? this.city,
+    // city: city ?? this.city,
   );
 
   factory UserData.fromJson(Map<String, dynamic> json) => UserData(
@@ -111,7 +111,7 @@ class UserData {
         : DateTime.parse(json["birth_date"]),
     gender: json["gender"],
     image: json["image"],
-    city: json["city"] == null ? null : CityResult.fromJson(json["city"]),
+    // city: json["city"] == null ? null : CityResult.fromJson(json["city"]),
     resetPasswordCode: json["reset_password_code"],
   );
 

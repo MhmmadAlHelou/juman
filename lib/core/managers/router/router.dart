@@ -15,27 +15,28 @@ class AppRouter extends RootStackRouter {
   RouteType get defaultRouteType => const RouteType.material();
   @override
   final List<AutoRoute> routes = <AutoRoute>[
-    // CustomRoute(
-    //   page: CreateAccountRoute.page,
-    //   transitionsBuilder: TransitionsBuilders.fadeIn,
-    // ),
+    CustomRoute(
+      page: CreateAccountRoute.page,
+      // initial: true,
+      transitionsBuilder: TransitionsBuilders.fadeIn,
+    ),
     CustomRoute(
       page: LoginRoute.page,
       // initial: true,
       transitionsBuilder: TransitionsBuilders.fadeIn,
     ),
-    // CustomRoute(
-    //   page: ForgetPasswordRoute.page,
-    //   transitionsBuilder: TransitionsBuilders.fadeIn,
-    // ),
-    // CustomRoute(
-    //   page: NewPasswordRoute.page,
-    //   transitionsBuilder: TransitionsBuilders.fadeIn,
-    // ),
-    // CustomRoute(
-    //   page: VerificationCodeRoute.page,
-    //   transitionsBuilder: TransitionsBuilders.fadeIn,
-    // ),
+    CustomRoute(
+      page: ForgetPasswordRoute.page,
+      transitionsBuilder: TransitionsBuilders.fadeIn,
+    ),
+    CustomRoute(
+      page: NewPasswordRoute.page,
+      transitionsBuilder: TransitionsBuilders.fadeIn,
+    ),
+    CustomRoute(
+      page: VerificationCodeRoute.page,
+      transitionsBuilder: TransitionsBuilders.fadeIn,
+    ),
     // CustomRoute(
     //   page: DeleteAccountRoute.page,
     //   transitionsBuilder: TransitionsBuilders.fadeIn,
@@ -51,7 +52,7 @@ class AppRouter extends RootStackRouter {
         CustomRoute(page: HomeRoute.page),
 
         CustomRoute(page: ProfileRoute.page),
-        // CustomRoute(page: OrdersRoute.page),/////////////////////////////////-----------------------
+        // CustomRoute(page: OrdersRoute.page),
         // CustomRoute(page: FavouritesRoute.page),
       ],
     ),

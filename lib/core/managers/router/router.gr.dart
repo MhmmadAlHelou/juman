@@ -9,42 +9,49 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:auto_route/auto_route.dart' as _i12;
+import 'package:auto_route/auto_route.dart' as _i15;
 import 'package:ewan/features/add_property/presentation/screens/add_property_page.dart'
     as _i1;
+import 'package:ewan/features/auth/auth.dart' as _i18;
 import 'package:ewan/features/auth/presentation/screens/create_account_screen.dart'
     as _i3;
+import 'package:ewan/features/auth/presentation/screens/forget_password_screen.dart'
+    as _i4;
 import 'package:ewan/features/auth/presentation/screens/login_screen.dart'
-    as _i5;
+    as _i6;
+import 'package:ewan/features/auth/presentation/screens/new_password_screen.dart'
+    as _i9;
+import 'package:ewan/features/auth/presentation/screens/verification_code_screen.dart'
+    as _i14;
 import 'package:ewan/features/base/presentation/screens/base_screen.dart'
     as _i2;
-import 'package:ewan/features/home/data/data.dart' as _i14;
-import 'package:ewan/features/home/data/models/properties_model.dart' as _i16;
+import 'package:ewan/features/home/data/data.dart' as _i17;
+import 'package:ewan/features/home/data/models/properties_model.dart' as _i20;
 import 'package:ewan/features/home/presentation/screens/home_screen.dart'
-    as _i4;
+    as _i5;
 import 'package:ewan/features/my_properties/presentation/screens/my_properties_screen.dart'
-    as _i6;
-import 'package:ewan/features/my_properties/presentation/screens/my_property_detail_screen.dart'
     as _i7;
-import 'package:ewan/features/profile/presentation/screens/profile_screen.dart'
+import 'package:ewan/features/my_properties/presentation/screens/my_property_detail_screen.dart'
     as _i8;
-import 'package:ewan/features/reservation/data/models/reservation_model.dart'
-    as _i15;
-import 'package:ewan/features/reservation/presentation/Screens/reeserve_screen.dart'
+import 'package:ewan/features/profile/presentation/screens/profile_screen.dart'
     as _i10;
+import 'package:ewan/features/reservation/data/models/reservation_model.dart'
+    as _i19;
+import 'package:ewan/features/reservation/presentation/Screens/reeserve_screen.dart'
+    as _i12;
 import 'package:ewan/features/reservation/presentation/Screens/reservation_confirmed_screen.dart'
-    as _i9;
-import 'package:ewan/features/reservation/presentation/Screens/upload_receipt_screen.dart'
     as _i11;
-import 'package:flutter/material.dart' as _i13;
+import 'package:ewan/features/reservation/presentation/Screens/upload_receipt_screen.dart'
+    as _i13;
+import 'package:flutter/material.dart' as _i16;
 
 /// generated route for
 /// [_i1.AddPropertyPage]
-class AddPropertyPage extends _i12.PageRouteInfo<AddPropertyPageArgs> {
+class AddPropertyPage extends _i15.PageRouteInfo<AddPropertyPageArgs> {
   AddPropertyPage({
-    _i13.Key? key,
+    _i16.Key? key,
     String? propertyId,
-    List<_i12.PageRouteInfo>? children,
+    List<_i15.PageRouteInfo>? children,
   }) : super(
          AddPropertyPage.name,
          args: AddPropertyPageArgs(key: key, propertyId: propertyId),
@@ -53,7 +60,7 @@ class AddPropertyPage extends _i12.PageRouteInfo<AddPropertyPageArgs> {
 
   static const String name = 'AddPropertyPage';
 
-  static _i12.PageInfo page = _i12.PageInfo(
+  static _i15.PageInfo page = _i15.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<AddPropertyPageArgs>(
@@ -67,7 +74,7 @@ class AddPropertyPage extends _i12.PageRouteInfo<AddPropertyPageArgs> {
 class AddPropertyPageArgs {
   const AddPropertyPageArgs({this.key, this.propertyId});
 
-  final _i13.Key? key;
+  final _i16.Key? key;
 
   final String? propertyId;
 
@@ -89,13 +96,13 @@ class AddPropertyPageArgs {
 
 /// generated route for
 /// [_i2.BaseScreen]
-class BaseRoute extends _i12.PageRouteInfo<void> {
-  const BaseRoute({List<_i12.PageRouteInfo>? children})
+class BaseRoute extends _i15.PageRouteInfo<void> {
+  const BaseRoute({List<_i15.PageRouteInfo>? children})
     : super(BaseRoute.name, initialChildren: children);
 
   static const String name = 'BaseRoute';
 
-  static _i12.PageInfo page = _i12.PageInfo(
+  static _i15.PageInfo page = _i15.PageInfo(
     name,
     builder: (data) {
       return const _i2.BaseScreen();
@@ -105,13 +112,13 @@ class BaseRoute extends _i12.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i3.CreateAccountScreen]
-class CreateAccountRoute extends _i12.PageRouteInfo<void> {
-  const CreateAccountRoute({List<_i12.PageRouteInfo>? children})
+class CreateAccountRoute extends _i15.PageRouteInfo<void> {
+  const CreateAccountRoute({List<_i15.PageRouteInfo>? children})
     : super(CreateAccountRoute.name, initialChildren: children);
 
   static const String name = 'CreateAccountRoute';
 
-  static _i12.PageInfo page = _i12.PageInfo(
+  static _i15.PageInfo page = _i15.PageInfo(
     name,
     builder: (data) {
       return const _i3.CreateAccountScreen();
@@ -120,28 +127,44 @@ class CreateAccountRoute extends _i12.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i4.HomeScreen]
-class HomeRoute extends _i12.PageRouteInfo<void> {
-  const HomeRoute({List<_i12.PageRouteInfo>? children})
-    : super(HomeRoute.name, initialChildren: children);
+/// [_i4.ForgetPasswordScreen]
+class ForgetPasswordRoute extends _i15.PageRouteInfo<void> {
+  const ForgetPasswordRoute({List<_i15.PageRouteInfo>? children})
+    : super(ForgetPasswordRoute.name, initialChildren: children);
 
-  static const String name = 'HomeRoute';
+  static const String name = 'ForgetPasswordRoute';
 
-  static _i12.PageInfo page = _i12.PageInfo(
+  static _i15.PageInfo page = _i15.PageInfo(
     name,
     builder: (data) {
-      return const _i4.HomeScreen();
+      return const _i4.ForgetPasswordScreen();
     },
   );
 }
 
 /// generated route for
-/// [_i5.LoginScreen]
-class LoginRoute extends _i12.PageRouteInfo<LoginRouteArgs> {
+/// [_i5.HomeScreen]
+class HomeRoute extends _i15.PageRouteInfo<void> {
+  const HomeRoute({List<_i15.PageRouteInfo>? children})
+    : super(HomeRoute.name, initialChildren: children);
+
+  static const String name = 'HomeRoute';
+
+  static _i15.PageInfo page = _i15.PageInfo(
+    name,
+    builder: (data) {
+      return const _i5.HomeScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [_i6.LoginScreen]
+class LoginRoute extends _i15.PageRouteInfo<LoginRouteArgs> {
   LoginRoute({
-    _i13.Key? key,
-    _i13.VoidCallback? onLoginSuccess,
-    List<_i12.PageRouteInfo>? children,
+    _i16.Key? key,
+    _i16.VoidCallback? onLoginSuccess,
+    List<_i15.PageRouteInfo>? children,
   }) : super(
          LoginRoute.name,
          args: LoginRouteArgs(key: key, onLoginSuccess: onLoginSuccess),
@@ -150,13 +173,13 @@ class LoginRoute extends _i12.PageRouteInfo<LoginRouteArgs> {
 
   static const String name = 'LoginRoute';
 
-  static _i12.PageInfo page = _i12.PageInfo(
+  static _i15.PageInfo page = _i15.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<LoginRouteArgs>(
         orElse: () => const LoginRouteArgs(),
       );
-      return _i5.LoginScreen(
+      return _i6.LoginScreen(
         key: args.key,
         onLoginSuccess: args.onLoginSuccess,
       );
@@ -167,9 +190,9 @@ class LoginRoute extends _i12.PageRouteInfo<LoginRouteArgs> {
 class LoginRouteArgs {
   const LoginRouteArgs({this.key, this.onLoginSuccess});
 
-  final _i13.Key? key;
+  final _i16.Key? key;
 
-  final _i13.VoidCallback? onLoginSuccess;
+  final _i16.VoidCallback? onLoginSuccess;
 
   @override
   String toString() {
@@ -188,29 +211,29 @@ class LoginRouteArgs {
 }
 
 /// generated route for
-/// [_i6.MyPropertiesScreen]
-class MyPropertiesRoute extends _i12.PageRouteInfo<void> {
-  const MyPropertiesRoute({List<_i12.PageRouteInfo>? children})
+/// [_i7.MyPropertiesScreen]
+class MyPropertiesRoute extends _i15.PageRouteInfo<void> {
+  const MyPropertiesRoute({List<_i15.PageRouteInfo>? children})
     : super(MyPropertiesRoute.name, initialChildren: children);
 
   static const String name = 'MyPropertiesRoute';
 
-  static _i12.PageInfo page = _i12.PageInfo(
+  static _i15.PageInfo page = _i15.PageInfo(
     name,
     builder: (data) {
-      return const _i6.MyPropertiesScreen();
+      return const _i7.MyPropertiesScreen();
     },
   );
 }
 
 /// generated route for
-/// [_i7.MyPropertyDetailScreen]
+/// [_i8.MyPropertyDetailScreen]
 class MyPropertyDetailRoute
-    extends _i12.PageRouteInfo<MyPropertyDetailRouteArgs> {
+    extends _i15.PageRouteInfo<MyPropertyDetailRouteArgs> {
   MyPropertyDetailRoute({
-    _i13.Key? key,
-    required _i14.PropertiesModel property,
-    List<_i12.PageRouteInfo>? children,
+    _i16.Key? key,
+    required _i17.PropertiesModel property,
+    List<_i15.PageRouteInfo>? children,
   }) : super(
          MyPropertyDetailRoute.name,
          args: MyPropertyDetailRouteArgs(key: key, property: property),
@@ -219,11 +242,11 @@ class MyPropertyDetailRoute
 
   static const String name = 'MyPropertyDetailRoute';
 
-  static _i12.PageInfo page = _i12.PageInfo(
+  static _i15.PageInfo page = _i15.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<MyPropertyDetailRouteArgs>();
-      return _i7.MyPropertyDetailScreen(key: args.key, property: args.property);
+      return _i8.MyPropertyDetailScreen(key: args.key, property: args.property);
     },
   );
 }
@@ -231,9 +254,9 @@ class MyPropertyDetailRoute
 class MyPropertyDetailRouteArgs {
   const MyPropertyDetailRouteArgs({this.key, required this.property});
 
-  final _i13.Key? key;
+  final _i16.Key? key;
 
-  final _i14.PropertiesModel property;
+  final _i17.PropertiesModel property;
 
   @override
   String toString() {
@@ -252,29 +275,82 @@ class MyPropertyDetailRouteArgs {
 }
 
 /// generated route for
-/// [_i8.ProfileScreen]
-class ProfileRoute extends _i12.PageRouteInfo<void> {
-  const ProfileRoute({List<_i12.PageRouteInfo>? children})
+/// [_i9.NewPasswordScreen]
+class NewPasswordRoute extends _i15.PageRouteInfo<NewPasswordRouteArgs> {
+  NewPasswordRoute({
+    _i16.Key? key,
+    required _i18.AuthenticationBloc authenticationBloc,
+    List<_i15.PageRouteInfo>? children,
+  }) : super(
+         NewPasswordRoute.name,
+         args: NewPasswordRouteArgs(
+           key: key,
+           authenticationBloc: authenticationBloc,
+         ),
+         initialChildren: children,
+       );
+
+  static const String name = 'NewPasswordRoute';
+
+  static _i15.PageInfo page = _i15.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<NewPasswordRouteArgs>();
+      return _i9.NewPasswordScreen(
+        key: args.key,
+        authenticationBloc: args.authenticationBloc,
+      );
+    },
+  );
+}
+
+class NewPasswordRouteArgs {
+  const NewPasswordRouteArgs({this.key, required this.authenticationBloc});
+
+  final _i16.Key? key;
+
+  final _i18.AuthenticationBloc authenticationBloc;
+
+  @override
+  String toString() {
+    return 'NewPasswordRouteArgs{key: $key, authenticationBloc: $authenticationBloc}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! NewPasswordRouteArgs) return false;
+    return key == other.key && authenticationBloc == other.authenticationBloc;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ authenticationBloc.hashCode;
+}
+
+/// generated route for
+/// [_i10.ProfileScreen]
+class ProfileRoute extends _i15.PageRouteInfo<void> {
+  const ProfileRoute({List<_i15.PageRouteInfo>? children})
     : super(ProfileRoute.name, initialChildren: children);
 
   static const String name = 'ProfileRoute';
 
-  static _i12.PageInfo page = _i12.PageInfo(
+  static _i15.PageInfo page = _i15.PageInfo(
     name,
     builder: (data) {
-      return const _i8.ProfileScreen();
+      return const _i10.ProfileScreen();
     },
   );
 }
 
 /// generated route for
-/// [_i9.ReservationConfirmedScreen]
+/// [_i11.ReservationConfirmedScreen]
 class ReservationConfirmedRoute
-    extends _i12.PageRouteInfo<ReservationConfirmedRouteArgs> {
+    extends _i15.PageRouteInfo<ReservationConfirmedRouteArgs> {
   ReservationConfirmedRoute({
-    _i13.Key? key,
-    required _i15.ReservationModel reservation,
-    List<_i12.PageRouteInfo>? children,
+    _i16.Key? key,
+    required _i19.ReservationModel reservation,
+    List<_i15.PageRouteInfo>? children,
   }) : super(
          ReservationConfirmedRoute.name,
          args: ReservationConfirmedRouteArgs(
@@ -286,11 +362,11 @@ class ReservationConfirmedRoute
 
   static const String name = 'ReservationConfirmedRoute';
 
-  static _i12.PageInfo page = _i12.PageInfo(
+  static _i15.PageInfo page = _i15.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<ReservationConfirmedRouteArgs>();
-      return _i9.ReservationConfirmedScreen(
+      return _i11.ReservationConfirmedScreen(
         key: args.key,
         reservation: args.reservation,
       );
@@ -301,9 +377,9 @@ class ReservationConfirmedRoute
 class ReservationConfirmedRouteArgs {
   const ReservationConfirmedRouteArgs({this.key, required this.reservation});
 
-  final _i13.Key? key;
+  final _i16.Key? key;
 
-  final _i15.ReservationModel reservation;
+  final _i19.ReservationModel reservation;
 
   @override
   String toString() {
@@ -322,15 +398,15 @@ class ReservationConfirmedRouteArgs {
 }
 
 /// generated route for
-/// [_i10.ReserveScreen]
-class ReserveRoute extends _i12.PageRouteInfo<ReserveRouteArgs> {
+/// [_i12.ReserveScreen]
+class ReserveRoute extends _i15.PageRouteInfo<ReserveRouteArgs> {
   ReserveRoute({
-    _i13.Key? key,
-    required _i16.PropertiesModel property,
+    _i16.Key? key,
+    required _i20.PropertiesModel property,
     required DateTime checkIn,
     required DateTime checkOut,
     required int numberOfGuests,
-    List<_i12.PageRouteInfo>? children,
+    List<_i15.PageRouteInfo>? children,
   }) : super(
          ReserveRoute.name,
          args: ReserveRouteArgs(
@@ -345,11 +421,11 @@ class ReserveRoute extends _i12.PageRouteInfo<ReserveRouteArgs> {
 
   static const String name = 'ReserveRoute';
 
-  static _i12.PageInfo page = _i12.PageInfo(
+  static _i15.PageInfo page = _i15.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<ReserveRouteArgs>();
-      return _i10.ReserveScreen(
+      return _i12.ReserveScreen(
         key: args.key,
         property: args.property,
         checkIn: args.checkIn,
@@ -369,9 +445,9 @@ class ReserveRouteArgs {
     required this.numberOfGuests,
   });
 
-  final _i13.Key? key;
+  final _i16.Key? key;
 
-  final _i16.PropertiesModel property;
+  final _i20.PropertiesModel property;
 
   final DateTime checkIn;
 
@@ -405,12 +481,12 @@ class ReserveRouteArgs {
 }
 
 /// generated route for
-/// [_i11.UploadReceiptScreen]
-class UploadReceiptRoute extends _i12.PageRouteInfo<UploadReceiptRouteArgs> {
+/// [_i13.UploadReceiptScreen]
+class UploadReceiptRoute extends _i15.PageRouteInfo<UploadReceiptRouteArgs> {
   UploadReceiptRoute({
-    _i13.Key? key,
-    required _i15.ReservationModel reservation,
-    List<_i12.PageRouteInfo>? children,
+    _i16.Key? key,
+    required _i19.ReservationModel reservation,
+    List<_i15.PageRouteInfo>? children,
   }) : super(
          UploadReceiptRoute.name,
          args: UploadReceiptRouteArgs(key: key, reservation: reservation),
@@ -419,11 +495,11 @@ class UploadReceiptRoute extends _i12.PageRouteInfo<UploadReceiptRouteArgs> {
 
   static const String name = 'UploadReceiptRoute';
 
-  static _i12.PageInfo page = _i12.PageInfo(
+  static _i15.PageInfo page = _i15.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<UploadReceiptRouteArgs>();
-      return _i11.UploadReceiptScreen(
+      return _i13.UploadReceiptScreen(
         key: args.key,
         reservation: args.reservation,
       );
@@ -434,9 +510,9 @@ class UploadReceiptRoute extends _i12.PageRouteInfo<UploadReceiptRouteArgs> {
 class UploadReceiptRouteArgs {
   const UploadReceiptRouteArgs({this.key, required this.reservation});
 
-  final _i13.Key? key;
+  final _i16.Key? key;
 
-  final _i15.ReservationModel reservation;
+  final _i19.ReservationModel reservation;
 
   @override
   String toString() {
@@ -452,4 +528,58 @@ class UploadReceiptRouteArgs {
 
   @override
   int get hashCode => key.hashCode ^ reservation.hashCode;
+}
+
+/// generated route for
+/// [_i14.VerificationCodeScreen]
+class VerificationCodeRoute
+    extends _i15.PageRouteInfo<VerificationCodeRouteArgs> {
+  VerificationCodeRoute({
+    _i16.Key? key,
+    required _i18.AuthenticationBloc authenticationBloc,
+    List<_i15.PageRouteInfo>? children,
+  }) : super(
+         VerificationCodeRoute.name,
+         args: VerificationCodeRouteArgs(
+           key: key,
+           authenticationBloc: authenticationBloc,
+         ),
+         initialChildren: children,
+       );
+
+  static const String name = 'VerificationCodeRoute';
+
+  static _i15.PageInfo page = _i15.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<VerificationCodeRouteArgs>();
+      return _i14.VerificationCodeScreen(
+        key: args.key,
+        authenticationBloc: args.authenticationBloc,
+      );
+    },
+  );
+}
+
+class VerificationCodeRouteArgs {
+  const VerificationCodeRouteArgs({this.key, required this.authenticationBloc});
+
+  final _i16.Key? key;
+
+  final _i18.AuthenticationBloc authenticationBloc;
+
+  @override
+  String toString() {
+    return 'VerificationCodeRouteArgs{key: $key, authenticationBloc: $authenticationBloc}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! VerificationCodeRouteArgs) return false;
+    return key == other.key && authenticationBloc == other.authenticationBloc;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ authenticationBloc.hashCode;
 }

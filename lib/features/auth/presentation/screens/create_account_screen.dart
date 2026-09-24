@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ewan/core/core.dart';
-import 'package:ewan/features/auth/data/models/city_model.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 import '../../auth.dart';
 
 @RoutePage()
@@ -41,10 +41,6 @@ class _CreateAccountViewState extends State<CreateAccountView> {
   late FocusNode lastNameFocusNode;
   late TextFieldControllerImpl lastNameController;
 
-  late TextEditingController addressTextEditingController;
-  late FocusNode addressFocusNode;
-  late TextFieldControllerImpl addressController;
-
   late GlobalButtonController globalButtonController;
   late FocusNode submitButtonFocusNode;
 
@@ -56,10 +52,10 @@ class _CreateAccountViewState extends State<CreateAccountView> {
   late final FocusNode confirmPasswordFocusNode;
   late final TextFieldControllerImpl confirmPasswordController;
 
-  CityResult? selectedCity;
-  late FocusNode cityFocusNode;
-
   bool isObscure = true;
+
+  final TextEditingController phoneController = TextEditingController();
+  final FocusNode phoneFocusNode = FocusNode();
 
   @override
   void initState() {
@@ -77,10 +73,6 @@ class _CreateAccountViewState extends State<CreateAccountView> {
     lastNameFocusNode = FocusNode();
     lastNameController = TextFieldControllerImpl('');
 
-    addressTextEditingController = TextEditingController();
-    addressFocusNode = FocusNode();
-    addressController = TextFieldControllerImpl('');
-
     passwordTextEditingController = TextEditingController();
     passwordFocusNode = FocusNode();
     passwordController = TextFieldControllerImpl('');
@@ -91,8 +83,6 @@ class _CreateAccountViewState extends State<CreateAccountView> {
 
     globalButtonController = GlobalButtonController();
     submitButtonFocusNode = FocusNode();
-
-    cityFocusNode = FocusNode();
   }
 
   @override
@@ -125,18 +115,18 @@ class _CreateAccountViewState extends State<CreateAccountView> {
             if (generalException?.message.isNotEmpty ?? false) {
               showSnackBar(
                 context: context,
-                message: generalException?.message,
+                message: generalException?.displayMessage,
                 isError: true,
               );
             }
           },
           signUpSucceed: () {
             globalButtonController.value = null;
-            // context.pushRoute(
-            //   VerificationCodeRoute(
-            //     authenticationBloc: context.read<AuthenticationBloc>(),
-            //   ),
-            // );
+            context.pushRoute(
+              VerificationCodeRoute(
+                authenticationBloc: context.read<AuthenticationBloc>(),
+              ),
+            );
           },
           orElse: () {},
         );
@@ -156,11 +146,8 @@ class _CreateAccountViewState extends State<CreateAccountView> {
           const LabelAuthTextWidget(text: LocaleKeys.email),
           emailTextField(),
           const SizedBox(height: 16),
-          const LabelAuthTextWidget(text: LocaleKeys.city),
-          cityField(),
-          const SizedBox(height: 16),
-          const LabelAuthTextWidget(text: LocaleKeys.address),
-          addressTextField(),
+          const LabelAuthTextWidget(text: LocaleKeys.mobileNumber),
+          phoneField(),
           const SizedBox(height: 16),
           const LabelAuthTextWidget(text: LocaleKeys.password),
           passwordTextField(),
@@ -184,9 +171,7 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                       firstName: firstNameTextEditingController.text,
                       lastName: lastNameTextEditingController.text,
                       password: passwordTextEditingController.text,
-                      address: addressTextEditingController.text,
-                      cityId: selectedCity?.id ?? "",
-                      gender: 1,
+                      phoneNumber: phoneController.text,
                     ),
                   ),
                 );
@@ -230,7 +215,7 @@ class _CreateAccountViewState extends State<CreateAccountView> {
             keyboardType: TextInputType.emailAddress,
             textDirection: TextDirection.ltr,
             focusNode: emailFocusNode,
-            nextFocusNode: cityFocusNode,
+            nextFocusNode: phoneFocusNode,
             hintText: LocaleKeys.email.tr(),
             isEmpty: emailValue?.isEmpty ?? false,
             onChanged: (String value) {
@@ -304,54 +289,31 @@ class _CreateAccountViewState extends State<CreateAccountView> {
     );
   }
 
-  cityField() {
-    return SearchableDDL<CityResult>(
-      hintText: "",
-      isEmpty: selectedCity == null,
-      nextFocusNode: addressFocusNode,
-      selectedItem: selectedCity,
-      validator: (CityResult? value) => validateInput(
-        value != null ? "v" : "",
-        fieldName: 'city',
-        externalErrors: externalErrors,
-        context,
-        <ValidationType>[ValidationType.requiredField],
+  Widget phoneField() {
+    return IntlPhoneField(
+      controller: phoneController,
+      focusNode: phoneFocusNode,
+      initialCountryCode: 'SY',
+      disableLengthCheck: true,
+      decoration: InputDecoration(
+        hintStyle: TextStyle(color: Palette.hint.withValues(alpha: 0.2)),
+        hintText: '987 123 456',
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
       ),
-      onChanged: (CityResult? value) {
-        setState(() {
-          selectedCity = value;
-        });
-      },
-      focusNode: cityFocusNode,
-      asyncItems: (String s, _) async {
-        final DioClient dioClient = DioClient();
-        final Response<dynamic> response = await dioClient.sendRequest(
-          RequestType.get,
-          EndPoint.cities,
-        );
-        final CitiesModel citySuccessResponseModel = CitiesModel.fromJson(
-          response.data as Map<String, dynamic>,
-        );
-        return citySuccessResponseModel.results;
-      },
-    );
-  }
-
-  ValueListenableBuilder<String?> addressTextField() {
-    return ValueListenableBuilder<String?>(
-      valueListenable: addressController,
-      builder: (BuildContext context, String? addressValue, Widget? child) {
-        return TextInputWidget(
-          controller: addressTextEditingController,
-          keyboardType: TextInputType.streetAddress,
-          focusNode: addressFocusNode,
-          nextFocusNode: passwordFocusNode,
-          hintText: LocaleKeys.address.tr(),
-          isEmpty: addressValue?.isEmpty ?? false,
-          onChanged: (String value) {
-            addressController.onTextChange(value);
-          },
-        );
+      // onChanged: (phone) {
+      //   print('Country Code: ${phone.countryCode}');
+      //   print('Phone Number: ${phone.number}');
+      //   print('Complete Number: ${phone.completeNumber}');
+      // },
+      // onCountryChanged: (country) {
+      //   print('Country changed: ${country.code}');
+      //   print('Dial code: +${country.dialCode}');
+      // },
+      validator: (value) {
+        if (value == null || value.number.isEmpty) {
+          return LocaleKeys.phoneNumberIsRequired.tr();
+        }
+        return null;
       },
     );
   }
@@ -433,15 +395,12 @@ class _CreateAccountViewState extends State<CreateAccountView> {
     lastNameFocusNode.dispose();
     lastNameController.dispose();
 
-    addressTextEditingController.dispose();
-    addressFocusNode.dispose();
-    addressController.dispose();
-
     passwordTextEditingController.dispose();
     passwordFocusNode.dispose();
     passwordController.dispose();
 
-    cityFocusNode.dispose();
+    phoneController.dispose();
+    phoneFocusNode.dispose();
 
     confirmPasswordTextEditingController.dispose();
     confirmPasswordFocusNode.dispose();

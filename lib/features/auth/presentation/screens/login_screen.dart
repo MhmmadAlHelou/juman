@@ -88,7 +88,7 @@ class _LoginViewState extends State<LoginView> {
             globalButtonController.value = null;
             showSnackBar(
               context: context,
-              message: generalException?.message,
+              message: generalException?.displayMessage,
               isError: true,
             );
           },
@@ -105,9 +105,9 @@ class _LoginViewState extends State<LoginView> {
           accountNeedVerify: () {
             globalButtonController.value = null;
 
-            // context.router.push(
-            //   VerificationCodeRoute(authenticationBloc: _authenticationBloc),//////////////////__________
-            // );
+            context.router.push(
+              VerificationCodeRoute(authenticationBloc: _authenticationBloc),
+            );
 
             showSnackBar(
               context: context,
@@ -135,7 +135,7 @@ class _LoginViewState extends State<LoginView> {
             alignment: AlignmentDirectional.centerEnd,
             child: TextButton(
               onPressed: () {
-                // context.pushRoute(const ForgetPasswordRoute());
+                context.pushRoute(const ForgetPasswordRoute());
               },
               child: Text(
                 LocaleKeys.forgetPassword.tr(),
@@ -154,7 +154,7 @@ class _LoginViewState extends State<LoginView> {
               question: LocaleKeys.doNotHaveAnAccount,
               action: LocaleKeys.signUp,
               onPressed: () {
-                // context.pushRoute(const CreateAccountRoute());
+                context.pushRoute(const CreateAccountRoute());
               },
             ),
           ),

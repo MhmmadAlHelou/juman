@@ -11,7 +11,7 @@ class BackendException extends GeneralException {
     final bool noInternet = _isNoInternetError(dioException);
 
     if (status == 403 && PrefData.isSignedIn) {
-      // getIt<AppManagerCubit>().logOut();
+      getIt<AppManagerCubit>().logOut();
     }
 
     // Populate `message` and `errors`
@@ -40,6 +40,16 @@ class BackendException extends GeneralException {
 
       if (apiError is Map<String, dynamic>) {
         final dynamic apiMessage = apiError['message'];
+        final dynamic apiDetails = apiError['details'];
+
+        if (apiDetails is Map<String, dynamic>) {
+          errors = apiDetails.map((String key, dynamic value) {
+            if (value is List) {
+              return MapEntry<String, String>(key, value.join(', '));
+            }
+            return MapEntry<String, String>(key, value.toString());
+          });
+        }
 
         if (apiMessage != null && apiMessage.toString().isNotEmpty) {
           message = apiMessage.toString();

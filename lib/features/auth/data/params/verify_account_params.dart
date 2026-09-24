@@ -5,7 +5,7 @@ class VerifyAccountParams {
   final String code;
 
   Map<String, dynamic> toJson() => <String, String>{
-    'email': email?.trim() ?? "",
-    'code': code.trim(),
+    'identifier': email?.trim() ?? "",
+    'otp': code.trim(),
   };
 }

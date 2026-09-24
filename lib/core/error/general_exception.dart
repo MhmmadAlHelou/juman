@@ -3,6 +3,9 @@ abstract class GeneralException implements Exception {
 
   String message;
   Map<String, String>? errors;
+  String get displayMessage => (errors != null && errors!.isNotEmpty)
+      ? errors!.values.join('\n')
+      : message;
 
   @override
   String toString() {

@@ -1,5 +1,3 @@
-import 'package:ewan/features/auth/data/models/city_model.dart';
-
 import '../../../core/core.dart';
 import 'data.dart';
 
@@ -35,16 +33,16 @@ class AuthRepository {
     return authSuccessResponseModel;
   }
 
-  Future<AuthModel> signUp({required SignUpParams signUpParams}) async {
+  Future<SignUpModel> signUp({required SignUpParams signUpParams}) async {
     final Response<dynamic> response = await _dioClient.sendRequest(
       RequestType.post,
-      EndPoint.register,
+      EndPoint.signup,
       data: signUpParams.toJson(),
     );
-    final AuthModel authSuccessResponseModel = AuthModel.fromJson(
+    final SignUpModel signUpResponseModel = SignUpModel.fromJson(
       response.data as Map<String, dynamic>,
     );
-    return authSuccessResponseModel;
+    return signUpResponseModel;
   }
 
   Future<AuthModel> updateUser({required Map<String, dynamic> body}) async {
@@ -70,51 +68,58 @@ class AuthRepository {
     return authSuccessResponseModel;
   }
 
-  Future<AuthModel> verifyAccount({
+  Future<MessageResponseModel> verifyAccount({
     required VerifyAccountParams verifyAccountParams,
   }) async {
     final Response<dynamic> response = await _dioClient.sendRequest(
-      RequestType.put,
-      EndPoint.verify,
+      RequestType.post,
+      EndPoint.verifyOtp,
       data: verifyAccountParams.toJson(),
     );
-    final AuthModel authSuccessResponseModel = AuthModel.fromJson(
-      response.data as Map<String, dynamic>,
-    );
-    return authSuccessResponseModel;
+    // final AuthModel authSuccessResponseModel = AuthModel.fromJson(
+    //   response.data as Map<String, dynamic>,
+    // );
+    // return authSuccessResponseModel;
+    return MessageResponseModel.fromJson(response.data as Map<String, dynamic>);
   }
 
   Future<void> resendVerificationCodeOnEmail({required String email}) async {
     await _dioClient.sendRequest(
       RequestType.post,
-      EndPoint.sendVerificationCode,
-      data: <String, String>{"email": email},
+      EndPoint.resendOtp,
+      data: <String, String>{"identifier": email},
     );
   }
 
-  Future<void> resetPassword({
-    required String resetPasswordCode,
-    required String password,
+  Future<MessageResponseModel> forgotPassword({
+    required String identifier,
   }) async {
-    await _dioClient.sendRequest(
-      RequestType.put,
-      EndPoint.resetPassword,
-      data: <String, String>{
-        "reset_password_code": resetPasswordCode,
-        "password": password,
-      },
+    final FormData formData = FormData.fromMap(<String, dynamic>{
+      'identifier': identifier,
+    });
+    final Response<dynamic> response = await _dioClient.sendRequest(
+      RequestType.post,
+      EndPoint.forgotPassword,
+      formData: formData,
     );
+    return MessageResponseModel.fromJson(response.data as Map<String, dynamic>);
   }
 
-  Future<List<CityResult>> getCity() async {
+  Future<MessageResponseModel> resetPassword({
+    required String identifier,
+    required String otp,
+    required String newPassword,
+  }) async {
+    final FormData formData = FormData.fromMap(<String, dynamic>{
+      'identifier': identifier,
+      'otp': otp,
+      'new_password': newPassword,
+    });
     final Response<dynamic> response = await _dioClient.sendRequest(
-      RequestType.get,
-      EndPoint.cities,
-      queryParameters: <String, dynamic>{'pagination_page_size': 100},
+      RequestType.post,
+      EndPoint.resetPassword,
+      formData: formData,
     );
-    final CitiesModel citySuccessResponseModel = CitiesModel.fromJson(
-      response.data as Map<String, dynamic>,
-    );
-    return citySuccessResponseModel.results;
+    return MessageResponseModel.fromJson(response.data as Map<String, dynamic>);
   }
 }
