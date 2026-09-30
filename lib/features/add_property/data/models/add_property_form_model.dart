@@ -1,3 +1,4 @@
+import 'package:ewan/features/add_property/data/models/uploaded_file_model.dart';
 import 'package:ewan/features/home/data/models/properties_model.dart';
 
 class AddPropertyFormModel {
@@ -25,13 +26,15 @@ class AddPropertyFormModel {
   final List<AmenityModel> amenities;
 
   // Step 4
-  final List<String> uploadedImageUris;
+  // final List<String> uploadedImageUris;
+  final List<UploadedImageItem> uploadedImages;
 
   // Step 5
   final int? minimumStay;
   final int? maximumStay;
   final double? pricePerNight;
-  final List<String> uploadedDocumentUris;
+  // final List<String> uploadedDocumentUris;
+  final List<UploadedDocumentItem> uploadedDocuments;
 
   const AddPropertyFormModel({
     this.id,
@@ -50,11 +53,11 @@ class AddPropertyFormModel {
     this.bedrooms = 0,
     this.bathrooms = 0,
     this.amenities = const <AmenityModel>[],
-    this.uploadedImageUris = const <String>[],
     this.minimumStay,
     this.maximumStay,
     this.pricePerNight,
-    this.uploadedDocumentUris = const <String>[],
+    this.uploadedImages = const <UploadedImageItem>[],
+    this.uploadedDocuments = const <UploadedDocumentItem>[],
   });
 
   AddPropertyFormModel copyWith({
@@ -74,11 +77,11 @@ class AddPropertyFormModel {
     int? bedrooms,
     int? bathrooms,
     List<AmenityModel>? amenities,
-    List<String>? uploadedImageUris,
     int? minimumStay,
     int? maximumStay,
     double? pricePerNight,
-    List<String>? uploadedDocumentUris,
+    List<UploadedImageItem>? uploadedImages,
+    List<UploadedDocumentItem>? uploadedDocuments,
   }) {
     return AddPropertyFormModel(
       id: id ?? this.id,
@@ -97,11 +100,11 @@ class AddPropertyFormModel {
       bedrooms: bedrooms ?? this.bedrooms,
       bathrooms: bathrooms ?? this.bathrooms,
       amenities: amenities ?? this.amenities,
-      uploadedImageUris: uploadedImageUris ?? this.uploadedImageUris,
       minimumStay: minimumStay ?? this.minimumStay,
       maximumStay: maximumStay ?? this.maximumStay,
       pricePerNight: pricePerNight ?? this.pricePerNight,
-      uploadedDocumentUris: uploadedDocumentUris ?? this.uploadedDocumentUris,
+      uploadedImages: uploadedImages ?? this.uploadedImages,
+      uploadedDocuments: uploadedDocuments ?? this.uploadedDocuments,
     );
   }
 
@@ -137,16 +140,20 @@ class AddPropertyFormModel {
       amenities: (json['amenities'] as List<dynamic>? ?? <dynamic>[])
           .map((dynamic e) => AmenityModel.fromJson(e as Map<String, dynamic>))
           .toList(),
-      // Images returned from GET/PATCH are complete {id, image, is_cover} objects,
-      // Not raw URIs - we only extract .images because they are already uploaded (don't need to be re-uploaded)
-      uploadedImageUris: (json['images'] as List<dynamic>? ?? <dynamic>[])
-          .map((dynamic e) => (e as Map<String, dynamic>)['image'] as String)
-          .toList(),
       minimumStay: json['min_stay'] as int?,
       maximumStay: json['max_stay'] as int?,
       pricePerNight: double.tryParse(json['price_per_night']?.toString() ?? ''),
-      uploadedDocumentUris: (json['documents'] as List<dynamic>? ?? <dynamic>[])
-          .map((dynamic e) => (e as Map<String, dynamic>)['file'] as String)
+      uploadedImages: (json['images'] as List<dynamic>? ?? <dynamic>[])
+          .map(
+            (dynamic e) =>
+                UploadedImageItem.fromJson(e as Map<String, dynamic>),
+          )
+          .toList(),
+      uploadedDocuments: (json['documents'] as List<dynamic>? ?? <dynamic>[])
+          .map(
+            (dynamic e) =>
+                UploadedDocumentItem.fromJson(e as Map<String, dynamic>),
+          )
           .toList(),
     );
   }

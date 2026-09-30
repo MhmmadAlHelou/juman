@@ -60,7 +60,7 @@ class MyPropertyModel {
     return MyPropertyModel(
       id: d.id ?? '',
       title: d.title.trim().isEmpty ? 'Untitled Draft' : d.title,
-      imageUrl: d.uploadedImageUris.isEmpty ? null : d.uploadedImageUris.first,
+      imageUrl: d.uploadedImages.isNotEmpty ? d.uploadedImages.first.url : null,
       status: d.status,
       isDraft: true,
       cityName: d.city?.name,

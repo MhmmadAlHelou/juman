@@ -63,8 +63,8 @@ class AddPropertyState extends Equatable {
       formData.amenities.isNotEmpty;
 
   bool get isImagesValid =>
-      formData.uploadedImageUris.length >= 5 &&
-      formData.uploadedImageUris.length <= 30;
+      formData.uploadedImages.length >= 5 &&
+      formData.uploadedImages.length <= 30;
 
   bool get isPricingAndDocsValid =>
       (formData.minimumStay ?? 0) >= 1 &&
@@ -73,8 +73,8 @@ class AddPropertyState extends Equatable {
           formData.maximumStay! >= (formData.minimumStay ?? 0)) &&
       formData.pricePerNight != null &&
       formData.pricePerNight! > 0 &&
-      formData.uploadedDocumentUris.isNotEmpty &&
-      formData.uploadedDocumentUris.length <= 2;
+      formData.uploadedDocuments.isNotEmpty &&
+      formData.uploadedDocuments.length <= 2;
 
   bool get isCurrentStepValid {
     switch (currentStep) {

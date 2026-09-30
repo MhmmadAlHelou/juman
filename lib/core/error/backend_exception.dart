@@ -18,6 +18,7 @@ class BackendException extends GeneralException {
     _processErrorResponse(errorResponse, noInternet, status);
   }
   final int statusCode;
+  String? code;
 
   // Helper to check if the error indicates a network issue
   bool _isNoInternetError(DioException? dioException) {
@@ -41,6 +42,7 @@ class BackendException extends GeneralException {
       if (apiError is Map<String, dynamic>) {
         final dynamic apiMessage = apiError['message'];
         final dynamic apiDetails = apiError['details'];
+        final dynamic apiDetail = apiError['detail'];
 
         if (apiDetails is Map<String, dynamic>) {
           errors = apiDetails.map((String key, dynamic value) {
@@ -53,6 +55,13 @@ class BackendException extends GeneralException {
 
         if (apiMessage != null && apiMessage.toString().isNotEmpty) {
           message = apiMessage.toString();
+          return;
+        }
+
+        if (apiDetail != null && apiDetail.toString().isNotEmpty) {
+          final parsed = BackendErrorParser.parse(apiDetail.toString());
+          code = parsed.code;
+          message = parsed.message;
           return;
         }
       }
@@ -77,6 +86,19 @@ class BackendException extends GeneralException {
       // Handle old API response format
       if (errorResponse.containsKey('message')) {
         message = errorResponse['message']?.toString() ?? '';
+        return;
+      }
+
+      // Handle bare DRF field errors with no wrapper key at all, e.g.
+      // {"family_book_document": ["Family book file is required."]}
+      if (errorResponse.isNotEmpty &&
+          errorResponse.values.every((dynamic v) => v is List)) {
+        final Map<String, String> fieldErrors = errorResponse.map(
+          (String key, dynamic value) =>
+              MapEntry<String, String>(key, (value as List).join(', ')),
+        );
+        errors = fieldErrors;
+        message = fieldErrors.values.first;
         return;
       }
     }

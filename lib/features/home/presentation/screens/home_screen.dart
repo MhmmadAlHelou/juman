@@ -87,7 +87,7 @@ class _HomeViewState extends State<HomeView> with MapSheetController<HomeView> {
   @override
   void initState() {
     propertyCubit = context.read<PropertyCubit>();
-    getIt<PropertyCubit>().loadProperties();
+    propertyCubit.loadProperties();
 
     sheetController.addListener(onSheetChanged);
 
@@ -108,7 +108,7 @@ class _HomeViewState extends State<HomeView> with MapSheetController<HomeView> {
         builder: (context, state) {
           return RefreshIndicator(
             onRefresh: () async {
-              getIt<PropertyCubit>().loadProperties();
+              propertyCubit.loadProperties();
               await Future<void>.delayed(const Duration(milliseconds: 300));
             },
             child: Stack(

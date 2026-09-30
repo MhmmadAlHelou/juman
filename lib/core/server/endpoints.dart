@@ -95,6 +95,15 @@ class EndPoint {
 
   static const String paymentMethods = 'payment-methods/';
 
+  // ─────────────────────────────────────────────
+  // Profile
+  // ─────────────────────────────────────────────
+
+  static const String profile = 'profile/';
+  static const String passportDocument = 'auth/profile/upload-passport/';
+  static const String selfiePhoto = 'auth/profile/upload-selfie/';
+  static const String familyBookDocument = 'auth/profile/upload-family-book/';
+
   ///////////////////////////////////
   // static const String register = 'users/register/';
 
@@ -120,7 +129,7 @@ class EndPoint {
   static const String updateFcm = 'fcm/devices/';
   static const String updateForUnAuthFcm = 'fcm/unauthenticated-devices/';
 
-  static const String profile = 'users/profile/';
+  // static const String profile = 'users/profile/';
 
   static const String genders = 'enums/genders/';
 

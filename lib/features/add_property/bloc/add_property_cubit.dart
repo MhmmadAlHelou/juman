@@ -26,6 +26,7 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
   final FileUploadService _uploadService;
 
   Future<void> initWizard({String? propertyId, bool forceNew = false}) async {
+    if (isClosed) return;
     emit(state.copyWith(isInitializing: true, clearError: true));
 
     final Future<void> locationsFuture = _loadLocationsData();
@@ -39,6 +40,7 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
       } on BackendException catch (e) {
         await locationsFuture;
         if (e.statusCode == 401) {
+          if (isClosed) return;
           emit(
             state.copyWith(
               isInitializing: false,
@@ -47,6 +49,7 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
           );
           return;
         }
+        if (isClosed) return;
         emit(
           state.copyWith(
             isInitializing: false,
@@ -63,6 +66,7 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
       } on BackendException catch (e) {
         if (e.statusCode == 401) {
           await locationsFuture;
+          if (isClosed) return;
           emit(
             state.copyWith(
               isInitializing: false,
@@ -82,6 +86,8 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
 
       await locationsFuture;
 
+      if (isClosed) return;
+
       emit(
         state.copyWith(
           formData: formData,
@@ -91,9 +97,11 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
       );
     } on BackendException catch (e) {
       await locationsFuture;
+      if (isClosed) return;
       emit(state.copyWith(isInitializing: false, errorMessage: e.message));
     } catch (e) {
       await locationsFuture;
+      if (isClosed) return;
       emit(
         state.copyWith(
           isInitializing: false,
@@ -105,6 +113,7 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
   }
 
   Future<void> _loadLocationsData() async {
+    if (isClosed) return;
     emit(state.copyWith(isLoadingLocationsData: true));
     try {
       final List<PropertyCategoryModel> categories = await _locationsRepository
@@ -114,6 +123,8 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
       final List<CityModel> cities = await _locationsRepository.getCities();
       final List<AmenityModel> amenities = await _locationsRepository
           .getAmenityItems();
+
+      if (isClosed) return;
 
       emit(
         state.copyWith(
@@ -125,6 +136,7 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
         ),
       );
     } on BackendException catch (e) {
+      if (isClosed) return;
       emit(
         state.copyWith(isLoadingLocationsData: false, errorMessage: e.message),
       );
@@ -138,7 +150,7 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
     }
     if (f.city == null || f.area == null) return AddPropertyStep.location;
     if (f.amenities.isEmpty) return AddPropertyStep.details;
-    if (f.uploadedImageUris.isEmpty) return AddPropertyStep.images;
+    if (f.uploadedImages.isEmpty) return AddPropertyStep.images;
     return AddPropertyStep.pricingAndDocs;
   }
 
@@ -236,8 +248,6 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
     emit(state.copyWith(formData: state.formData.copyWith(amenities: current)));
   }
 
-  // ---- Uploading images - completely separate from PATCH ----
-
   Future<void> pickAndUploadImage(File imageFile) async {
     emit(state.copyWith(isUploadingImage: true, clearError: true));
     try {
@@ -245,12 +255,12 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
         imageFile,
         propertyId: state.formData.id,
       );
-      final List<String> updated = List<String>.from(
-        state.formData.uploadedImageUris,
-      )..add(uploaded.file);
+      final List<UploadedImageItem> updated = List<UploadedImageItem>.from(
+        state.formData.uploadedImages,
+      )..add(UploadedImageItem(id: uploaded.id, url: uploaded.file));
       emit(
         state.copyWith(
-          formData: state.formData.copyWith(uploadedImageUris: updated),
+          formData: state.formData.copyWith(uploadedImages: updated),
           isUploadingImage: false,
         ),
       );
@@ -259,18 +269,22 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
     }
   }
 
-  void removeUploadedImage(String imageUri) {
-    final List<String> updated = List<String>.from(
-      state.formData.uploadedImageUris,
-    )..remove(imageUri);
-    emit(
-      state.copyWith(
-        formData: state.formData.copyWith(uploadedImageUris: updated),
-      ),
-    );
+  Future<void> removeUploadedImage(UploadedImageItem image) async {
+    emit(state.copyWith(clearError: true));
+    try {
+      await _repository.deleteImage(image.id);
+      final List<UploadedImageItem> updated = List<UploadedImageItem>.from(
+        state.formData.uploadedImages,
+      )..removeWhere((UploadedImageItem i) => i.id == image.id);
+      emit(
+        state.copyWith(
+          formData: state.formData.copyWith(uploadedImages: updated),
+        ),
+      );
+    } on BackendException catch (e) {
+      emit(state.copyWith(errorMessage: e.message));
+    }
   }
-
-  // ---- Uploading documents (PDF) - Same logic as images, separate path ----
 
   Future<void> pickAndUploadDocument(File documentFile) async {
     emit(state.copyWith(isUploadingDocument: true, clearError: true));
@@ -279,12 +293,12 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
         documentFile,
         propertyId: state.formData.id,
       );
-      final List<String> updated = List<String>.from(
-        state.formData.uploadedDocumentUris,
-      )..add(uploaded.file);
+      final List<UploadedDocumentItem> updated =
+          List<UploadedDocumentItem>.from(state.formData.uploadedDocuments)
+            ..add(UploadedDocumentItem(id: uploaded.id, url: uploaded.file));
       emit(
         state.copyWith(
-          formData: state.formData.copyWith(uploadedDocumentUris: updated),
+          formData: state.formData.copyWith(uploadedDocuments: updated),
           isUploadingDocument: false,
         ),
       );
@@ -293,15 +307,21 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
     }
   }
 
-  void removeUploadedDocument(String documentUri) {
-    final List<String> updated = List<String>.from(
-      state.formData.uploadedDocumentUris,
-    )..remove(documentUri);
-    emit(
-      state.copyWith(
-        formData: state.formData.copyWith(uploadedDocumentUris: updated),
-      ),
-    );
+  Future<void> removeUploadedDocument(UploadedDocumentItem document) async {
+    emit(state.copyWith(clearError: true));
+    try {
+      await _repository.deleteDocument(document.id);
+      final List<UploadedDocumentItem> updated =
+          List<UploadedDocumentItem>.from(state.formData.uploadedDocuments)
+            ..removeWhere((UploadedDocumentItem d) => d.id == document.id);
+      emit(
+        state.copyWith(
+          formData: state.formData.copyWith(uploadedDocuments: updated),
+        ),
+      );
+    } on BackendException catch (e) {
+      emit(state.copyWith(errorMessage: e.message));
+    }
   }
 
   // ---- Navigating between steps - here where the PATCH truly becomes a reality ----
@@ -386,10 +406,13 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
       );
       await _repository.submitProperty(state.formData.id!);
 
+      if (isClosed) return true;
+
       emit(state.copyWith(isSubmitting: false));
-      await initWizard(forceNew: true);
+      // await initWizard(forceNew: true);
       return true;
     } on BackendException catch (e) {
+      if (isClosed) return false;
       emit(
         state.copyWith(
           isSavingStep: false,

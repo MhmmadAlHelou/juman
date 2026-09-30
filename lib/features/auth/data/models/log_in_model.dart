@@ -1,5 +1,3 @@
-import 'package:ewan/features/auth/data/models/city_model.dart';
-
 class AuthModel {
   final String access;
   final String refresh;

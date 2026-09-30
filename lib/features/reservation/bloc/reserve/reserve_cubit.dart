@@ -44,7 +44,11 @@ class ReserveCubit extends Cubit<ReserveState> {
       await _refreshPreview();
     } on BackendException catch (e) {
       emit(
-        state.copyWith(status: ReserveStatus.error, errorMessage: e.message),
+        state.copyWith(
+          status: ReserveStatus.error,
+          errorMessage: e.displayMessage,
+          errorCode: e.code,
+        ),
       );
     }
   }
@@ -75,7 +79,11 @@ class ReserveCubit extends Cubit<ReserveState> {
       emit(state.copyWith(status: ReserveStatus.loaded, preview: preview));
     } on BackendException catch (e) {
       emit(
-        state.copyWith(status: ReserveStatus.error, errorMessage: e.message),
+        state.copyWith(
+          status: ReserveStatus.error,
+          errorMessage: e.displayMessage,
+          errorCode: e.code,
+        ),
       );
     }
   }
@@ -99,7 +107,11 @@ class ReserveCubit extends Cubit<ReserveState> {
       );
     } on BackendException catch (e) {
       emit(
-        state.copyWith(status: ReserveStatus.error, errorMessage: e.message),
+        state.copyWith(
+          status: ReserveStatus.error,
+          errorMessage: e.displayMessage,
+          errorCode: e.code,
+        ),
       );
     }
   }

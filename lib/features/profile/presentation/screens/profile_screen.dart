@@ -121,6 +121,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     // TODO: context.router.push(const PersonalInformationRoute());
                   },
                 ),
+                SettingsTile(
+                  icon: Icons.document_scanner_outlined,
+                  // icon: Icons.perm_identity,
+                  title: LocaleKeys.identityAndDocuments.tr(),
+                  onTap: () {
+                    context.router.push(const IdentityVerificationRoute());
+                  },
+                ),
               ],
             ),
             const SizedBox(height: 24),

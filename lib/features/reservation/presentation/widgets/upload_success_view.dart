@@ -1,5 +1,5 @@
 import 'package:ewan/core/core.dart';
-import 'package:ewan/features/reservation/bloc/upload_receipt_cubit.dart';
+import 'package:ewan/features/reservation/bloc/upload_receipt/upload_receipt_cubit.dart';
 import 'package:ewan/features/reservation/data/models/reservation_model.dart';
 import 'package:flutter/material.dart';
 
@@ -46,7 +46,8 @@ class UploadSuccessView extends StatelessWidget {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () {
-                // context.router.replaceAll([const MyTripsRoute()]); //TODO
+                context.router.root.navigate(const BaseRoute());
+                context.tabsRouter.setActiveIndex(1);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Palette.primary,

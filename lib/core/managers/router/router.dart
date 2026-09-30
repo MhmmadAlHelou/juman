@@ -50,10 +50,9 @@ class AppRouter extends RootStackRouter {
       initial: true,
       children: [
         CustomRoute(page: HomeRoute.page),
-
+        CustomRoute(page: MyTripsRoute.page),
+        CustomRoute(page: MyFavoritesRoute.page),
         CustomRoute(page: ProfileRoute.page),
-        // CustomRoute(page: OrdersRoute.page),
-        // CustomRoute(page: FavouritesRoute.page),
       ],
     ),
     CustomRoute(
@@ -78,6 +77,10 @@ class AppRouter extends RootStackRouter {
     ),
     CustomRoute(
       page: UploadReceiptRoute.page,
+      transitionsBuilder: TransitionsBuilders.fadeIn,
+    ),
+    CustomRoute(
+      page: IdentityVerificationRoute.page,
       transitionsBuilder: TransitionsBuilders.fadeIn,
     ),
     // CustomRoute(

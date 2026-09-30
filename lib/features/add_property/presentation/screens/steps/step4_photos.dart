@@ -13,8 +13,7 @@ class AddPropertyStep4 extends StatelessWidget {
 
   Future<void> _pickImages(BuildContext context) async {
     final cubit = context.read<AddPropertyCubit>();
-    final remaining =
-        _maxImages - cubit.state.formData.uploadedImageUris.length;
+    final remaining = _maxImages - cubit.state.formData.uploadedImages.length;
     if (remaining <= 0 || cubit.state.isUploadingImage) return;
 
     final List<PlatformFile> result = await FilePicker.pickFiles(
@@ -63,11 +62,11 @@ class AddPropertyStep4 extends StatelessWidget {
           // ---- Dropzone ----
           BlocBuilder<AddPropertyCubit, AddPropertyState>(
             buildWhen: (p, c) =>
-                p.formData.uploadedImageUris.length !=
-                    c.formData.uploadedImageUris.length ||
+                p.formData.uploadedImages.length !=
+                    c.formData.uploadedImages.length ||
                 p.isUploadingImage != c.isUploadingImage,
             builder: (context, state) {
-              final count = state.formData.uploadedImageUris.length;
+              final count = state.formData.uploadedImages.length;
               final isFull = count >= _maxImages;
               final isBusy = state.isUploadingImage;
               return Center(
@@ -130,7 +129,7 @@ class AddPropertyStep4 extends StatelessWidget {
           BlocBuilder<AddPropertyCubit, AddPropertyState>(
             buildWhen: (p, c) => p.isImagesValid != c.isImagesValid,
             builder: (context, state) {
-              final count = state.formData.uploadedImageUris.length;
+              final count = state.formData.uploadedImages.length;
               if (state.isImagesValid || count == 0) {
                 return const SizedBox.shrink();
               }
@@ -164,9 +163,9 @@ class _ImagesGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AddPropertyCubit, AddPropertyState>(
       buildWhen: (p, c) =>
-          p.formData.uploadedImageUris != c.formData.uploadedImageUris,
+          p.formData.uploadedImages != c.formData.uploadedImages,
       builder: (context, state) {
-        final images = state.formData.uploadedImageUris;
+        final images = state.formData.uploadedImages;
         if (images.isEmpty) return const SizedBox.shrink();
 
         return GridView.builder(
@@ -180,14 +179,14 @@ class _ImagesGrid extends StatelessWidget {
             childAspectRatio: 1.3,
           ),
           itemBuilder: (context, index) {
-            final url = images[index];
+            final image = images[index];
             return Stack(
               children: [
                 Positioned.fill(
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(12),
                     child: Image.network(
-                      url,
+                      image.url,
                       fit: BoxFit.cover,
                       errorBuilder: (_, _, _) => Container(
                         color: Colors.grey.shade300,
@@ -202,7 +201,7 @@ class _ImagesGrid extends StatelessWidget {
                   child: _RemoveButton(
                     onTap: () => context
                         .read<AddPropertyCubit>()
-                        .removeUploadedImage(url),
+                        .removeUploadedImage(image),
                   ),
                 ),
               ],

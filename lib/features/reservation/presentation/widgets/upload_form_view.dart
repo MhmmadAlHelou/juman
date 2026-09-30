@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:ewan/core/core.dart';
-import 'package:ewan/features/reservation/bloc/upload_receipt_cubit.dart';
+import 'package:ewan/features/reservation/bloc/upload_receipt/upload_receipt_cubit.dart';
 import 'package:flutter/material.dart';
 
 class UploadFormView extends StatelessWidget {

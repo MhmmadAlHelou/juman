@@ -57,7 +57,8 @@ class ReservationConfirmedScreen extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    // context.router.replaceAll([const MyTripsRoute()]);//TODO
+                    context.router.root.navigate(const BaseRoute());
+                    context.tabsRouter.setActiveIndex(1);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Palette.primary,

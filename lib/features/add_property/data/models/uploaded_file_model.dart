@@ -1,3 +1,5 @@
+import 'package:equatable/equatable.dart';
+
 class UploadedFileModel {
   const UploadedFileModel({
     required this.id,
@@ -22,4 +24,38 @@ class UploadedFileModel {
       contentType: json['content_type'] as String? ?? '',
     );
   }
+}
+
+class UploadedImageItem extends Equatable {
+  const UploadedImageItem({required this.id, required this.url});
+
+  final String id;
+  final String url;
+
+  factory UploadedImageItem.fromJson(Map<String, dynamic> json) {
+    return UploadedImageItem(
+      id: json['id'] as String,
+      url: json['image'] as String,
+    );
+  }
+
+  @override
+  List<Object?> get props => <Object?>[id, url];
+}
+
+class UploadedDocumentItem extends Equatable {
+  const UploadedDocumentItem({required this.id, required this.url});
+
+  final String id;
+  final String url;
+
+  factory UploadedDocumentItem.fromJson(Map<String, dynamic> json) {
+    return UploadedDocumentItem(
+      id: json['id'] as String,
+      url: json['file'] as String,
+    );
+  }
+
+  @override
+  List<Object?> get props => <Object?>[id, url];
 }

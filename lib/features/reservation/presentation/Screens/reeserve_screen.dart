@@ -1,8 +1,10 @@
 import 'package:ewan/core/core.dart';
 import 'package:ewan/features/home/data/models/properties_model.dart';
-import 'package:ewan/features/reservation/bloc/reserve_cubit.dart';
+import 'package:ewan/features/reservation/bloc/reserve/reserve_cubit.dart';
 import 'package:ewan/features/reservation/data/payment_methods_repository.dart';
 import 'package:ewan/features/reservation/data/reservation_repository.dart';
+import 'package:ewan/features/reservation/presentation/widgets/info_tile.dart';
+import 'package:ewan/features/reservation/presentation/widgets/property_summary_card.dart';
 import 'package:ewan/features/reservation/presentation/widgets/select_dates_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 
@@ -25,10 +27,7 @@ class ReserveScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => ReserveCubit(
-        // TODO: swap to getIt<ReservationRepository>() once the backend
-        // currency config is fixed — mocked locally for now since the mock
-        // needs the already-loaded `property` object.
-        MockReservationRepository(fakeProperty: property),
+        getIt<ReservationRepository>(),
         getIt<PaymentMethodsRepository>(),
         property: property,
         checkIn: checkIn,
@@ -60,11 +59,33 @@ class _ReserveView extends StatelessWidget {
       ),
       body: BlocConsumer<ReserveCubit, ReserveState>(
         listener: (context, state) {
-          if (state.status == ReserveStatus.error &&
-              state.errorMessage != null) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(state.errorMessage!)));
+          if (state.status == ReserveStatus.error) {
+            if (state.errorCode == 'missing_verification_documents') {
+              showDialog(
+                context: context,
+                builder: (_) => AlertDialog(
+                  title: Text(LocaleKeys.verificationRequired.tr()),
+                  content: Text(state.errorMessage ?? ''),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: Text(LocaleKeys.cancel.tr()),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        context.router.push(const IdentityVerificationRoute());
+                      },
+                      child: Text(LocaleKeys.uploadNow.tr()),
+                    ),
+                  ],
+                ),
+              );
+            } else if (state.errorMessage != null) {
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(state.errorMessage!)));
+            }
           }
           if (state.status == ReserveStatus.submitted &&
               state.createdReservation != null) {
@@ -90,7 +111,7 @@ class _ReserveView extends StatelessWidget {
                 child: ListView(
                   padding: const EdgeInsets.all(16),
                   children: [
-                    _PropertySummaryCard(property: state.property),
+                    PropertySummaryCard(property: state.property),
                     const SizedBox(height: 24),
                     _TripSection(state: state),
                     const SizedBox(height: 24),
@@ -109,64 +130,6 @@ class _ReserveView extends StatelessWidget {
   }
 }
 
-class _PropertySummaryCard extends StatelessWidget {
-  const _PropertySummaryCard({required this.property});
-  final PropertiesModel property;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: property.coverImageUrl != null
-              ? Image.network(
-                  property.coverImageUrl!,
-                  width: 64,
-                  height: 64,
-                  fit: BoxFit.cover,
-                )
-              : Container(width: 64, height: 64, color: Palette.semiGray),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                property.title,
-                style: const TextStyle(
-                  color: Palette.fontColor,
-                  fontFamily: FontFamily.alexandria,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              Row(
-                children: [
-                  Icon(
-                    Icons.location_on,
-                    size: 14,
-                    color: Palette.fontColor.withValues(alpha: 0.6),
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    '${property.area.name}, ${property.city.name}',
-                    style: TextStyle(
-                      fontFamily: FontFamily.alexandria,
-                      color: Palette.fontColor.withValues(alpha: 0.6),
-                      fontSize: 12,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
 class _TripSection extends StatelessWidget {
   const _TripSection({required this.state});
   final ReserveState state;
@@ -178,7 +141,7 @@ class _TripSection extends StatelessWidget {
       children: [
         Text(LocaleKeys.yourTrip.tr(), style: _sectionTitleStyle),
         const SizedBox(height: 8),
-        _InfoTile(
+        InfoTile(
           icon: Icons.calendar_today,
           title: LocaleKeys.dates.tr(),
           subtitle:
@@ -205,7 +168,7 @@ class _TripSection extends StatelessWidget {
             cubit.updateGuests(result['numberOfGuests'] as int);
           },
         ),
-        _InfoTile(
+        InfoTile(
           icon: Icons.people_outline,
           title: LocaleKeys.guests.tr(),
           subtitle: '${state.numberOfGuests} ${LocaleKeys.guests.tr()}',
@@ -215,67 +178,6 @@ class _TripSection extends StatelessWidget {
   }
 
   String _fmt(DateTime d) => '${d.day}/${d.month}/${d.year}';
-}
-
-class _InfoTile extends StatelessWidget {
-  const _InfoTile({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    this.onEdit,
-  });
-
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final VoidCallback? onEdit;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Row(
-        children: [
-          Icon(icon, color: Palette.primary),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontFamily: FontFamily.alexandria,
-                    fontWeight: FontWeight.w600,
-                    color: Palette.fontColor,
-                  ),
-                ),
-                Text(
-                  subtitle,
-                  style: TextStyle(
-                    fontFamily: FontFamily.alexandria,
-                    color: Palette.fontColor.withValues(alpha: 0.6),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          if (onEdit != null)
-            TextButton(
-              onPressed: onEdit,
-              child: Text(
-                LocaleKeys.edit.tr(),
-                style: TextStyle(
-                  color: Palette.primary,
-                  decoration: TextDecoration.underline,
-                  fontFamily: FontFamily.alexandria,
-                ),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
 }
 
 class _PayWithSection extends StatelessWidget {

@@ -71,10 +71,9 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
       },
       child: AuthSkeleton(
         formKey: formKey,
-        title: LocaleKeys.forgetPassword,
-        subTitleArgs:
-            "Enter your email to receive a verification code to reset your password",
-        subTitle: LocaleKeys.plzEnterYourEmail,
+        title: LocaleKeys.forgetPassword.tr(),
+        subTitleArgs: LocaleKeys.enterYourEmailToReceiveVerificationCode.tr(),
+        subTitle: LocaleKeys.plzEnterYourEmail.tr(),
         content: <Widget>[
           const LabelAuthTextWidget(text: LocaleKeys.email),
           emailTextField(),
@@ -83,8 +82,8 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
           const SizedBox(height: 5),
           Center(
             child: QuestionWithActionWidget(
-              question: LocaleKeys.backToLogin,
-              action: LocaleKeys.login,
+              question: LocaleKeys.backToLogin.tr(),
+              action: LocaleKeys.login.tr(),
               onPressed: () {
                 context.maybePop();
               },
@@ -106,7 +105,6 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
             keyboardType: TextInputType.emailAddress,
             nextFocusNode: submitButtonFocusNode,
             textDirection: TextDirection.ltr,
-
             focusNode: emailFocusNode,
             hintText: LocaleKeys.email.tr(),
             isEmpty: emailValue?.isEmpty ?? false,

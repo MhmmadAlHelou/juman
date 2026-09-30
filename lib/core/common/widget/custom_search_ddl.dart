@@ -1,7 +1,6 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:ewan/core/core.dart';
-import 'package:ewan/features/auth/data/models/city_model.dart';
 
 class SearchableDDL<T> extends StatefulWidget {
   const SearchableDDL({

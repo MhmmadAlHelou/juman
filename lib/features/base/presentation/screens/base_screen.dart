@@ -95,11 +95,9 @@ class _BaseScreenState extends State<BaseScreen> {
         animationDuration: const Duration(milliseconds: 100),
         routes: <PageRouteInfo>[
           const HomeRoute(),
+          const MyFavoritesRoute(),
+          const MyTripsRoute(),
           const ProfileRoute(),
-
-          // AddPropertyPage(),
-          // FavouritesRoute(),
-          // OrdersRoute(),
         ],
         bottomNavigationBuilder: (_, TabsRouter tabsRouter) {
           _tabsRouter = tabsRouter;
@@ -126,44 +124,44 @@ class _BaseScreenState extends State<BaseScreen> {
                 ),
                 title: context.tr(LocaleKeys.home),
               ),
-              // CustomTabBarItem(
-              //   icon: AssetsManager.svg.bookmark.svg(
-              //     height: 20,
-              //     width: 20,
-              //     colorFilter: ColorFilter.mode(
-              //       context.colorScheme.onSurfaceVariant,
-              //       BlendMode.srcIn,
-              //     ),
-              //   ),
-              //   activeIcon: AssetsManager.svg.bookmark.svg(
-              //     height: 20,
-              //     width: 20,
-              //     colorFilter: ColorFilter.mode(
-              //       context.colorScheme.surface,
-              //       BlendMode.srcIn,
-              //     ),
-              //   ),
-              //   title: context.tr(LocaleKeys.saved),
-              // ),
-              // CustomTabBarItem(
-              //   icon: AssetsManager.svg.orders.svg(
-              //     height: 20,
-              //     width: 20,
-              //     colorFilter: ColorFilter.mode(
-              //       context.colorScheme.onSurfaceVariant,
-              //       BlendMode.srcIn,
-              //     ),
-              //   ),
-              //   activeIcon: AssetsManager.svg.orders.svg(
-              //     height: 20,
-              //     width: 20,
-              //     colorFilter: ColorFilter.mode(
-              //       context.colorScheme.surface,
-              //       BlendMode.srcIn,
-              //     ),
-              //   ),
-              //   title: context.tr(LocaleKeys.services),
-              // ),
+              CustomTabBarItem(
+                icon: AssetsManager.svg.favorite.svg(
+                  height: 20,
+                  width: 20,
+                  colorFilter: ColorFilter.mode(
+                    context.colorScheme.onSurfaceVariant,
+                    BlendMode.srcIn,
+                  ),
+                ),
+                activeIcon: AssetsManager.svg.favorite.svg(
+                  height: 20,
+                  width: 20,
+                  colorFilter: ColorFilter.mode(
+                    context.colorScheme.surface,
+                    BlendMode.srcIn,
+                  ),
+                ),
+                title: context.tr(LocaleKeys.favorites),
+              ),
+              CustomTabBarItem(
+                icon: AssetsManager.svg.clipboardText.svg(
+                  height: 20,
+                  width: 20,
+                  colorFilter: ColorFilter.mode(
+                    context.colorScheme.onSurfaceVariant,
+                    BlendMode.srcIn,
+                  ),
+                ),
+                activeIcon: AssetsManager.svg.clipboardText.svg(
+                  height: 20,
+                  width: 20,
+                  colorFilter: ColorFilter.mode(
+                    context.colorScheme.surface,
+                    BlendMode.srcIn,
+                  ),
+                ),
+                title: context.tr(LocaleKeys.myTrips),
+              ),
               CustomTabBarItem(
                 icon: AssetsManager.svg.profile.svg(
                   height: 20,

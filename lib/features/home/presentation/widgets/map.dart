@@ -15,20 +15,24 @@ class MyMap extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
 
-        final markers = state.properties.map((listing) {
-          final isSelected = listing.id == state.selectedpropertyId;
-          final icon = isSelected
-              ? state.selectedMarkerIcons[listing.id]!
-              : state.normalMarkerIcons[listing.id]!;
-
-          return Marker(
-            markerId: MarkerId(listing.id),
-            position: LatLng(listing.latitude!, listing.longitude!),
-            icon: icon,
-            onTap: () =>
-                context.read<PropertyCubit>().selectProperty(listing.id),
-          );
-        }).toSet();
+        final markers = state.properties
+            .where((listing) => listing.hasValidCoordinates)
+            .map((listing) {
+              final isSelected = listing.id == state.selectedpropertyId;
+              final icon = isSelected
+                  ? state.selectedMarkerIcons[listing.id]
+                  : state.normalMarkerIcons[listing.id];
+              if (icon == null) return null;
+              return Marker(
+                markerId: MarkerId(listing.id),
+                position: LatLng(listing.latitude!, listing.longitude!),
+                icon: icon,
+                onTap: () =>
+                    context.read<PropertyCubit>().selectProperty(listing.id),
+              );
+            })
+            .whereType<Marker>()
+            .toSet();
 
         final selected = state.selectedListing;
 

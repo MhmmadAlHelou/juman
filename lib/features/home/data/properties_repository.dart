@@ -43,7 +43,7 @@ class PropertiesRepositoryImpl implements PropertiesRepository {
 
     final Map<String, dynamic> data = response.data as Map<String, dynamic>;
     final List<dynamic> rawResults =
-        data['results'] as List<dynamic>? ?? <dynamic>[];
+        data['data']['results'] as List<dynamic>? ?? <dynamic>[];
 
     final List<PropertiesModel> results = rawResults
         .map((dynamic e) => PropertiesModel.fromJson(e as Map<String, dynamic>))

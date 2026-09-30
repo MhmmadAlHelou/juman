@@ -59,6 +59,34 @@
   "goToMyTrips": "Go to My Trips",
   "underVerification": "Under Verification",
   "reservationConfirmedTitle": "Reservation Confirmed",
+  "verificationRequired": "Verification Required",
+  "tapToUploadDocument": "Tap To Upload Document",
+  "verificationRequiredBody": "You must complete your profile and upload the required verification documents before making a reservation.",
+
+  "retry": "Retry",
+  "nationalIdIqama": "national Id",
+  "passport": "Passport",
+  "familyRegister": "Family Register",
+  "documentVerified": "Document Verified",
+  "uploading": "Uploading",
+  "Verified": "verified",
+  "underReview": "Under Review",
+  "required": "Required",
+
+  "favorites": "Favorites",
+  "noFavoritesYet": "No favorites yet",
+  "noFavoritesYetTitle": "Start exploring and save properties you love\nby tapping the heart icon.",
+  "exploreProperties": "Explore Properties",
+
+  "myTrips": "Trips",
+  "myReservations": "My Reservations",
+  "approved": "Approved",
+  "noReservations": "No Reservations",
+  "pendingHostReview": "Pending Host Review",
+  "bookAgain": "Book Again",
+  "cancelRequest": "Cancel Request",
+  "reservationDetails": "Reservation Details",
+  "downloadInvoice": "Download Invoice",
 
 
   "back": "Back",
@@ -142,6 +170,7 @@
 
   "mobileNumber": "Mobile Number",
   "phoneNumberIsRequired": "Phone number is required",
+  "enterYourEmailToReceiveVerificationCode": "Enter your email to receive a verification code to reset your password",
 
   "noInternetConnectionError": "No internet connection, please try again",
   "genericError": "Something went wrong, please try again",
@@ -265,6 +294,7 @@
   "allServices" :"All Services",
   "saveToFav" :"Save to Favorites",
   "personalInformation" :"Personal Information" ,
+  "identityAndDocuments" :"Identity & Documents" ,
   "accountManagement" :"Account Management" ,
   "savedItems" :"Saved Items",
   "mySubmissions" :"My Submissions",

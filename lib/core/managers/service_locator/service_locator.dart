@@ -8,6 +8,7 @@ import 'package:ewan/features/home/bloc/property_cubit.dart';
 import 'package:ewan/features/home/data/properties_repository.dart';
 import 'package:ewan/features/my_properties/bloc/my_properties_cubit.dart';
 import 'package:ewan/features/my_properties/data/my_properties_repository.dart';
+import 'package:ewan/features/profile/data/profile_repository.dart';
 import 'package:ewan/features/reservation/data/payment_methods_repository.dart';
 
 import 'package:ewan/features/reservation/data/reservation_repository.dart';
@@ -71,11 +72,12 @@ void repositories() {
   );
 
   getIt.registerLazySingleton<PaymentMethodsRepository>(
-    () => MockPaymentMethodsRepository(),
+    () => PaymentMethodsRepositoryImpl(getIt<DioClient>()),
   );
-  //  getIt.registerLazySingleton<ReservationRepository>( //TODO:
-  //   () => ReservationRepositoryImpl(getIt<DioClient>()),
-  // );
+
+  getIt.registerLazySingleton<ProfileRepository>(
+    () => ProfileRepositoryImpl(getIt<DioClient>()),
+  );
 
   // getIt.registerFactory(() => NotificationRepository(getIt()));
   // getIt.registerFactory(() => FavouritesRepository(getIt()));
@@ -88,8 +90,6 @@ void cubits() {
   // getIt.registerFactory(() => NotificationBloc(getIt()));
 
   // Home Feature
-  // getIt.registerFactory(() => HomeBloc(getIt()));
-
   getIt.registerFactory<PropertyCubit>(
     () => PropertyCubit(repository: getIt<PropertiesRepository>()),
   );

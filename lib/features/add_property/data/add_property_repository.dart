@@ -6,11 +6,14 @@ abstract class AddPropertyRepository {
   Future<AddPropertyFormModel> createDraft();
   Future<AddPropertyFormModel?> getMyDraft();
   Future<AddPropertyFormModel> getDraftById(String id);
+  // Future<AddPropertyFormModel> getPropertyById(String propertyId);
   Future<AddPropertyFormModel> patchStep(
     String propertyId,
     Map<String, dynamic> fields,
   );
   Future<void> submitProperty(String propertyId);
+  Future<void> deleteImage(String imageId);
+  Future<void> deleteDocument(String documentId);
 }
 
 class AddPropertyRepositoryImpl implements AddPropertyRepository {
@@ -25,8 +28,16 @@ class AddPropertyRepositoryImpl implements AddPropertyRepository {
       EndPoint.properties,
       data: const <String, dynamic>{},
     );
-    final Map<String, dynamic> body = response.data as Map<String, dynamic>;
-    return AddPropertyFormModel.fromJson(body);
+    // final Map<String, dynamic> body = response.data as Map<String, dynamic>;
+    // // Logger().i(body);
+    // final Map<String, dynamic> propertyJson =
+    //     body['data'] is Map<String, dynamic>
+    //     ? body['data'] as Map<String, dynamic>
+    //     : body;
+    // return AddPropertyFormModel.fromJson(propertyJson);
+    return AddPropertyFormModel.fromJson(
+      _unwrap(response.data as Map<String, dynamic>),
+    );
   }
 
   @override
@@ -37,11 +48,11 @@ class AddPropertyRepositoryImpl implements AddPropertyRepository {
     final Response<dynamic> response = await _dioClient.sendRequest(
       RequestType.patch,
       '${EndPoint.properties}$propertyId/',
-      // data: fields,
       formData: FormData.fromMap(fields),
     );
-    final Map<String, dynamic> body = response.data as Map<String, dynamic>;
-    return AddPropertyFormModel.fromJson(body);
+    return AddPropertyFormModel.fromJson(
+      _unwrap(response.data as Map<String, dynamic>),
+    );
   }
 
   @override
@@ -60,8 +71,12 @@ class AddPropertyRepositoryImpl implements AddPropertyRepository {
         EndPoint.myProperties,
       );
       final Map<String, dynamic> data = response.data as Map<String, dynamic>;
+      final Map<String, dynamic> propertyJson =
+          data['data'] is Map<String, dynamic>
+          ? data['data'] as Map<String, dynamic>
+          : data;
       final List<dynamic> results =
-          data['results'] as List<dynamic>? ?? <dynamic>[];
+          propertyJson['results'] as List<dynamic>? ?? <dynamic>[];
 
       if (results.isEmpty) return null;
 
@@ -96,7 +111,41 @@ class AddPropertyRepositoryImpl implements AddPropertyRepository {
       RequestType.get,
       '${EndPoint.properties}$id/',
     );
-    final Map<String, dynamic> body = response.data as Map<String, dynamic>;
-    return AddPropertyFormModel.fromJson(body);
+    return AddPropertyFormModel.fromJson(
+      _unwrap(response.data as Map<String, dynamic>),
+    );
+  }
+
+  // @override
+  // Future<AddPropertyFormModel> getPropertyById(String propertyId) async {
+  //   final Response<dynamic> response = await _dioClient.sendRequest(
+  //     RequestType.get,
+  //     '${EndPoint.properties}$propertyId/',
+  //   );
+  //   return AddPropertyFormModel.fromJson(
+  //     _unwrap(response.data as Map<String, dynamic>),
+  //   );
+  // }
+
+  @override
+  Future<void> deleteImage(String imageId) async {
+    await _dioClient.sendRequest(
+      RequestType.delete,
+      '${EndPoint.properties}images/$imageId/',
+    );
+  }
+
+  @override
+  Future<void> deleteDocument(String documentId) async {
+    await _dioClient.sendRequest(
+      RequestType.delete,
+      '${EndPoint.properties}documents/$documentId/',
+    );
+  }
+
+  Map<String, dynamic> _unwrap(Map<String, dynamic> body) {
+    return body['data'] is Map<String, dynamic>
+        ? body['data'] as Map<String, dynamic>
+        : body;
   }
 }

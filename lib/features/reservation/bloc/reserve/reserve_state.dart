@@ -22,6 +22,7 @@ class ReserveState extends Equatable {
     this.preview,
     this.createdReservation,
     this.errorMessage,
+    this.errorCode,
   });
 
   final ReserveStatus status;
@@ -34,6 +35,7 @@ class ReserveState extends Equatable {
   final ReservationModel? preview;
   final ReservationModel? createdReservation;
   final String? errorMessage;
+  final String? errorCode;
 
   int get numberOfNights => checkOut.difference(checkIn).inDays;
 
@@ -55,6 +57,7 @@ class ReserveState extends Equatable {
     ReservationModel? preview,
     ReservationModel? createdReservation,
     String? errorMessage,
+    String? errorCode,
   }) {
     return ReserveState(
       status: status ?? this.status,
@@ -68,6 +71,7 @@ class ReserveState extends Equatable {
       preview: preview ?? this.preview,
       createdReservation: createdReservation ?? this.createdReservation,
       errorMessage: errorMessage,
+      errorCode: errorCode,
     );
   }
 
@@ -83,5 +87,6 @@ class ReserveState extends Equatable {
     preview,
     createdReservation,
     errorMessage,
+    errorCode,
   ];
 }

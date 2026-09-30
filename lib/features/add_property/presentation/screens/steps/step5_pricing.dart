@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:ewan/core/core.dart';
 import 'package:ewan/features/add_property/bloc/add_property_cubit.dart';
+import 'package:ewan/features/add_property/data/models/uploaded_file_model.dart';
 import 'package:ewan/features/add_property/presentation/widgets/dotted_border_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -262,8 +263,7 @@ class _DocumentsUploader extends StatelessWidget {
 
   Future<void> _pickDocuments(BuildContext context) async {
     final cubit = context.read<AddPropertyCubit>();
-    final remaining =
-        _maxDocs - cubit.state.formData.uploadedDocumentUris.length;
+    final remaining = _maxDocs - cubit.state.formData.uploadedDocuments.length;
     if (remaining <= 0 || cubit.state.isUploadingDocument) return;
 
     final List<PlatformFile> result = await FilePicker.pickFiles(
@@ -287,10 +287,10 @@ class _DocumentsUploader extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AddPropertyCubit, AddPropertyState>(
       buildWhen: (p, c) =>
-          p.formData.uploadedDocumentUris != c.formData.uploadedDocumentUris ||
+          p.formData.uploadedDocuments != c.formData.uploadedDocuments ||
           p.isUploadingDocument != c.isUploadingDocument,
       builder: (context, state) {
-        final docs = state.formData.uploadedDocumentUris;
+        final docs = state.formData.uploadedDocuments;
         final isFull = docs.length >= _maxDocs;
         final isBusy = state.isUploadingDocument;
 
@@ -346,13 +346,13 @@ class _DocumentsUploader extends StatelessWidget {
             if (docs.isNotEmpty) ...[
               const SizedBox(height: 12),
               ...docs.map(
-                (url) => Padding(
+                (doc) => Padding(
                   padding: const EdgeInsets.only(bottom: 8),
                   child: _DocumentTile(
-                    url: url,
+                    document: doc,
                     onRemove: () => context
                         .read<AddPropertyCubit>()
-                        .removeUploadedDocument(url),
+                        .removeUploadedDocument(doc),
                   ),
                 ),
               ),
@@ -365,14 +365,14 @@ class _DocumentsUploader extends StatelessWidget {
 }
 
 class _DocumentTile extends StatelessWidget {
-  final String url;
+  final UploadedDocumentItem document;
   final VoidCallback onRemove;
 
-  const _DocumentTile({required this.url, required this.onRemove});
+  const _DocumentTile({required this.document, required this.onRemove});
 
   @override
   Widget build(BuildContext context) {
-    final fileName = url.split('/').last;
+    final fileName = document.url.split('/').last;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(

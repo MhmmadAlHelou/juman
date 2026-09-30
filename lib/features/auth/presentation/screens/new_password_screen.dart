@@ -79,12 +79,12 @@ class _NewPasswordViewState extends State<NewPasswordView> {
       child: AuthSkeleton(
         formKey: formKey,
         autovalidateMode: _autoValidateMode,
-        title: LocaleKeys.insertNewPassword,
+        title: LocaleKeys.insertNewPassword.tr(),
         content: <Widget>[
-          const LabelAuthTextWidget(text: LocaleKeys.password),
+          LabelAuthTextWidget(text: LocaleKeys.password.tr()),
           passwordTextField(),
           const SizedBox(height: 16),
-          const LabelAuthTextWidget(text: LocaleKeys.confirmPassword),
+          LabelAuthTextWidget(text: LocaleKeys.confirmPassword.tr()),
           confirmPasswordTextField(),
           const SizedBox(height: 20),
           submitButton(),

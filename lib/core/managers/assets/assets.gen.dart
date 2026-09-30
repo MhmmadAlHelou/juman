@@ -52,6 +52,9 @@ class $AssetsSvgGen {
   SvgGenImage get alertLogout =>
       const SvgGenImage('assets/svg/alert_logout.svg');
 
+  /// File path: assets/svg/booking.svg
+  SvgGenImage get booking => const SvgGenImage('assets/svg/booking.svg');
+
   /// File path: assets/svg/bookmark-Filled.svg
   SvgGenImage get bookmarkFilled =>
       const SvgGenImage('assets/svg/bookmark-Filled.svg');
@@ -78,6 +81,9 @@ class $AssetsSvgGen {
 
   /// File path: assets/svg/eye.svg
   SvgGenImage get eye => const SvgGenImage('assets/svg/eye.svg');
+
+  /// File path: assets/svg/favorite.svg
+  SvgGenImage get favorite => const SvgGenImage('assets/svg/favorite.svg');
 
   /// File path: assets/svg/filter.svg
   SvgGenImage get filter => const SvgGenImage('assets/svg/filter.svg');
@@ -125,6 +131,7 @@ class $AssetsSvgGen {
   /// List of all assets
   List<SvgGenImage> get values => [
     alertLogout,
+    booking,
     bookmarkFilled,
     bookmark,
     clipboardText,
@@ -133,6 +140,7 @@ class $AssetsSvgGen {
     email,
     eyeSlash,
     eye,
+    favorite,
     filter,
     home2,
     infoCircle,
@@ -162,9 +170,7 @@ class $AssetsTranslationsGen {
   List<String> get values => [ar, en];
 }
 
-class AssetsManager {
-  const AssetsManager._();
-
+abstract final class AssetsManager {
   static const $AssetsImagesGen images = $AssetsImagesGen();
   static const $AssetsSvgGen svg = $AssetsSvgGen();
   static const $AssetsTranslationsGen translations = $AssetsTranslationsGen();

@@ -1,5 +1,3 @@
-import 'package:ewan/features/auth/data/models/sign_up_model.dart';
-
 import '../../../core/core.dart';
 import '../../base/data/base_repository.dart';
 import '../auth.dart';
@@ -54,7 +52,6 @@ class AuthenticationBloc
   String languageCode = LocalizationConfig.currentLanguage;
   String? currencyId = PrefData.currencyIdPhone;
   bool loginMethod = false;
-  String? _pendingPassword;
 
   Future<void> signUp(
     AuthenticationEvent event,
@@ -68,10 +65,6 @@ class AuthenticationBloc
       emit(const AuthenticationState.loadingSignUp());
       await _authRepository.signUp(signUpParams: event.signUpParams);
 
-      // لا يوجد token هنا بعد — الإيميل معروف من نفس الـ params اللي بعتها
-      verificationCodeEmail = event.signUpParams.email;
-      _pendingPassword =
-          event.signUpParams.password; // خزّنها مؤقتًا لتسجيل الدخول بعد التحقق
       emit(const AuthenticationState.signUpSucceed());
     } on GeneralException catch (e) {
       emit(AuthenticationState.signUpFailed(generalException: e));
@@ -92,18 +85,18 @@ class AuthenticationBloc
         verifyAccountParams: event.verifyAccountParams,
       );
 
-      final AuthModel response = await _authRepository.signIn(
-        signInParams: SignInParams(
-          email: verificationCodeEmail!,
-          password: _pendingPassword!,
-        ),
-      );
-      PrefData.isSignedIn = true;
-      PrefData.token = response.access;
-      await Future.wait(<Future<void>>[
-        _userLocalDataSource.storeUser(response.user),
-        operationsOnUserProfile(response.user),
-      ]);
+      // final AuthModel response = await _authRepository.signIn(
+      //   signInParams: SignInParams(
+      //     email: verificationCodeEmail!,
+      //     password: _pendingPassword!,
+      //   ),
+      // );
+      // PrefData.isSignedIn = true;
+      // PrefData.token = response.access;
+      // await Future.wait(<Future<void>>[
+      //   _userLocalDataSource.storeUser(response.user),
+      //   operationsOnUserProfile(response.user),
+      // ]);
       GlobalNotifiers.profileNotifier.value =
           !GlobalNotifiers.profileNotifier.value;
 

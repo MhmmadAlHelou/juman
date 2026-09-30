@@ -1,6 +1,8 @@
 import 'package:ewan/features/home/data/models/properties_model.dart';
 import 'package:ewan/features/reservation/data/reservation_status.dart';
 
+enum TripTab { approved, pending, rejected }
+
 class ReservationModel {
   const ReservationModel({
     required this.id,
@@ -54,7 +56,7 @@ class ReservationModel {
 
   factory ReservationModel.fromJson(Map<String, dynamic> json) {
     return ReservationModel(
-      id: json['id'] as String,
+      id: json['id'] as String? ?? '',
       property: PropertiesModel.fromJson(
         json['property'] as Map<String, dynamic>,
       ),
@@ -87,4 +89,36 @@ class ReservationModel {
       rejectionReason: json['rejection_reason'] as String?,
     );
   }
+
+  bool get isEffectivelyExpired =>
+      status == ReservationStatus.expired ||
+      (status == ReservationStatus.hold && isHoldExpired);
+
+  TripTab get tripTab {
+    if (isEffectivelyExpired) return TripTab.rejected;
+    switch (status) {
+      case ReservationStatus.confirmed:
+        return TripTab.approved;
+      case ReservationStatus.hold:
+      case ReservationStatus.holdApproval:
+      case ReservationStatus.pendingPayment:
+        return TripTab.pending;
+      case ReservationStatus.rejected:
+      case ReservationStatus.expired:
+      case ReservationStatus.cancelled:
+        return TripTab.rejected;
+    }
+  }
+
+  bool get needsReceiptUpload =>
+      !isEffectivelyExpired &&
+      (status == ReservationStatus.hold ||
+          status == ReservationStatus.pendingPayment) &&
+      receiptImage == null;
+
+  bool get canCancel =>
+      !isEffectivelyExpired &&
+      (status == ReservationStatus.hold ||
+          status == ReservationStatus.holdApproval ||
+          status == ReservationStatus.pendingPayment);
 }

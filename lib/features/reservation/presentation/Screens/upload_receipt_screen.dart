@@ -1,5 +1,5 @@
 import 'package:ewan/core/core.dart';
-import 'package:ewan/features/reservation/bloc/upload_receipt_cubit.dart';
+import 'package:ewan/features/reservation/bloc/upload_receipt/upload_receipt_cubit.dart';
 import 'package:ewan/features/reservation/data/models/reservation_model.dart';
 import 'package:ewan/features/reservation/data/reservation_repository.dart';
 import 'package:ewan/features/reservation/presentation/widgets/upload_form_view.dart';
@@ -16,8 +16,7 @@ class UploadReceiptScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => UploadReceiptCubit(
-        // TODO: getIt<ReservationRepository>() بعد حل مشكلة الـ currency
-        MockReservationRepository(fakeProperty: reservation.property),
+        getIt<ReservationRepository>(),
         reservation: reservation,
       ),
       child: const _UploadReceiptView(),

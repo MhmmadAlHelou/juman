@@ -16,7 +16,8 @@ class PaymentMethodsRepositoryImpl implements PaymentMethodsRepository {
         RequestType.get,
         EndPoint.paymentMethods,
       );
-      return (response.data as List)
+      final body = response.data as Map<String, dynamic>;
+      return (body['data'] as List<dynamic>)
           .map((e) => PaymentMethodModel.fromJson(e as Map<String, dynamic>))
           .toList();
     } on DioException catch (e) {
@@ -25,26 +26,26 @@ class PaymentMethodsRepositoryImpl implements PaymentMethodsRepository {
   }
 }
 
-class MockPaymentMethodsRepository implements PaymentMethodsRepository {
-  @override
-  Future<List<PaymentMethodModel>> getPaymentMethods() async {
-    await Future.delayed(const Duration(milliseconds: 400));
-    return const [
-      PaymentMethodModel(
-        id: 'bank-transfer',
-        name: 'Bank Transfer',
-        instruction:
-            'HSBC Private International / JPMorgan Chase\nHorizon Stays Escrow Ltd.',
-        image: '',
-        requiresReceipt: true,
-      ),
-      PaymentMethodModel(
-        id: 'mobile-pay',
-        name: 'Mobile Pay',
-        instruction: 'Apple Pay or Google Wallet',
-        image: '',
-        requiresReceipt: false,
-      ),
-    ];
-  }
-}
+// class MockPaymentMethodsRepository implements PaymentMethodsRepository {
+//   @override
+//   Future<List<PaymentMethodModel>> getPaymentMethods() async {
+//     await Future.delayed(const Duration(milliseconds: 400));
+//     return const [
+//       PaymentMethodModel(
+//         id: 'bank-transfer',
+//         name: 'Bank Transfer',
+//         instruction:
+//             'HSBC Private International / JPMorgan Chase\nHorizon Stays Escrow Ltd.',
+//         image: '',
+//         requiresReceipt: true,
+//       ),
+//       PaymentMethodModel(
+//         id: 'mobile-pay',
+//         name: 'Mobile Pay',
+//         instruction: 'Apple Pay or Google Wallet',
+//         image: '',
+//         requiresReceipt: false,
+//       ),
+//     ];
+//   }
+// }

@@ -96,8 +96,8 @@ class _VerificationCodeViewState extends State<VerificationCodeView> {
           },
           verifyAccountSucceed: () {
             globalButtonController.value = null;
-
-            context.router.replaceAll(<PageRouteInfo>[const BaseRoute()]);
+            context.router.replaceAll(<PageRouteInfo>[LoginRoute()]);
+            // context.router.replaceAll(<PageRouteInfo>[const BaseRoute()]);
           },
           resendVerificationCodeFailed: (GeneralException? generalException) {
             globalButtonController.value = null;

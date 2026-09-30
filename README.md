@@ -5,6 +5,8 @@ dart run easy_localization:generate -S assets/translations -O lib/generated -o l
 dart run easy_localization:generate -S assets/translations -O lib/generated  
 
 dart run build_runner build
+
+flutter build apk --release
 _________________
 ## back to:
 
@@ -18,8 +20,4 @@ _________________
     lib\core\server\dio_client.dart line 56 'X-Os-Type'
     _____________________
 
-    lib\features\home\data\home_repository.dart
-    lib\features\home\presentation\helper\home_helper.dart lines 7 8
-    lib\features\auth\presentation\screens\create_account_screen.dart line 135
-    lib\features\auth\bloc\authentication_bloc.dart line 225
 

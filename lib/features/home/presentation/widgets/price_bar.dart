@@ -1,5 +1,7 @@
 import 'package:ewan/core/core.dart';
 import 'package:ewan/features/home/data/data.dart';
+import 'package:ewan/features/profile/data/profile_repository.dart';
+import 'package:ewan/features/reservation/presentation/widgets/missing_verification_dialog.dart';
 import 'package:ewan/features/reservation/presentation/widgets/select_dates_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 
@@ -43,8 +45,17 @@ class _PriceBarState extends State<PriceBar> {
     }
   }
 
-  void _goToReserve() {
+  void _goToReserve() async {
     if (!_hasSelectedDates) return;
+
+    final profile = await getIt<ProfileRepository>().getProfile();
+    if (!(profile.identityPhoto != null &&
+        profile.familyBookDocument != null)) {
+      if (!mounted) return;
+      showMissingVerificationDialog(context); // ← مشتركة، تحت
+      return;
+    }
+
     context.router.push(
       ReserveRoute(
         property: widget.property,

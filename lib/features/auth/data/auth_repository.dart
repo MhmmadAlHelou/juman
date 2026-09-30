@@ -19,29 +19,30 @@ class AuthRepository {
     return authSuccessResponseModel;
   }
 
-  Future<AuthModel> signInByCode({
-    required VerifyAccountParams verifyAccountParams,
-  }) async {
-    final Response<dynamic> response = await _dioClient.sendRequest(
-      RequestType.post,
-      EndPoint.loginByCode,
-      data: verifyAccountParams.toJson(),
-    );
-    final AuthModel authSuccessResponseModel = AuthModel.fromJson(
-      response.data as Map<String, dynamic>,
-    );
-    return authSuccessResponseModel;
-  }
+  // Future<AuthModel> signInByCode({
+  //   required VerifyAccountParams verifyAccountParams,
+  // }) async {
+  //   final Response<dynamic> response = await _dioClient.sendRequest(
+  //     RequestType.post,
+  //     EndPoint.loginByCode,
+  //     data: verifyAccountParams.toJson(),
+  //   );
+  //   final AuthModel authSuccessResponseModel = AuthModel.fromJson(
+  //     response.data as Map<String, dynamic>,
+  //   );
+  //   return authSuccessResponseModel;
+  // }
 
-  Future<SignUpModel> signUp({required SignUpParams signUpParams}) async {
+  Future<MessageResponseModel> signUp({
+    required SignUpParams signUpParams,
+  }) async {
     final Response<dynamic> response = await _dioClient.sendRequest(
       RequestType.post,
       EndPoint.signup,
       data: signUpParams.toJson(),
     );
-    final SignUpModel signUpResponseModel = SignUpModel.fromJson(
-      response.data as Map<String, dynamic>,
-    );
+    final MessageResponseModel signUpResponseModel =
+        MessageResponseModel.fromJson(response.data as Map<String, dynamic>);
     return signUpResponseModel;
   }
 
