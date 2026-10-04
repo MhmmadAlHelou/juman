@@ -117,6 +117,7 @@ class _ReserveView extends StatelessWidget {
                     const SizedBox(height: 24),
                     _PayWithSection(state: state),
                     const SizedBox(height: 24),
+                    const Divider(),
                     _PriceDetails(state: state),
                   ],
                 ),
@@ -244,7 +245,7 @@ class _PriceDetails extends StatelessWidget {
             // Text(state.totalAmount.toStringAsFixed(0)),
           ],
         ),
-        const Divider(),
+        // const Divider(),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -253,7 +254,7 @@ class _PriceDetails extends StatelessWidget {
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             Text(
-              state.totalAmount.toStringAsFixed(0),
+              state.totalAmount.toStringAsFixed(2),
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ],

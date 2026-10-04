@@ -103,7 +103,7 @@ class _PriceBreakdown extends StatelessWidget {
         const Divider(),
         _row(
           LocaleKeys.totalSyp.tr(),
-          r.totalAmount.toStringAsFixed(0),
+          r.totalAmount.toStringAsFixed(2),
           bold: true,
         ),
       ],

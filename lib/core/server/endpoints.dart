@@ -103,6 +103,13 @@ class EndPoint {
   static const String passportDocument = 'auth/profile/upload-passport/';
   static const String selfiePhoto = 'auth/profile/upload-selfie/';
   static const String familyBookDocument = 'auth/profile/upload-family-book/';
+  static const String updateProfile = 'profile/update/';
+  static const String requestPasswordChange =
+      'profile/password/request-change/';
+  static const String confirmPasswordChange =
+      'profile/password/confirm-change/';
+  static const String requestEmailChange = 'profile/email/request-change/';
+  static const String confirmEmailChange = 'profile/email/confirm-change/';
 
   ///////////////////////////////////
   // static const String register = 'users/register/';

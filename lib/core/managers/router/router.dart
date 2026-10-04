@@ -37,6 +37,22 @@ class AppRouter extends RootStackRouter {
       page: VerificationCodeRoute.page,
       transitionsBuilder: TransitionsBuilders.fadeIn,
     ),
+    CustomRoute(
+      page: PersonalInformationRoute.page,
+      transitionsBuilder: TransitionsBuilders.fadeIn,
+    ),
+    CustomRoute(
+      page: ProfileOtpRoute.page,
+      transitionsBuilder: TransitionsBuilders.fadeIn,
+    ),
+    CustomRoute(
+      page: ChangePasswordRoute.page,
+      transitionsBuilder: TransitionsBuilders.fadeIn,
+    ),
+    CustomRoute(
+      page: ChangeEmailRoute.page,
+      transitionsBuilder: TransitionsBuilders.fadeIn,
+    ),
     // CustomRoute(
     //   page: DeleteAccountRoute.page,
     //   transitionsBuilder: TransitionsBuilders.fadeIn,
@@ -77,6 +93,10 @@ class AppRouter extends RootStackRouter {
     ),
     CustomRoute(
       page: UploadReceiptRoute.page,
+      transitionsBuilder: TransitionsBuilders.fadeIn,
+    ),
+    CustomRoute(
+      page: ReservationDetailsRoute.page,
       transitionsBuilder: TransitionsBuilders.fadeIn,
     ),
     CustomRoute(

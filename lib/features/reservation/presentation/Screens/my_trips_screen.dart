@@ -1,4 +1,5 @@
 import 'package:ewan/core/core.dart';
+import 'package:ewan/features/home/presentation/screens/property_detail.dart';
 import 'package:ewan/features/reservation/bloc/my_trips/my_trips_cubit.dart';
 import 'package:ewan/features/reservation/data/models/reservation_model.dart';
 import 'package:ewan/features/reservation/data/reservation_repository.dart';
@@ -86,7 +87,7 @@ class _TripsList extends StatelessWidget {
           : ListView.separated(
               padding: const EdgeInsets.all(16),
               itemCount: reservations.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 16),
+              separatorBuilder: (_, _) => const SizedBox(height: 16),
               itemBuilder: (_, i) =>
                   _ReservationCard(reservation: reservations[i]),
             ),
@@ -149,7 +150,7 @@ class _ReservationCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  '${r.totalAmount.toStringAsFixed(0)} '
+                  '${r.totalAmount.toStringAsFixed(2)} '
                   '${LocaleKeys.total.tr()}',
                   style: const TextStyle(fontWeight: FontWeight.w700),
                 ),
@@ -206,12 +207,19 @@ class _Actions extends StatelessWidget {
       buttons.add(
         _primary(LocaleKeys.bookAgain.tr(), () {
           // TODO: push PropertyDetailPage(property: r.property)
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => PropertyDetailPage(property: r.property),
+            ),
+          );
         }),
       );
     }
     buttons.add(
       _secondary(LocaleKeys.viewDetails.tr(), () {
         // TODO: ReservationDetailsScreen (getReservation / invoice / payment-confirmation)
+        context.router.push(ReservationDetailsRoute(reservationId: r.id));
       }),
     );
     if (r.canCancel) {

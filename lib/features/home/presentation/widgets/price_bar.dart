@@ -52,7 +52,7 @@ class _PriceBarState extends State<PriceBar> {
     if (!(profile.identityPhoto != null &&
         profile.familyBookDocument != null)) {
       if (!mounted) return;
-      showMissingVerificationDialog(context); // ← مشتركة، تحت
+      showMissingVerificationDialog(context);
       return;
     }
 

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:ewan/core/common/widget/document_drop_zone.dart';
 import 'package:ewan/core/core.dart';
-import 'package:ewan/features/profile/bloc/identity_verification_cubit.dart';
+import 'package:ewan/features/profile/bloc/identity_verification/identity_verification_cubit.dart';
 import 'package:ewan/features/profile/data/models/profile_model.dart';
 import 'package:ewan/features/profile/data/profile_repository.dart';
 import 'package:flutter/material.dart';

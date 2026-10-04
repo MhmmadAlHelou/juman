@@ -4,9 +4,9 @@ import 'package:equatable/equatable.dart';
 import 'package:ewan/core/core.dart';
 import 'package:ewan/features/profile/data/profile_repository.dart';
 
-import '../data/models/profile_model.dart';
+import '../../data/models/profile_model.dart';
 
-part 'identity_verification_status.dart';
+part 'identity_verification_state.dart';
 
 class IdentityVerificationCubit extends Cubit<IdentityVerificationState> {
   IdentityVerificationCubit(this._profileRepository)

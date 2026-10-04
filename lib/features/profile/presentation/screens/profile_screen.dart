@@ -1,4 +1,5 @@
 import 'package:ewan/features/auth/auth.dart';
+import 'package:ewan/features/profile/bloc/profile_cubit.dart';
 import 'package:ewan/features/profile/presentation/widgets/profile_header.dart';
 import 'package:ewan/features/profile/presentation/widgets/section_title.dart';
 import 'package:ewan/features/profile/presentation/widgets/settings_section.dart';
@@ -102,98 +103,104 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Palette.backgroundColor,
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-          children: <Widget>[
-            ProfileHeader(user: _user),
-            const SizedBox(height: 32),
-            SectionTitle(LocaleKeys.accountSettings.tr()),
-            const SizedBox(height: 8),
-            SettingsCard(
-              children: <Widget>[
-                SettingsTile(
-                  icon: Icons.person_outline,
-                  title: LocaleKeys.personalInformation.tr(),
-                  onTap: () {
-                    // TODO: context.router.push(const PersonalInformationRoute());
-                  },
-                ),
-                SettingsTile(
-                  icon: Icons.document_scanner_outlined,
-                  // icon: Icons.perm_identity,
-                  title: LocaleKeys.identityAndDocuments.tr(),
-                  onTap: () {
-                    context.router.push(const IdentityVerificationRoute());
-                  },
-                ),
-              ],
-            ),
-            const SizedBox(height: 24),
-            SectionTitle(LocaleKeys.hosting.tr()),
-            const SizedBox(height: 8),
-            SettingsCard(
-              highlighted: true,
-              children: <Widget>[
-                SettingsTile(
-                  icon: Icons.home_work_outlined,
-                  title: LocaleKeys.myProperties.tr(),
-                  onTap: () {
-                    context.router.push(const MyPropertiesRoute());
-                  },
-                ),
-                SettingsTile(
-                  icon: Icons.add_home_outlined,
-                  title: LocaleKeys.addProperty.tr(),
-                  onTap: () {
-                    context.router.push(AddPropertyPage());
-                  },
-                ),
-                SettingsTile(
-                  icon: Icons.assignment_outlined,
-                  title: LocaleKeys.hostReservations.tr(),
-                  onTap: () {
-                    // TODO: context.router.push(const HostReservationsRoute());
-                  },
-                ),
-              ],
-            ),
-            const SizedBox(height: 24),
-            SectionTitle(LocaleKeys.supportSettings.tr()),
-            const SizedBox(height: 8),
-            SettingsCard(
-              children: <Widget>[
-                SettingsTile(
-                  icon: Icons.notifications_none,
-                  title: LocaleKeys.notifications.tr(),
-                  onTap: () {},
-                ),
-                SettingsTile(
-                  icon: Icons.language,
-                  title: LocaleKeys.language.tr(),
-                  trailingText: context.locale.languageCode == 'ar'
-                      ? 'العربية'
-                      : 'English',
-                  onTap: _changeLanguage,
-                ),
-                SettingsTile(
-                  icon: Icons.help_outline,
-                  title: LocaleKeys.helpCenter.tr(),
-                  onTap: () {},
-                ),
-                SettingsTile(
-                  icon: Icons.logout,
-                  title: LocaleKeys.logout.tr(),
-                  titleColor: Colors.red,
-                  iconColor: Colors.red,
-                  showChevron: false,
-                  onTap: _logout,
-                ),
-              ],
-            ),
-          ],
+    return BlocListener<ProfileCubit, ProfileState>(
+      bloc: getIt<ProfileCubit>(),
+      listenWhen: (p, c) =>
+          c.status == ProfileStatus.saved || c.status == ProfileStatus.loaded,
+      listener: (_, _) => _loadUser(),
+      child: Scaffold(
+        backgroundColor: Palette.backgroundColor,
+        body: SafeArea(
+          child: ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+            children: <Widget>[
+              ProfileHeader(user: _user),
+              const SizedBox(height: 32),
+              SectionTitle(LocaleKeys.accountSettings.tr()),
+              const SizedBox(height: 8),
+              SettingsCard(
+                children: <Widget>[
+                  SettingsTile(
+                    icon: Icons.person_outline,
+                    title: LocaleKeys.personalInformation.tr(),
+                    onTap: () {
+                      context.pushRoute(const PersonalInformationRoute());
+                    },
+                  ),
+                  SettingsTile(
+                    icon: Icons.document_scanner_outlined,
+                    // icon: Icons.perm_identity,
+                    title: LocaleKeys.identityAndDocuments.tr(),
+                    onTap: () {
+                      context.router.push(const IdentityVerificationRoute());
+                    },
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+              SectionTitle(LocaleKeys.hosting.tr()),
+              const SizedBox(height: 8),
+              SettingsCard(
+                highlighted: true,
+                children: <Widget>[
+                  SettingsTile(
+                    icon: Icons.home_work_outlined,
+                    title: LocaleKeys.myProperties.tr(),
+                    onTap: () {
+                      context.router.push(const MyPropertiesRoute());
+                    },
+                  ),
+                  SettingsTile(
+                    icon: Icons.add_home_outlined,
+                    title: LocaleKeys.addProperty.tr(),
+                    onTap: () {
+                      context.router.push(AddPropertyPage());
+                    },
+                  ),
+                  SettingsTile(
+                    icon: Icons.assignment_outlined,
+                    title: LocaleKeys.hostReservations.tr(),
+                    onTap: () {
+                      // TODO: context.router.push(const HostReservationsRoute());
+                    },
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+              SectionTitle(LocaleKeys.supportSettings.tr()),
+              const SizedBox(height: 8),
+              SettingsCard(
+                children: <Widget>[
+                  SettingsTile(
+                    icon: Icons.notifications_none,
+                    title: LocaleKeys.notifications.tr(),
+                    onTap: () {},
+                  ),
+                  SettingsTile(
+                    icon: Icons.language,
+                    title: LocaleKeys.language.tr(),
+                    trailingText: context.locale.languageCode == 'ar'
+                        ? 'العربية'
+                        : 'English',
+                    onTap: _changeLanguage,
+                  ),
+                  SettingsTile(
+                    icon: Icons.help_outline,
+                    title: LocaleKeys.helpCenter.tr(),
+                    onTap: () {},
+                  ),
+                  SettingsTile(
+                    icon: Icons.logout,
+                    title: LocaleKeys.logout.tr(),
+                    titleColor: Colors.red,
+                    iconColor: Colors.red,
+                    showChevron: false,
+                    onTap: _logout,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

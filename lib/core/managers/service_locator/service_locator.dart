@@ -8,6 +8,7 @@ import 'package:ewan/features/home/bloc/property_cubit.dart';
 import 'package:ewan/features/home/data/properties_repository.dart';
 import 'package:ewan/features/my_properties/bloc/my_properties_cubit.dart';
 import 'package:ewan/features/my_properties/data/my_properties_repository.dart';
+import 'package:ewan/features/profile/bloc/profile_cubit.dart';
 import 'package:ewan/features/profile/data/profile_repository.dart';
 import 'package:ewan/features/reservation/data/payment_methods_repository.dart';
 
@@ -103,6 +104,10 @@ void cubits() {
       locationsRepository: getIt<LocationsRepository>(),
       uploadService: getIt<FileUploadService>(),
     ),
+  );
+
+  getIt.registerLazySingleton<ProfileCubit>(
+    () => ProfileCubit(getIt<ProfileRepository>(), UserLocalDataSource()),
   );
 
   getIt.registerFactory(
