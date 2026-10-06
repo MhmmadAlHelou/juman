@@ -13,6 +13,14 @@ Logger logger = Logger(
 class DioClient {
   DioClient() {
     _dio = _createDio();
+
+    Future<void>? _refreshing;
+
+    Future<void> _refreshOnce() {
+      return _refreshing ??= getRefreshToken().whenComplete(() {
+        _refreshing = null;
+      });
+    }
   }
 
   late Dio _dio;
@@ -92,33 +100,42 @@ class DioClient {
             'Message: ${error.response?.data}',
           );
 
-          final bool isLoginRequest = requestPath == EndPoint.login;
-          final bool isRefreshRequest = requestPath == EndPoint.refreshToken;
+          final RequestOptions req = error.requestOptions;
+          final bool isLoginRequest = req.path == EndPoint.login;
+          final bool isRefreshRequest = req.path == EndPoint.refreshToken;
+          final bool alreadyRetried = req.extra['retried'] == true;
 
           if (error.response?.statusCode == 401 &&
               !isLoginRequest &&
-              !isRefreshRequest) {
+              !isRefreshRequest &&
+              !alreadyRetried) {
+            req.extra['retried'] = true;
+
             try {
               await getRefreshToken();
+              req.headers['Authorization'] = 'Bearer ${PrefData.token}';
+              handler.resolve(await _dio.fetch<dynamic>(req));
 
-              final RequestOptions requestOptions = error.requestOptions;
+              // final RequestOptions requestOptions = error.requestOptions;
 
-              requestOptions.headers['Authorization'] =
-                  'Bearer ${PrefData.token}';
+              // error.requestOptions.headers['Authorization'] =
+              //     'Bearer ${PrefData.token}';
 
-              final Response<dynamic> response = await dio.fetch<dynamic>(
-                requestOptions,
-              );
+              // final Response<dynamic> response = await dio.fetch<dynamic>(
+              //   requestOptions,
+              // );
 
-              handler.resolve(response);
-            } on DioException catch (e) {
-              handler.next(e);
-            } catch (e) {
-              handler.next(
-                DioException(requestOptions: error.requestOptions, error: e),
-              );
+              // handler.resolve(response);
+            } catch (_) {
+              // Renewal failed: Clear the token and retry as a guest.
+              PrefData.token = null;
+              req.headers.remove('Authorization');
+              try {
+                handler.resolve(await _dio.fetch<dynamic>(req));
+              } on DioException catch (e) {
+                handler.next(e);
+              }
             }
-
             return;
           }
 

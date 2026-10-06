@@ -1,3 +1,4 @@
+import 'package:ewan/features/favourites/presentation/widgets/favorite_icon_button.dart';
 import 'package:ewan/features/home/data/models/properties_model.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +21,7 @@ class PropertyCard extends StatefulWidget {
 class _PropertyCardState extends State<PropertyCard> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
-  bool _isFavorite = false;
+  // bool _isFavorite = false;
 
   @override
   void dispose() {
@@ -89,10 +90,7 @@ class _PropertyCardState extends State<PropertyCard> {
             Positioned(
               top: 12,
               right: 12,
-              child: _HeartButton(
-                isFavorite: _isFavorite,
-                onTap: () => setState(() => _isFavorite = !_isFavorite),
-              ),
+              child: FavoriteIconButton(property: widget.property),
             ),
 
             // --- Small map badge, bottom-right ---
@@ -245,25 +243,25 @@ class _PropertyCardState extends State<PropertyCard> {
 // ---------------------------------------------------------------------
 // Heart / favorite button
 // ---------------------------------------------------------------------
-class _HeartButton extends StatelessWidget {
-  final bool isFavorite;
-  final VoidCallback onTap;
+// class _HeartButton extends StatelessWidget {
+//   final bool isFavorite;
+//   final VoidCallback onTap;
 
-  const _HeartButton({required this.isFavorite, required this.onTap});
+//   const _HeartButton({required this.isFavorite, required this.onTap});
 
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Icon(
-        isFavorite ? Icons.favorite : Icons.favorite_border,
-        size: 26,
-        color: isFavorite ? Palette.red : Palette.white,
-        shadows: const [Shadow(color: Palette.black, blurRadius: 4)],
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return GestureDetector(
+//       onTap: onTap,
+//       child: Icon(
+//         isFavorite ? Icons.favorite : Icons.favorite_border,
+//         size: 26,
+//         color: isFavorite ? Palette.red : Palette.white,
+//         shadows: const [Shadow(color: Palette.black, blurRadius: 4)],
+//       ),
+//     );
+//   }
+// }
 
 // ---------------------------------------------------------------------
 // Small map preview badge (bottom-right of carousel)

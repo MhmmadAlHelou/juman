@@ -100,9 +100,9 @@ class EndPoint {
   // ─────────────────────────────────────────────
 
   static const String profile = 'profile/';
-  static const String passportDocument = 'auth/profile/upload-passport/';
-  static const String selfiePhoto = 'auth/profile/upload-selfie/';
-  static const String familyBookDocument = 'auth/profile/upload-family-book/';
+  static const String passportDocument = 'verification/passport/';
+  static const String selfiePhoto = 'verification/selfie/';
+  static const String familyBookDocument = 'verification/family-book/';
   static const String updateProfile = 'profile/update/';
   static const String requestPasswordChange =
       'profile/password/request-change/';
@@ -110,6 +110,12 @@ class EndPoint {
       'profile/password/confirm-change/';
   static const String requestEmailChange = 'profile/email/request-change/';
   static const String confirmEmailChange = 'profile/email/confirm-change/';
+
+  // ─────────────────────────────────────────────
+  // favorites
+  // ─────────────────────────────────────────────
+
+  static const String favorites = 'favorites/';
 
   ///////////////////////////////////
   // static const String register = 'users/register/';

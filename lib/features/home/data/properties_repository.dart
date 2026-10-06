@@ -14,6 +14,8 @@ abstract class PropertiesRepository {
 
   // Future<PaginatedResult<PropertiesModel>> getMyProperties();
   Future<void> deleteProperty(String id);
+
+  Future<PropertiesModel> getPropertyById(String id);
 }
 
 class PropertiesRepositoryImpl implements PropertiesRepository {
@@ -77,6 +79,18 @@ class PropertiesRepositoryImpl implements PropertiesRepository {
     }
 
     return all;
+  }
+
+  // impl
+  @override
+  Future<PropertiesModel> getPropertyById(String id) async {
+    final response = await _dioClient.sendRequest(
+      RequestType.get,
+      '${EndPoint.properties}$id/',
+    );
+    return PropertiesModel.fromJson(
+      response.data['data'] as Map<String, dynamic>,
+    );
   }
 
   // @override

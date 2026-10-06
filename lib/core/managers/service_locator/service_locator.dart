@@ -3,6 +3,10 @@ import 'package:ewan/features/add_property/data/add_property_repository.dart';
 import 'package:ewan/features/add_property/data/locations_repository.dart';
 import 'package:ewan/features/add_property/data/services/file_upload_service.dart';
 import 'package:ewan/features/base/data/base_repository.dart';
+import 'package:ewan/features/favourites/bloc/favourites_cubit.dart';
+import 'package:ewan/features/favourites/data/datasources/favorites_local_data_source.dart';
+import 'package:ewan/features/favourites/data/datasources/favorites_remote_data_source.dart';
+import 'package:ewan/features/favourites/data/favourites_repository.dart';
 import 'package:ewan/features/home/bloc/locations_cubit.dart';
 import 'package:ewan/features/home/bloc/property_cubit.dart';
 import 'package:ewan/features/home/data/properties_repository.dart';
@@ -48,6 +52,17 @@ void initPrefManager(SharedPreferences preferences) =>
 void repositories() {
   // Base Feature
   getIt.registerFactory(() => AuthRepository(getIt()));
+  // getIt.registerFactory(() => FavoritesRepository(getIt()));
+
+  getIt.registerFactory<FavoritesLocalDataSource>(
+    () => FavoritesLocalDataSourceImpl(),
+  );
+  getIt.registerFactory<FavoritesRemoteDataSource>(
+    () => FavoritesRemoteDataSourceImpl(getIt()),
+  );
+  getIt.registerFactory<FavoritesRepository>(
+    () => FavoritesRepositoryImpl(getIt(), getIt()),
+  );
 
   getIt.registerLazySingleton<PropertiesRepository>(
     () => PropertiesRepositoryImpl(getIt<DioClient>()),
@@ -86,9 +101,12 @@ void repositories() {
 
 void cubits() {
   // Auth Feature
-  getIt.registerFactory(() => AuthenticationBloc(getIt(), getIt(), getIt()));
+  getIt.registerFactory(
+    () => AuthenticationBloc(getIt(), getIt(), getIt(), getIt()),
+  );
   // getIt.registerFactory(() => ProfileBloc(getIt(), getIt()));
   // getIt.registerFactory(() => NotificationBloc(getIt()));
+  getIt.registerFactory(() => FavoritesCubit(getIt()));
 
   // Home Feature
   getIt.registerFactory<PropertyCubit>(

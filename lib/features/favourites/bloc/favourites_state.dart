@@ -1,28 +1,32 @@
-// part of 'favourites_bloc.dart';
+part of 'favourites_cubit.dart';
 
-// @freezed
-// class FavouritesState with _$FavouritesState {
-//   const factory FavouritesState.initial() = _Initial;
+enum FavoritesStatus { initial, loading, loaded, error }
 
-//   const factory FavouritesState.guest() = _Guest;
- 
-//   const factory FavouritesState.failureCreateFavourite({
-//     @Default(null) GeneralException? generalException,
-//   }) = _FailureCreateFavourite;
- 
-//   const factory FavouritesState.failureDeleteFavourite({
-//     @Default(null) GeneralException? generalException,
-//   }) = _FailureDeleteFavourite;
+class FavoritesState extends Equatable {
+  const FavoritesState({
+    this.status = FavoritesStatus.initial,
+    this.favorites = const [],
+    this.favoriteIds = const {},
+    this.errorMessage,
+  });
 
-//   const factory FavouritesState.loadingAllFavourites() = _LoadingAllFavourites;
+  final FavoritesStatus status;
+  final List<FavoriteListItem> favorites;
+  final Set<String> favoriteIds;
+  final String? errorMessage;
 
-//   const factory FavouritesState.successAllFavourites({
-//     @Default(<FavouriteResult>[]) List<FavouriteResult> favourites,
-//     @Default(false) bool hasNext,
-//     @Default(1) int page,
-//   }) = _SuccessAllFavourites;
+  FavoritesState copyWith({
+    FavoritesStatus? status,
+    List<FavoriteListItem>? favorites,
+    Set<String>? favoriteIds,
+    String? errorMessage,
+  }) => FavoritesState(
+    status: status ?? this.status,
+    favorites: favorites ?? this.favorites,
+    favoriteIds: favoriteIds ?? this.favoriteIds,
+    errorMessage: errorMessage,
+  );
 
-//   const factory FavouritesState.failureAllFavourites({
-//     @Default(null) GeneralException? generalException,
-//   }) = _FailureAllFavourites;
-// }
+  @override
+  List<Object?> get props => [status, favorites, favoriteIds, errorMessage];
+}

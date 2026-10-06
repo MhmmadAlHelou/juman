@@ -1,3 +1,6 @@
+import 'package:ewan/features/favourites/data/models/favorite_cache_item.dart';
+import 'package:ewan/features/home/data/models/properties_model.dart';
+
 import '../../core.dart';
 
 class PrefData {
@@ -41,4 +44,22 @@ class PrefData {
 
   static String? get currencyIdPhone =>
       Managers.prefManager.get<String>(PrefKeys.currencyId);
+
+  static set favoriteProperties(List<FavoriteCacheItem> value) =>
+      Managers.prefManager.set(
+        PrefKeys.favoriteProperties,
+        jsonEncode(value.map((e) => e.toJson()).toList()),
+      );
+
+  static List<FavoriteCacheItem> get favoriteProperties {
+    final raw = Managers.prefManager.get<String>(PrefKeys.favoriteProperties);
+    if (raw == null || raw.isEmpty) return [];
+    final decoded = jsonDecode(raw) as List;
+    return decoded
+        .map((e) => FavoriteCacheItem.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
+
+  static void clearFavoriteProperties() =>
+      Managers.prefManager.remove(PrefKeys.favoriteProperties);
 }

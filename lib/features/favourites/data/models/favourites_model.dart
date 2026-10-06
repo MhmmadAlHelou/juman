@@ -1,31 +1,51 @@
-// import 'package:tallebplus_app/core/common/models/pagination_model.dart';
-// import 'package:tallebplus_app/features/orders/data/models/orders_model.dart';
+import 'package:equatable/equatable.dart';
+import 'package:ewan/features/favourites/data/models/favorite_cache_item.dart';
+import 'package:ewan/features/home/data/models/properties_model.dart';
 
-// class FavouritesModel {
-//   final PaginationData pagination;
-//   final List<FavouriteResult> results;
+class FavoriteListItem extends Equatable {
+  const FavoriteListItem({
+    required this.id,
+    required this.title,
+    required this.cityName,
+    required this.pricePerNight,
+    this.coverImageUrl,
+    this.fullProperty,
+  });
 
-//   FavouritesModel({required this.pagination, required this.results});
+  final String id;
+  final String title;
+  final String cityName;
+  final double pricePerNight;
+  final String? coverImageUrl;
+  final PropertiesModel? fullProperty;
 
-//   factory FavouritesModel.fromJson(Map<String, dynamic> json) =>
-//       FavouritesModel(
-//         pagination: PaginationData.fromJson(json["pagination"]),
-//         results: List<FavouriteResult>.from(
-//           json["results"]!.map((dynamic x) => FavouriteResult.fromJson(x)),
-//         ),
-//       );
-// }
+  factory FavoriteListItem.fromProperty(PropertiesModel property) =>
+      FavoriteListItem(
+        id: property.id,
+        title: property.title,
+        cityName: property.city.name,
+        pricePerNight: property.pricePerNight,
+        coverImageUrl: property.coverImageUrl,
+        fullProperty: property,
+      );
 
-// class FavouriteResult {
-//   final String? id;
-//   final OrderResult? order;
+  factory FavoriteListItem.fromCache(FavoriteCacheItem item) =>
+      FavoriteListItem(
+        id: item.id,
+        title: item.title,
+        cityName: item.cityName,
+        pricePerNight: item.pricePerNight,
+        coverImageUrl: item.coverImageUrl,
+        fullProperty: null,
+      );
 
-//   FavouriteResult({this.id, this.order});
-
-//   factory FavouriteResult.fromJson(Map<String, dynamic> json) =>
-//       FavouriteResult(
-//         id: json["id"],
-//         order:
-//             json["order"] == null ? null : OrderResult.fromJson(json["order"]),
-//       );
-// }
+  @override
+  List<Object?> get props => [
+    id,
+    title,
+    cityName,
+    pricePerNight,
+    coverImageUrl,
+    fullProperty,
+  ];
+}

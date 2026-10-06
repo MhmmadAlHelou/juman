@@ -1,4 +1,5 @@
 import 'package:ewan/core/core.dart';
+import 'package:ewan/features/favourites/presentation/widgets/favorite_icon_button.dart';
 import 'package:ewan/features/home/data/data.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +18,7 @@ class ImageAppbarDetails extends StatefulWidget {
 }
 
 class _ImageAppbarDetailState extends State<ImageAppbarDetails> {
-  bool _isFavorite = false;
+  // bool _isFavorite = false;
   int _currentImage = 0;
   final PageController _pageController = PageController();
 
@@ -48,11 +49,12 @@ class _ImageAppbarDetailState extends State<ImageAppbarDetails> {
         if (widget.showFavorite)
           Padding(
             padding: const EdgeInsets.all(8),
-            child: _RoundIconButton(
-              icon: _isFavorite ? Icons.favorite : Icons.favorite_border,
-              iconColor: _isFavorite ? Palette.red : Palette.black,
-              onTap: () => setState(() => _isFavorite = !_isFavorite),
-            ),
+            child: FavoriteIconButton(property: widget.property),
+            // child: _RoundIconButton(
+            //   icon: _isFavorite ? Icons.favorite : Icons.favorite_border,
+            //   iconColor: _isFavorite ? Palette.red : Palette.black,
+            //   onTap: () => setState(() => _isFavorite = !_isFavorite),
+            // ),
           ),
       ],
       flexibleSpace: FlexibleSpaceBar(

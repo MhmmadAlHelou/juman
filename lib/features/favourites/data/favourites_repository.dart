@@ -1,40 +1,57 @@
-// import 'package:tallebplus_app/features/Favourites/data/models/Favourites_model.dart';
+import 'package:ewan/core/managers/preference/pref_data.dart';
+import 'package:ewan/features/favourites/data/datasources/favorites_local_data_source.dart';
+import 'package:ewan/features/favourites/data/datasources/favorites_remote_data_source.dart';
+import 'package:ewan/features/favourites/data/models/favourites_model.dart';
+import 'package:ewan/features/home/data/models/properties_model.dart';
 
-// import '../../../core/core.dart';
+abstract class FavoritesRepository {
+  Future<List<FavoriteListItem>> getFavorites();
+  Future<void> addFavorite(PropertiesModel property);
+  Future<void> removeFavorite(String propertyId);
+  bool isFavoriteLocally(String propertyId); // for guest heart-icon state
+  Future<void> syncAfterLogin();
+}
 
-// class FavouritesRepository {
-//   final DioClient _dioClient;
+class FavoritesRepositoryImpl implements FavoritesRepository {
+  FavoritesRepositoryImpl(this._local, this._remote);
 
-//   FavouritesRepository(this._dioClient);
+  final FavoritesLocalDataSource _local;
+  final FavoritesRemoteDataSource _remote;
 
-//   Future<FavouritesModel> getFavourites(
-//     int page,
-//     CancelToken? cancelToken,
-//   ) async {
-//     Response<dynamic> response = await _dioClient.sendRequest(
-//       RequestType.get,
-//       EndPoint.favourites,
-//       cancelToken: cancelToken,
-//       queryParameters: <String, dynamic>{'page': page},
-//     );
-//     final FavouritesModel successResponseModel = FavouritesModel.fromJson(
-//       response.data as Map<String, dynamic>,
-//     );
-//     return successResponseModel;
-//   }
+  @override
+  Future<List<FavoriteListItem>> getFavorites() async {
+    if (!PrefData.isSignedIn) {
+      return _local.getFavorites().map(FavoriteListItem.fromCache).toList();
+    }
+    final favorites = await _remote.getFavorites(); // List<PropertiesModel>
+    return favorites.map(FavoriteListItem.fromProperty).toList();
+  }
 
-//   Future<void> createFavourite(String orderId) async {
-//     await _dioClient.sendRequest(
-//       RequestType.post,
-//       EndPoint.favourites,
-//       data: <String, dynamic>{'order': orderId},
-//     );
-//   }
+  @override
+  Future<void> addFavorite(PropertiesModel property) {
+    if (!PrefData.isSignedIn) {
+      _local.addFavorite(property);
+      return Future.value();
+    }
+    return _remote.addFavorite(property.id);
+  }
 
-//   Future<void> deleteFavourite(String id) async {
-//     await _dioClient.sendRequest(
-//       RequestType.delete,
-//       "${EndPoint.favourites}delete_by_order/?order=$id",
-//     );
-//   }
-// }
+  @override
+  Future<void> removeFavorite(String propertyId) {
+    if (!PrefData.isSignedIn) {
+      _local.removeFavorite(propertyId);
+      return Future.value();
+    }
+    return _remote.removeFavorite(propertyId);
+  }
+
+  @override
+  bool isFavoriteLocally(String propertyId) => _local.isFavorite(propertyId);
+
+  @override
+  Future<void> syncAfterLogin() async {
+    final ids = _local.getFavoriteIdsAndClear();
+    if (ids.isEmpty) return;
+    await _remote.syncFavorites(ids);
+  }
+}

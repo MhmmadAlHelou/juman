@@ -1,3 +1,5 @@
+import 'package:ewan/features/favourites/data/favourites_repository.dart';
+
 import '../../../core/core.dart';
 import '../../base/data/base_repository.dart';
 import '../auth.dart';
@@ -12,6 +14,7 @@ class AuthenticationBloc
     this._authRepository,
     this._userLocalDataSource,
     this._baseRemoteDataSource,
+    this._favoritesRepository,
   ) : super(const AuthenticationState.initial()) {
     on<AuthenticationEvent>((
       AuthenticationEvent event,
@@ -41,6 +44,7 @@ class AuthenticationBloc
   final AuthRepository _authRepository;
   final UserLocalDataSource _userLocalDataSource;
   final BaseRemoteDataSource _baseRemoteDataSource;
+  final FavoritesRepository _favoritesRepository;
 
   String? verificationCodeEmail;
   bool verifyEmailForProfile = false;
@@ -84,6 +88,8 @@ class AuthenticationBloc
       await _authRepository.verifyAccount(
         verifyAccountParams: event.verifyAccountParams,
       );
+
+      // unawaited(_favoritesRepository.syncAfterLogin());
 
       // final AuthModel response = await _authRepository.signIn(
       //   signInParams: SignInParams(
@@ -149,6 +155,9 @@ class AuthenticationBloc
       if (event is! _SignInByCode) return;
 
       resetPasswordOtp = event.verifyAccountParams.code;
+
+      unawaited(_favoritesRepository.syncAfterLogin());
+
       emit(const AuthenticationState.redirectToResetPasswordPage());
 
       // emit(const AuthenticationState.loadingVerifyAccount());
@@ -234,6 +243,8 @@ class AuthenticationBloc
         signInParams: event.signInParams,
       );
       loginMethod = true;
+
+      unawaited(_favoritesRepository.syncAfterLogin());
 
       // TODO: Re-enable when backend returns `email_verified`.
       // if (response.user.emailVerified != true) {

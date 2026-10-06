@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:ewan/features/favourites/bloc/favourites_cubit.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
@@ -63,14 +64,14 @@ class _BaseScreenState extends State<BaseScreen> {
   //   }
   //   super.initState();
   // }
-  @override
-  void initState() {
-    if (!PrefData.isSignedIn) {
-      ///////////////////////////////////////////////
-      context.router.replaceAll(<PageRouteInfo<dynamic>>[LoginRoute()]);
-    }
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   if (!PrefData.isSignedIn) {
+  //     ///////////////////////////////////////////////
+  //     context.router.replaceAll(<PageRouteInfo<dynamic>>[LoginRoute()]);
+  //   }
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {

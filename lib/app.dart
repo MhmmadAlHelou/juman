@@ -1,3 +1,4 @@
+import 'package:ewan/features/favourites/bloc/favourites_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:app_links/app_links.dart';
 
@@ -82,8 +83,16 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<AppManagerCubit>(
-      create: (BuildContext context) => getIt<AppManagerCubit>()..init(),
+    // return BlocProvider<AppManagerCubit>(
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<AppManagerCubit>(
+          create: (_) => getIt<AppManagerCubit>()..init(),
+        ),
+        BlocProvider<FavoritesCubit>(
+          create: (_) => getIt<FavoritesCubit>()..loadFavorites(),
+        ),
+      ],
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           context.read<AppManagerCubit>().changeTextTheme(constraints);

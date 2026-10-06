@@ -162,7 +162,10 @@ class _LoginViewState extends State<LoginView> {
           const SizedBox(height: Dimensions.space16),
           GestureDetector(
             onTap: () {
-              context.maybePop();
+              // context.maybePop();
+              context.router.replaceAll(<PageRouteInfo<dynamic>>[
+                const HomeRoute(),
+              ]);
             },
             child: Center(
               child: Text(

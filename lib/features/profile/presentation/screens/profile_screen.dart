@@ -116,56 +116,58 @@ class _ProfileScreenState extends State<ProfileScreen> {
             children: <Widget>[
               ProfileHeader(user: _user),
               const SizedBox(height: 32),
-              SectionTitle(LocaleKeys.accountSettings.tr()),
+              if (_user != null) SectionTitle(LocaleKeys.accountSettings.tr()),
               const SizedBox(height: 8),
-              SettingsCard(
-                children: <Widget>[
-                  SettingsTile(
-                    icon: Icons.person_outline,
-                    title: LocaleKeys.personalInformation.tr(),
-                    onTap: () {
-                      context.pushRoute(const PersonalInformationRoute());
-                    },
-                  ),
-                  SettingsTile(
-                    icon: Icons.document_scanner_outlined,
-                    // icon: Icons.perm_identity,
-                    title: LocaleKeys.identityAndDocuments.tr(),
-                    onTap: () {
-                      context.router.push(const IdentityVerificationRoute());
-                    },
-                  ),
-                ],
-              ),
+              if (_user != null)
+                SettingsCard(
+                  children: <Widget>[
+                    SettingsTile(
+                      icon: Icons.person_outline,
+                      title: LocaleKeys.personalInformation.tr(),
+                      onTap: () {
+                        context.pushRoute(const PersonalInformationRoute());
+                      },
+                    ),
+                    SettingsTile(
+                      icon: Icons.document_scanner_outlined,
+                      // icon: Icons.perm_identity,
+                      title: LocaleKeys.identityAndDocuments.tr(),
+                      onTap: () {
+                        context.router.push(const IdentityVerificationRoute());
+                      },
+                    ),
+                  ],
+                ),
               const SizedBox(height: 24),
-              SectionTitle(LocaleKeys.hosting.tr()),
+              if (_user != null) SectionTitle(LocaleKeys.hosting.tr()),
               const SizedBox(height: 8),
-              SettingsCard(
-                highlighted: true,
-                children: <Widget>[
-                  SettingsTile(
-                    icon: Icons.home_work_outlined,
-                    title: LocaleKeys.myProperties.tr(),
-                    onTap: () {
-                      context.router.push(const MyPropertiesRoute());
-                    },
-                  ),
-                  SettingsTile(
-                    icon: Icons.add_home_outlined,
-                    title: LocaleKeys.addProperty.tr(),
-                    onTap: () {
-                      context.router.push(AddPropertyPage());
-                    },
-                  ),
-                  SettingsTile(
-                    icon: Icons.assignment_outlined,
-                    title: LocaleKeys.hostReservations.tr(),
-                    onTap: () {
-                      // TODO: context.router.push(const HostReservationsRoute());
-                    },
-                  ),
-                ],
-              ),
+              if (_user != null)
+                SettingsCard(
+                  highlighted: true,
+                  children: <Widget>[
+                    SettingsTile(
+                      icon: Icons.home_work_outlined,
+                      title: LocaleKeys.myProperties.tr(),
+                      onTap: () {
+                        context.router.push(const MyPropertiesRoute());
+                      },
+                    ),
+                    SettingsTile(
+                      icon: Icons.add_home_outlined,
+                      title: LocaleKeys.addProperty.tr(),
+                      onTap: () {
+                        context.router.push(AddPropertyPage());
+                      },
+                    ),
+                    SettingsTile(
+                      icon: Icons.assignment_outlined,
+                      title: LocaleKeys.hostReservations.tr(),
+                      onTap: () {
+                        // TODO: context.router.push(const HostReservationsRoute());
+                      },
+                    ),
+                  ],
+                ),
               const SizedBox(height: 24),
               SectionTitle(LocaleKeys.supportSettings.tr()),
               const SizedBox(height: 8),
@@ -189,14 +191,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     title: LocaleKeys.helpCenter.tr(),
                     onTap: () {},
                   ),
-                  SettingsTile(
-                    icon: Icons.logout,
-                    title: LocaleKeys.logout.tr(),
-                    titleColor: Colors.red,
-                    iconColor: Colors.red,
-                    showChevron: false,
-                    onTap: _logout,
-                  ),
+                  if (_user != null)
+                    SettingsTile(
+                      icon: Icons.logout,
+                      title: LocaleKeys.logout.tr(),
+                      titleColor: Colors.red,
+                      iconColor: Colors.red,
+                      showChevron: false,
+                      onTap: _logout,
+                    ),
+                  if (_user == null)
+                    SettingsTile(
+                      icon: Icons.login,
+                      title: LocaleKeys.login.tr(),
+                      titleColor: Colors.green,
+                      iconColor: Colors.green,
+                      showChevron: false,
+                      onTap: () {
+                        context.router.replaceAll(<PageRouteInfo<dynamic>>[
+                          LoginRoute(),
+                        ]);
+                      },
+                    ),
                 ],
               ),
             ],
