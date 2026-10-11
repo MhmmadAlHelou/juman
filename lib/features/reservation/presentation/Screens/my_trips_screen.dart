@@ -141,7 +141,10 @@ class _ReservationCard extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   '${r.property.area.name}, ${r.property.city.name}',
-                  style: const TextStyle(color: Palette.semiGray, fontSize: 12),
+                  style: const TextStyle(
+                    color: Palette.fontColor,
+                    fontSize: 12,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Text(

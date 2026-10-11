@@ -8,6 +8,7 @@ class UploadReceiptState extends Equatable {
     required this.reservation,
     this.selectedFile,
     this.remaining,
+    this.submissionResult,
     this.errorMessage,
   });
 
@@ -15,6 +16,7 @@ class UploadReceiptState extends Equatable {
   final ReservationModel reservation;
   final File? selectedFile;
   final Duration? remaining;
+  final ReceiptSubmissionResult? submissionResult;
   final String? errorMessage;
 
   bool get isExpired => remaining != null && remaining! <= Duration.zero;
@@ -29,6 +31,7 @@ class UploadReceiptState extends Equatable {
     ReservationModel? reservation,
     File? selectedFile,
     Duration? remaining,
+    ReceiptSubmissionResult? submissionResult,
     String? errorMessage,
   }) {
     return UploadReceiptState(
@@ -36,6 +39,7 @@ class UploadReceiptState extends Equatable {
       reservation: reservation ?? this.reservation,
       selectedFile: selectedFile ?? this.selectedFile,
       remaining: remaining ?? this.remaining,
+      submissionResult: submissionResult ?? this.submissionResult,
       errorMessage: errorMessage,
     );
   }
@@ -46,6 +50,7 @@ class UploadReceiptState extends Equatable {
     reservation,
     selectedFile,
     remaining,
+    submissionResult,
     errorMessage,
   ];
 }

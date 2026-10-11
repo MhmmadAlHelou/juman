@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:ewan/core/core.dart';
+import 'package:ewan/features/reservation/data/models/reservation_invoice_model.dart';
 import 'package:ewan/features/reservation/data/models/reservation_model.dart';
+import 'package:ewan/features/reservation/data/models/submit_receipt_model.dart';
 import 'package:ewan/features/reservation/data/models/unavailable_dates_model.dart';
 
 abstract class ReservationRepository {
@@ -24,10 +26,12 @@ abstract class ReservationRepository {
     required String paymentMethodId,
   });
 
-  Future<ReservationModel> uploadReceipt(String reservationId, File file);
-  Future<ReservationModel> submitReceipt(String reservationId);
+  Future<void> uploadReceipt(String reservationId, File file);
+  Future<ReceiptSubmissionResult> submitReceipt(String reservationId);
   Future<ReservationModel> getReservation(String id);
   Future<void> cancelReservation(String id);
+
+  Future<ReservationInvoiceModel> getInvoice(String reservationId);
 }
 
 class ReservationRepositoryImpl implements ReservationRepository {
@@ -88,9 +92,7 @@ class ReservationRepositoryImpl implements ReservationRepository {
           'number_of_guests': numberOfGuests,
         },
       );
-      return ReservationModel.fromJson(
-        response.data['data'] as Map<String, dynamic>,
-      );
+      return ReservationModel.fromJson(_unwrap(response.data));
     } on DioException catch (e) {
       throw BackendException(dioException: e);
     }
@@ -118,50 +120,41 @@ class ReservationRepositoryImpl implements ReservationRepository {
         formData: formData,
       );
       final body = response.data as Map<String, dynamic>;
-      return ReservationModel.fromJson(body['data'] as Map<String, dynamic>);
+      return ReservationModel.fromJson(_unwrap(body));
     } on DioException catch (e) {
       throw BackendException(dioException: e);
     }
   }
 
   @override
-  Future<ReservationModel> uploadReceipt(
-    String reservationId,
-    File file,
-  ) async {
-    final String fileName = file.path.split('/').last;
+  Future<void> uploadReceipt(String reservationId, File file) async {
     try {
-      final FormData formData = FormData.fromMap(<String, dynamic>{
+      final fileName = file.path.split('/').last;
+      final formData = FormData.fromMap({
         'receipt_image': await MultipartFile.fromFile(
           file.path,
           filename: fileName,
         ),
       });
-
-      final Response<dynamic> response = await dioClient.sendRequest(
+      await dioClient.sendRequest(
         RequestType.post,
         '${EndPoint.reservations}$reservationId/upload-receipt/',
         formData: formData,
       );
-
-      final Map<String, dynamic> body = response.data as Map<String, dynamic>;
-      final Map<String, dynamic> data = body['data'] as Map<String, dynamic>;
-      return ReservationModel.fromJson(data);
     } on DioException catch (e) {
       throw BackendException(dioException: e);
     }
   }
 
   @override
-  Future<ReservationModel> submitReceipt(String reservationId) async {
+  Future<ReceiptSubmissionResult> submitReceipt(String reservationId) async {
     try {
       final response = await dioClient.sendRequest(
         RequestType.post,
         '${EndPoint.reservations}$reservationId/submit-receipt/',
       );
-      return ReservationModel.fromJson(
-        response.data['data'] as Map<String, dynamic>,
-      );
+      final body = response.data as Map<String, dynamic>;
+      return ReceiptSubmissionResult.fromJson(_unwrap(body));
     } on DioException catch (e) {
       throw BackendException(dioException: e);
     }
@@ -174,9 +167,7 @@ class ReservationRepositoryImpl implements ReservationRepository {
         RequestType.get,
         '${EndPoint.reservations}$id/',
       );
-      return ReservationModel.fromJson(
-        response.data['data'] as Map<String, dynamic>,
-      );
+      return ReservationModel.fromJson(_unwrap(response.data));
     } on DioException catch (e) {
       throw BackendException(dioException: e);
     }
@@ -194,133 +185,28 @@ class ReservationRepositoryImpl implements ReservationRepository {
     }
   }
 
+  @override
+  Future<ReservationInvoiceModel> getInvoice(String reservationId) async {
+    try {
+      final response = await dioClient.sendRequest(
+        RequestType.get,
+        '${EndPoint.invoiceByReservation}$reservationId/',
+      );
+      final body = response.data as Map<String, dynamic>;
+      return ReservationInvoiceModel.fromJson(_unwrap(body));
+    } on DioException catch (e) {
+      throw BackendException(dioException: e);
+    }
+  }
+
+  Map<String, dynamic> _unwrap(dynamic raw) {
+    final map = raw as Map<String, dynamic>;
+    final data = map['data'];
+    return data is Map<String, dynamic> ? data : map;
+  }
+
   String _formatDate(DateTime date) =>
       '${date.year.toString().padLeft(4, '0')}-'
       '${date.month.toString().padLeft(2, '0')}-'
       '${date.day.toString().padLeft(2, '0')}';
 }
-
-// class MockReservationRepository implements ReservationRepository {
-//   MockReservationRepository({required this.fakeProperty});
-
-//   final PropertiesModel fakeProperty;
-//   final List<DateTime> _unavailable = [];
-
-//   @override
-//   Future<List<DateTime>> getUnavailableDates(String propertyId) async {
-//     await Future.delayed(const Duration(milliseconds: 500));
-//     final now = DateTime.now();
-//     return [
-//       now.add(const Duration(days: 5)),
-//       now.add(const Duration(days: 6)),
-//       now.add(const Duration(days: 12)),
-//     ];
-//   }
-
-//   ReservationModel _fakeReservation({
-//     required DateTime checkIn,
-//     required DateTime checkOut,
-//     required int numberOfGuests,
-//     String status = 'hold',
-//     String? paymentMethodId,
-//   }) {
-//     final nights = checkOut.difference(checkIn).inDays;
-//     final total = fakeProperty.pricePerNight * nights;
-//     return ReservationModel(
-//       id: 'mock-${DateTime.now().millisecondsSinceEpoch}',
-//       property: fakeProperty,
-//       numberOfNights: nights,
-//       holdExpiresAt: DateTime.now().add(const Duration(hours: 24)),
-//       remainingHoldSeconds: const Duration(hours: 24).inSeconds,
-//       isHoldExpired: false,
-//       paymentStatus: 'awaiting_receipt',
-//       reservationType: 'standard',
-//       createdAt: DateTime.now(),
-//       updatedAt: DateTime.now(),
-//       checkIn: checkIn,
-//       checkOut: checkOut,
-//       numberOfGuests: numberOfGuests,
-//       pricePerNight: fakeProperty.pricePerNight,
-//       ownerAmount: total * 0.9,
-//       adminAmount: total * 0.1,
-//       totalAmount: total,
-//       status: ReservationStatus.fromJson(status),
-//       userId: 'mock-user',
-//       currencyId: 'SYP',
-//       paymentMethodId: paymentMethodId ?? '',
-//     );
-//   }
-
-//   @override
-//   Future<ReservationModel> previewReservation({
-//     required String propertyId,
-//     required DateTime checkIn,
-//     required DateTime checkOut,
-//     required int numberOfGuests,
-//   }) async {
-//     await Future.delayed(const Duration(milliseconds: 300));
-//     return _fakeReservation(
-//       checkIn: checkIn,
-//       checkOut: checkOut,
-//       numberOfGuests: numberOfGuests,
-//     );
-//   }
-
-//   @override
-//   Future<ReservationModel> createReservation({
-//     required String propertyId,
-//     required DateTime checkIn,
-//     required DateTime checkOut,
-//     required int numberOfGuests,
-//     required String paymentMethodId,
-//   }) async {
-//     await Future.delayed(const Duration(milliseconds: 600));
-//     return _fakeReservation(
-//       checkIn: checkIn,
-//       checkOut: checkOut,
-//       numberOfGuests: numberOfGuests,
-//       paymentMethodId: paymentMethodId,
-//     );
-//   }
-
-//   @override
-//   Future<ReservationModel> uploadReceipt(
-//     String reservationId,
-//     File file,
-//   ) async {
-//     await Future.delayed(const Duration(milliseconds: 800));
-//     return _fakeReservation(
-//       checkIn: DateTime.now(),
-//       checkOut: DateTime.now().add(const Duration(days: 3)),
-//       numberOfGuests: 2,
-//       status: 'hold_approval',
-//     );
-//   }
-
-//   @override
-//   Future<ReservationModel> submitReceipt(String reservationId) async {
-//     await Future.delayed(const Duration(milliseconds: 400));
-//     return _fakeReservation(
-//       checkIn: DateTime.now(),
-//       checkOut: DateTime.now().add(const Duration(days: 3)),
-//       numberOfGuests: 2,
-//       status: 'hold_approval',
-//     );
-//   }
-
-//   @override
-//   Future<ReservationModel> getReservation(String id) async {
-//     await Future.delayed(const Duration(milliseconds: 300));
-//     return _fakeReservation(
-//       checkIn: DateTime.now(),
-//       checkOut: DateTime.now().add(const Duration(days: 3)),
-//       numberOfGuests: 2,
-//       status: 'hold_approval',
-//     );
-//   }
-
-//   @override
-//   Future<void> cancelReservation(String id) async {
-//     await Future.delayed(const Duration(milliseconds: 300));
-//   }
-// }

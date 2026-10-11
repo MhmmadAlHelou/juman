@@ -133,7 +133,8 @@ class _IntStepperRow extends StatelessWidget {
 
   const _IntStepperRow({required this.label, required this.field});
 
-  int get _min => field == _IntStepperField.guests ? 1 : 0;
+  int _min(AddPropertyState state) =>
+      field == _IntStepperField.guests ? state.generalSettings.minGuests : 0;
   int get _max => field == _IntStepperField.bathrooms ? 20 : 100;
 
   int _currentValue(AddPropertyFormModel data) {
@@ -163,9 +164,11 @@ class _IntStepperRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AddPropertyCubit, AddPropertyState>(
       buildWhen: (p, c) =>
-          _currentValue(p.formData) != _currentValue(c.formData),
+          _currentValue(p.formData) != _currentValue(c.formData) ||
+          p.generalSettings != c.generalSettings,
       builder: (context, state) {
         final value = _currentValue(state.formData);
+        final minValue = _min(state);
         return Row(
           children: [
             Expanded(
@@ -181,7 +184,7 @@ class _IntStepperRow extends StatelessWidget {
             ),
             IconButton(
               icon: const Icon(Icons.remove_circle_outline),
-              onPressed: value <= _min
+              onPressed: value <= minValue
                   ? null
                   : () => _update(context, value - 1),
             ),

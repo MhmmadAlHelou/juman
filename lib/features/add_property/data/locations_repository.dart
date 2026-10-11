@@ -1,4 +1,5 @@
 import 'package:ewan/core/core.dart';
+import 'package:ewan/features/add_property/data/models/general_settings_model.dart';
 import 'package:ewan/features/home/data/models/properties_model.dart';
 
 abstract class LocationsRepository {
@@ -6,6 +7,7 @@ abstract class LocationsRepository {
   Future<List<PlaceTypeModel>> getPlaceTypes();
   Future<List<CityModel>> getCities();
   Future<List<AmenityModel>> getAmenityItems();
+  Future<GeneralSettingsModel> getGeneralSettings();
 }
 
 class LocationsRepositoryImpl implements LocationsRepository {
@@ -43,4 +45,15 @@ class LocationsRepositoryImpl implements LocationsRepository {
   @override
   Future<List<AmenityModel>> getAmenityItems() =>
       _getList(EndPoint.amenities, AmenityModel.fromJson);
+
+  @override
+  Future<GeneralSettingsModel> getGeneralSettings() async {
+    final Response<dynamic> response = await _dioClient.sendRequest(
+      RequestType.get,
+      EndPoint.generalSettings,
+    );
+    final Map<String, dynamic> body = response.data as Map<String, dynamic>;
+    final Map<String, dynamic> data = body['data'] as Map<String, dynamic>;
+    return GeneralSettingsModel.fromJson(data);
+  }
 }

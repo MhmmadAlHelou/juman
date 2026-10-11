@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:ewan/core/core.dart';
+import 'package:ewan/features/profile/data/models/kyc_status_model.dart';
 import 'package:ewan/features/profile/data/profile_repository.dart';
 
 import '../../data/models/profile_model.dart';
@@ -47,7 +48,7 @@ class IdentityVerificationCubit extends Cubit<IdentityVerificationState> {
     );
     try {
       switch (type) {
-        case DocumentType.nationalId:
+        case DocumentType.selfie:
           await _profileRepository.uploadIdentityPhoto(file);
         case DocumentType.passport:
           await _profileRepository.uploadPassport(file);

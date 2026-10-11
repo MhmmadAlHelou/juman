@@ -5,6 +5,7 @@ import 'package:ewan/core/core.dart';
 import 'package:ewan/features/add_property/data/add_property_repository.dart';
 import 'package:ewan/features/add_property/data/locations_repository.dart';
 import 'package:ewan/features/add_property/data/models/add_property_form_model.dart';
+import 'package:ewan/features/add_property/data/models/general_settings_model.dart';
 import 'package:ewan/features/add_property/data/models/uploaded_file_model.dart';
 import 'package:ewan/features/add_property/data/services/file_upload_service.dart';
 import 'package:ewan/features/home/data/models/properties_model.dart';
@@ -91,6 +92,7 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
       emit(
         state.copyWith(
           formData: formData,
+          originalStatus: formData.status,
           isInitializing: false,
           currentStep: _stepFromFormData(formData),
         ),
@@ -123,6 +125,8 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
       final List<CityModel> cities = await _locationsRepository.getCities();
       final List<AmenityModel> amenities = await _locationsRepository
           .getAmenityItems();
+      final GeneralSettingsModel settings = await _locationsRepository
+          .getGeneralSettings();
 
       if (isClosed) return;
 
@@ -132,6 +136,7 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
           placeTypes: placeTypes,
           cities: cities,
           amenities: amenities,
+          generalSettings: settings,
           isLoadingLocationsData: false,
         ),
       );
@@ -384,16 +389,25 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
   }
 
   Future<bool> submit() async {
+    Logger().i(
+      'SUBMIT originalStatus=${state.originalStatus}, formStatus=${state.formData.status}',
+    );
     if (!state.isPricingAndDocsValid || state.formData.id == null) {
       return false;
     }
 
     emit(state.copyWith(isSavingStep: true, clearError: true));
     try {
+      final String id = state.formData.id!;
+      // PENDING: Must revert to DRAFT to accept submission.+
+      if (state.originalStatus == PropertyStatus.pending) {
+        await _repository.revertToDraft(id);
+      }
+
       // We must save the data for the last step (price, minimum/maximum stay) before submitting,
       // because the submit endpoint checks the data stored in the database, not the request body itself.
       final AddPropertyFormModel afterPatch = await _repository.patchStep(
-        state.formData.id!,
+        id,
         state.formData.toPricingJson(),
       );
 
@@ -404,7 +418,9 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
           isSubmitting: true,
         ),
       );
-      await _repository.submitProperty(state.formData.id!);
+      if (state.originalStatus != PropertyStatus.approved) {
+        await _repository.submitProperty(id);
+      }
 
       if (isClosed) return true;
 

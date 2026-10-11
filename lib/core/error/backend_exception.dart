@@ -58,6 +58,14 @@ class BackendException extends GeneralException {
           return;
         }
 
+        if (apiDetail is List) {
+          final joined = apiDetail.map((e) => e.toString()).join(' ');
+          final parsed = BackendErrorParser.parse(joined);
+          code = parsed.code;
+          message = parsed.message.isNotEmpty ? parsed.message : joined;
+          return;
+        }
+
         if (apiDetail != null && apiDetail.toString().isNotEmpty) {
           final parsed = BackendErrorParser.parse(apiDetail.toString());
           code = parsed.code;

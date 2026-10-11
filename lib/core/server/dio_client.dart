@@ -14,13 +14,13 @@ class DioClient {
   DioClient() {
     _dio = _createDio();
 
-    Future<void>? _refreshing;
+    // Future<void>? _refreshing;
 
-    Future<void> _refreshOnce() {
-      return _refreshing ??= getRefreshToken().whenComplete(() {
-        _refreshing = null;
-      });
-    }
+    // Future<void> _refreshOnce() {
+    //   return _refreshing ??= getRefreshToken().whenComplete(() {
+    //     _refreshing = null;
+    //   });
+    // }
   }
 
   late Dio _dio;

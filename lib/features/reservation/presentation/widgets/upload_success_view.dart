@@ -1,6 +1,6 @@
+import 'package:ewan/core/common/function/go_to_my_trips.dart';
 import 'package:ewan/core/core.dart';
 import 'package:ewan/features/reservation/bloc/upload_receipt/upload_receipt_cubit.dart';
-import 'package:ewan/features/reservation/data/models/reservation_model.dart';
 import 'package:flutter/material.dart';
 
 class UploadSuccessView extends StatelessWidget {
@@ -9,6 +9,7 @@ class UploadSuccessView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final result = state.submissionResult;
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -35,19 +36,26 @@ class UploadSuccessView extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            LocaleKeys.receiptUploadedBody.tr(),
+            result?.message ?? LocaleKeys.receiptUploadedBody.tr(),
             textAlign: TextAlign.center,
             style: TextStyle(color: Palette.fontColor.withValues(alpha: 0.8)),
           ),
           const SizedBox(height: 24),
-          _ReceiptFileCard(reservation: state.reservation),
+          if (state.selectedFile != null)
+            _ReceiptFileCard(
+              fileName: state.selectedFile!.path.split('/').last,
+              statusLabel: result?.paymentStatusLabel ?? '',
+            ),
+          // _ReceiptFileCard(reservation: state.reservation),
           const Spacer(),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () {
-                context.router.root.navigate(const BaseRoute());
-                context.tabsRouter.setActiveIndex(1);
+                // context.router.root.navigate(const BaseRoute());
+                // context.tabsRouter.setActiveIndex(2);
+                // context.router.root.navigate(const BaseRoute());
+                goToMyTrips(context);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Palette.primary,
@@ -64,8 +72,9 @@ class UploadSuccessView extends StatelessWidget {
 }
 
 class _ReceiptFileCard extends StatelessWidget {
-  const _ReceiptFileCard({required this.reservation});
-  final ReservationModel reservation;
+  const _ReceiptFileCard({required this.fileName, required this.statusLabel});
+  final String fileName;
+  final String statusLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -84,12 +93,14 @@ class _ReceiptFileCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  reservation.receiptImage?.split('/').last ?? '',
+                  fileName,
+                  // reservation.receiptImage?.split('/').last ?? '',
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(fontWeight: FontWeight.w600),
                 ),
                 Text(
-                  LocaleKeys.underVerification.tr(),
+                  statusLabel,
+                  // LocaleKeys.underVerification.tr(),
                   style: const TextStyle(color: Colors.orange, fontSize: 12),
                 ),
               ],

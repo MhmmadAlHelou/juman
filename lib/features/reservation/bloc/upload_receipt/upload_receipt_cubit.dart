@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:ewan/core/core.dart';
 import 'package:ewan/features/reservation/data/models/reservation_model.dart';
+import 'package:ewan/features/reservation/data/models/submit_receipt_model.dart';
 import 'package:ewan/features/reservation/data/reservation_repository.dart';
 
 part 'upload_receipt_status.dart';
@@ -48,21 +49,21 @@ class UploadReceiptCubit extends Cubit<UploadReceiptState> {
         state.selectedFile!,
       );
       emit(state.copyWith(status: UploadReceiptStatus.submitting));
-      final updated = await _reservationRepository.submitReceipt(
+      final result = await _reservationRepository.submitReceipt(
         state.reservation.id,
       );
       _timer?.cancel();
       emit(
         state.copyWith(
           status: UploadReceiptStatus.success,
-          reservation: updated,
+          submissionResult: result,
         ),
       );
     } on BackendException catch (e) {
       emit(
         state.copyWith(
           status: UploadReceiptStatus.error,
-          errorMessage: e.message,
+          errorMessage: e.displayMessage,
         ),
       );
     }

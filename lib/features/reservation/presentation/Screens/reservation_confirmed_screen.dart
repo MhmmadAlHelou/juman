@@ -1,3 +1,4 @@
+import 'package:ewan/core/common/function/go_to_my_trips.dart';
 import 'package:ewan/core/core.dart';
 import 'package:ewan/features/reservation/data/models/reservation_model.dart';
 import 'package:flutter/material.dart';
@@ -57,8 +58,10 @@ class ReservationConfirmedScreen extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    context.router.root.navigate(const BaseRoute());
-                    context.tabsRouter.setActiveIndex(1);
+                    // context.router.root.navigate(const BaseRoute());
+                    // context.tabsRouter.setActiveIndex(2);
+                    // context.router.root.navigate(const BaseRoute());
+                    goToMyTrips(context);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Palette.primary,

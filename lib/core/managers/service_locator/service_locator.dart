@@ -10,9 +10,14 @@ import 'package:ewan/features/favourites/data/favourites_repository.dart';
 import 'package:ewan/features/home/bloc/locations_cubit.dart';
 import 'package:ewan/features/home/bloc/property_cubit.dart';
 import 'package:ewan/features/home/data/properties_repository.dart';
+import 'package:ewan/features/host_reservation/data/host_reservation_repository.dart';
 import 'package:ewan/features/my_properties/bloc/my_properties_cubit.dart';
 import 'package:ewan/features/my_properties/data/my_properties_repository.dart';
+import 'package:ewan/features/notifications/bloc/notifications_cubit.dart';
+import 'package:ewan/features/notifications/data/notification_repository.dart';
+import 'package:ewan/features/profile/bloc/legal_privacy/legal_cubit.dart';
 import 'package:ewan/features/profile/bloc/profile_cubit.dart';
+import 'package:ewan/features/profile/data/legal_repository.dart';
 import 'package:ewan/features/profile/data/profile_repository.dart';
 import 'package:ewan/features/reservation/data/payment_methods_repository.dart';
 
@@ -87,12 +92,24 @@ void repositories() {
     () => ReservationRepositoryImpl(getIt<DioClient>()),
   );
 
+  getIt.registerLazySingleton<HostReservationsRepository>(
+    () => HostReservationsRepositoryImpl(getIt<DioClient>()),
+  );
+
   getIt.registerLazySingleton<PaymentMethodsRepository>(
     () => PaymentMethodsRepositoryImpl(getIt<DioClient>()),
   );
 
   getIt.registerLazySingleton<ProfileRepository>(
     () => ProfileRepositoryImpl(getIt<DioClient>()),
+  );
+
+  getIt.registerLazySingleton<NotificationsRepository>(
+    () => NotificationsRepositoryImpl(getIt()),
+  );
+
+  getIt.registerLazySingleton<LegalRepository>(
+    () => LegalRepositoryImpl(getIt<DioClient>()),
   );
 
   // getIt.registerFactory(() => NotificationRepository(getIt()));
@@ -126,6 +143,12 @@ void cubits() {
 
   getIt.registerLazySingleton<ProfileCubit>(
     () => ProfileCubit(getIt<ProfileRepository>(), UserLocalDataSource()),
+  );
+
+  getIt.registerFactory(() => NotificationsCubit(getIt()));
+
+  getIt.registerFactory<LegalCubit>(
+    () => LegalCubit(repository: getIt<LegalRepository>()),
   );
 
   getIt.registerFactory(

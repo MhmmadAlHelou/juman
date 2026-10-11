@@ -1,5 +1,4 @@
 import 'package:ewan/features/favourites/data/models/favorite_cache_item.dart';
-import 'package:ewan/features/home/data/models/properties_model.dart';
 
 import '../../core.dart';
 

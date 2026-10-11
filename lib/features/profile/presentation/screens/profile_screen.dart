@@ -62,6 +62,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     await UserLocalDataSource().deleteUser();
     PrefData.isSignedIn = false;
     PrefData.token = null;
+    PrefData.refreshToken = null;
 
     if (!mounted) return;
     context.router.replaceAll(<PageRouteInfo<dynamic>>[LoginRoute()]);
@@ -163,7 +164,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       icon: Icons.assignment_outlined,
                       title: LocaleKeys.hostReservations.tr(),
                       onTap: () {
-                        // TODO: context.router.push(const HostReservationsRoute());
+                        context.router.push(const HostReservationsRoute());
                       },
                     ),
                   ],
@@ -173,11 +174,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
               const SizedBox(height: 8),
               SettingsCard(
                 children: <Widget>[
-                  SettingsTile(
-                    icon: Icons.notifications_none,
-                    title: LocaleKeys.notifications.tr(),
-                    onTap: () {},
-                  ),
+                  if (_user != null)
+                    SettingsTile(
+                      icon: Icons.notifications_none,
+                      title: LocaleKeys.notifications.tr(),
+                      onTap: () {
+                        context.router.push(const NotificationsRoute());
+                      },
+                    ),
                   SettingsTile(
                     icon: Icons.language,
                     title: LocaleKeys.language.tr(),
@@ -188,8 +192,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   SettingsTile(
                     icon: Icons.help_outline,
-                    title: LocaleKeys.helpCenter.tr(),
-                    onTap: () {},
+                    title: LocaleKeys.legalPrivacy.tr(),
+                    onTap: () {
+                      context.router.push(const LegalPrivacyRoute());
+                    },
                   ),
                   if (_user != null)
                     SettingsTile(

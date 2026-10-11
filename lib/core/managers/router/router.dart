@@ -46,6 +46,10 @@ class AppRouter extends RootStackRouter {
       transitionsBuilder: TransitionsBuilders.fadeIn,
     ),
     CustomRoute(
+      page: LegalPrivacyRoute.page,
+      transitionsBuilder: TransitionsBuilders.fadeIn,
+    ),
+    CustomRoute(
       page: ChangePasswordRoute.page,
       transitionsBuilder: TransitionsBuilders.fadeIn,
     ),
@@ -84,6 +88,10 @@ class AppRouter extends RootStackRouter {
       transitionsBuilder: TransitionsBuilders.fadeIn,
     ),
     CustomRoute(
+      page: HostReservationsRoute.page,
+      transitionsBuilder: TransitionsBuilders.fadeIn,
+    ),
+    CustomRoute(
       page: ReserveRoute.page,
       transitionsBuilder: TransitionsBuilders.fadeIn,
     ),
@@ -103,12 +111,13 @@ class AppRouter extends RootStackRouter {
       page: IdentityVerificationRoute.page,
       transitionsBuilder: TransitionsBuilders.fadeIn,
     ),
+
+    CustomRoute(
+      page: NotificationsRoute.page,
+      transitionsBuilder: TransitionsBuilders.fadeIn,
+    ),
     // CustomRoute(
     //   page: EditProfileRoute.page,
-    //   transitionsBuilder: TransitionsBuilders.fadeIn,
-    // ),
-    // CustomRoute(
-    //   page: NotificationRoute.page,
     //   transitionsBuilder: TransitionsBuilders.fadeIn,
     // ),
     // CustomRoute(

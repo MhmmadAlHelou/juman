@@ -73,8 +73,8 @@ class EndPoint {
   // Notifications
   // ─────────────────────────────────────────────
 
-  static const String registerDeviceToken =
-      'notifications/register-device-token/';
+  static const String notifications = 'notifications/';
+  static const String registerDeviceToken = 'register-device-token/';
 
   // ─────────────────────────────────────────────
   // Uploads
@@ -88,6 +88,13 @@ class EndPoint {
   // ─────────────────────────────────────────────
 
   static const String reservations = 'reservations/';
+  static const String hostReservations = 'host-reservations/';
+
+  // ─────────────────────────────────────────────
+  // invoices
+  // ─────────────────────────────────────────────
+
+  static const String invoiceByReservation = 'invoices/reservation/';
 
   // ─────────────────────────────────────────────
   // payment-methods
@@ -116,6 +123,14 @@ class EndPoint {
   // ─────────────────────────────────────────────
 
   static const String favorites = 'favorites/';
+
+  // ─────────────────────────────────────────────
+  // settings
+  // ─────────────────────────────────────────────
+
+  static const String generalSettings = 'settings/general/';
+  static const String privacyPolicy = 'settings/privacy-policy/';
+  static const String termsOfUse = 'settings/terms-of-use/';
 
   ///////////////////////////////////
   // static const String register = 'users/register/';
@@ -146,7 +161,7 @@ class EndPoint {
 
   static const String genders = 'enums/genders/';
 
-  static const String notifications = 'notification/my-notifications/';
+  // static const String notifications = 'notification/my-notifications/';
 
   static const String ads = 'home/ads/';
   static const String homeImage = 'home/image/';

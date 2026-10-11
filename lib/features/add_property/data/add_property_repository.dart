@@ -11,7 +11,11 @@ abstract class AddPropertyRepository {
     String propertyId,
     Map<String, dynamic> fields,
   );
+
   Future<void> submitProperty(String propertyId);
+  Future<void> revertToDraft(String propertyId);
+  Future<void> revertToPending(String propertyId);
+
   Future<void> deleteImage(String imageId);
   Future<void> deleteDocument(String documentId);
 }
@@ -60,6 +64,22 @@ class AddPropertyRepositoryImpl implements AddPropertyRepository {
     await _dioClient.sendRequest(
       RequestType.put,
       '${EndPoint.properties}$propertyId/submit/',
+    );
+  }
+
+  @override
+  Future<void> revertToDraft(String propertyId) async {
+    await _dioClient.sendRequest(
+      RequestType.put,
+      '${EndPoint.properties}$propertyId/revert-to-draft/',
+    );
+  }
+
+  @override
+  Future<void> revertToPending(String propertyId) async {
+    await _dioClient.sendRequest(
+      RequestType.put,
+      '${EndPoint.properties}$propertyId/revert-to-pending/',
     );
   }
 

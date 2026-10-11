@@ -49,13 +49,16 @@ class _PriceBarState extends State<PriceBar> {
     if (!_hasSelectedDates) return;
 
     final profile = await getIt<ProfileRepository>().getProfile();
-    if (!(profile.identityPhoto != null &&
-        profile.familyBookDocument != null)) {
+    final verified =
+        (profile.passportDocument != null || profile.selfiePhoto != null) &&
+        profile.familyBookDocument != null;
+    if (!verified) {
       if (!mounted) return;
       showMissingVerificationDialog(context);
       return;
     }
 
+    if (!mounted) return;
     context.router.push(
       ReserveRoute(
         property: widget.property,

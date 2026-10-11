@@ -261,7 +261,10 @@ class MyPropertyCard extends StatelessWidget {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Palette.primary,
                         ),
-                        child: Text(LocaleKeys.resubmit.tr()),
+                        child: Text(
+                          LocaleKeys.resubmit.tr(),
+                          style: TextStyle(color: Palette.white),
+                        ),
                       ),
                       IconButton(
                         onPressed: isDeleting ? null : onDelete,

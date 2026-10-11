@@ -12,11 +12,16 @@ class AddPropertyState extends Equatable {
     this.isUploadingImage = false,
     this.isUploadingDocument = false,
     this.errorMessage,
+    this.originalStatus,
     this.categories = const <PropertyCategoryModel>[],
     this.placeTypes = const <PlaceTypeModel>[],
     this.cities = const <CityModel>[],
     this.amenities = const <AmenityModel>[],
     this.isLoadingLocationsData = false,
+    this.generalSettings = const GeneralSettingsModel(
+      minStayDays: 1,
+      minGuests: 1,
+    ),
   });
 
   final AddPropertyStep currentStep;
@@ -28,6 +33,7 @@ class AddPropertyState extends Equatable {
   final bool isUploadingImage;
   final bool isUploadingDocument;
   final String? errorMessage;
+  final PropertyStatus? originalStatus;
 
   // Reference data loaded from LocationsRepository
   final List<PropertyCategoryModel> categories;
@@ -35,6 +41,7 @@ class AddPropertyState extends Equatable {
   final List<CityModel> cities;
   final List<AmenityModel> amenities;
   final bool isLoadingLocationsData;
+  final GeneralSettingsModel generalSettings;
 
   // ----  (Step Validation) ----
 
@@ -55,8 +62,8 @@ class AddPropertyState extends Equatable {
       formData.longitude != null;
 
   bool get isDetailsValid =>
-      (formData.propertySize == null || formData.propertySize! > 0) &&
-      formData.maximumGuests >= 1 &&
+      // (formData.propertySize == null || formData.propertySize! > 0) &&
+      formData.maximumGuests >= generalSettings.minGuests &&
       formData.bedrooms >= 0 &&
       formData.bathrooms >= 0 &&
       formData.bathrooms <= 20 &&
@@ -67,7 +74,7 @@ class AddPropertyState extends Equatable {
       formData.uploadedImages.length <= 30;
 
   bool get isPricingAndDocsValid =>
-      (formData.minimumStay ?? 0) >= 1 &&
+      (formData.minimumStay ?? 0) >= generalSettings.minStayDays &&
       (formData.minimumStay ?? 0) <= 365 &&
       (formData.maximumStay == null ||
           formData.maximumStay! >= (formData.minimumStay ?? 0)) &&
@@ -91,6 +98,10 @@ class AddPropertyState extends Equatable {
     }
   }
 
+  bool get isEditMode =>
+      originalStatus != null && originalStatus != PropertyStatus.draft;
+  bool get requiresSubmitStep => originalStatus != PropertyStatus.approved;
+
   bool get isLastStep => currentStep == AddPropertyStep.pricingAndDocs;
 
   List<AreaModel> get areasForSelectedCity =>
@@ -105,11 +116,13 @@ class AddPropertyState extends Equatable {
     bool? isUploadingImage,
     bool? isUploadingDocument,
     String? errorMessage,
+    PropertyStatus? originalStatus,
     bool clearError = false,
     List<PropertyCategoryModel>? categories,
     List<PlaceTypeModel>? placeTypes,
     List<CityModel>? cities,
     List<AmenityModel>? amenities,
+    GeneralSettingsModel? generalSettings,
     bool? isLoadingLocationsData,
   }) {
     return AddPropertyState(
@@ -121,12 +134,14 @@ class AddPropertyState extends Equatable {
       isUploadingImage: isUploadingImage ?? this.isUploadingImage,
       isUploadingDocument: isUploadingDocument ?? this.isUploadingDocument,
       errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
+      originalStatus: originalStatus ?? this.originalStatus,
       categories: categories ?? this.categories,
       placeTypes: placeTypes ?? this.placeTypes,
       cities: cities ?? this.cities,
       amenities: amenities ?? this.amenities,
       isLoadingLocationsData:
           isLoadingLocationsData ?? this.isLoadingLocationsData,
+      generalSettings: generalSettings ?? this.generalSettings,
     );
   }
 
@@ -140,10 +155,12 @@ class AddPropertyState extends Equatable {
     isUploadingImage,
     isUploadingDocument,
     errorMessage,
+    originalStatus,
     categories,
     placeTypes,
     cities,
     amenities,
     isLoadingLocationsData,
+    generalSettings,
   ];
 }

@@ -90,6 +90,8 @@ class ReservationModel {
     );
   }
 
+  bool get canResubmitReceipt => status == ReservationStatus.rejected;
+
   bool get isEffectivelyExpired =>
       status == ReservationStatus.expired ||
       (status == ReservationStatus.hold && isHoldExpired);
@@ -117,8 +119,5 @@ class ReservationModel {
       receiptImage == null;
 
   bool get canCancel =>
-      !isEffectivelyExpired &&
-      (status == ReservationStatus.hold ||
-          status == ReservationStatus.holdApproval ||
-          status == ReservationStatus.pendingPayment);
+      !isEffectivelyExpired && status == ReservationStatus.hold;
 }

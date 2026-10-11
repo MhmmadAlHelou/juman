@@ -9,6 +9,7 @@ import 'package:ewan/features/add_property/presentation/screens/steps/step3_deta
 import 'package:ewan/features/add_property/presentation/screens/steps/step4_photos.dart';
 import 'package:ewan/features/add_property/presentation/screens/steps/step5_pricing.dart';
 import 'package:ewan/features/add_property/presentation/widgets/add_property_app_bar.dart';
+import 'package:ewan/features/home/data/models/properties_model.dart';
 import 'package:flutter/material.dart';
 
 @RoutePage()
@@ -99,24 +100,13 @@ class _AddPropertyViewState extends State<_AddPropertyView> {
               !curr.isSubmitting &&
               curr.errorMessage == null,
           listener: (context, state) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(LocaleKeys.propertyAddedSuccessfully.tr()),
-              ),
-            );
-            // getIt<PropertyCubit>().loadProperties();
+            final String message = state.isEditMode
+                ? LocaleKeys.propertyUpdatedSuccessfully.tr()
+                : LocaleKeys.propertyAddedSuccessfully.tr();
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(message)));
             Navigator.pop(context);
-            // AutoTabsRouter.of(context).setActiveIndex(0);
-            // final AutoTabsRouterState? tabsRouter = AutoTabsRouter.maybeOf(
-            //   context,
-            // );
-            // if (tabsRouter != null) {
-            //   // فُتحت من تاب "+" الأصلي داخل AutoTabsRouter
-            //   tabsRouter.setActiveIndex(0);
-            // } else {
-            //   // فُتحت كـ route مستقل (من My Properties / Resubmit)
-            //   context.router.maybePop();
-            // }
           },
         ),
       ],
@@ -176,12 +166,37 @@ class _AddPropertyBottomBar extends StatelessWidget {
                 const Spacer(),
                 ElevatedButton(
                   onPressed: (state.isCurrentStepValid && !isBusy)
-                      ? () {
-                          if (state.isLastStep) {
-                            context.read<AddPropertyCubit>().submit();
-                          } else {
-                            context.read<AddPropertyCubit>().goToNextStep();
+                      ? () async {
+                          final cubit = context.read<AddPropertyCubit>();
+                          if (!state.isLastStep) {
+                            cubit.goToNextStep();
+                            return;
                           }
+                          if (state.originalStatus == PropertyStatus.approved) {
+                            final bool? confirmed = await showDialog<bool>(
+                              context: context,
+                              builder: (ctx) => AlertDialog(
+                                title: Text(
+                                  LocaleKeys.editPublishedProperty.tr(),
+                                ),
+                                content: Text(
+                                  LocaleKeys.editPublishedWarning.tr(),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(ctx, false),
+                                    child: Text(LocaleKeys.cancel.tr()),
+                                  ),
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(ctx, true),
+                                    child: Text(LocaleKeys.oK.tr()),
+                                  ),
+                                ],
+                              ),
+                            );
+                            if (confirmed != true) return;
+                          }
+                          cubit.submit();
                         }
                       : null,
                   style: ElevatedButton.styleFrom(

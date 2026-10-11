@@ -54,8 +54,8 @@ class _IdentityVerificationView extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             children: [
               _DocumentCard(
-                type: DocumentType.nationalId,
-                title: LocaleKeys.nationalIdIqama.tr(),
+                type: DocumentType.selfie,
+                title: LocaleKeys.selfiePhoto.tr(),
                 icon: Icons.badge_outlined,
                 state: state,
               ),
@@ -137,7 +137,7 @@ class _DocumentCard extends StatelessWidget {
               LocaleKeys.documentVerified.tr(),
               style: const TextStyle(color: Palette.darkGray),
             )
-          else
+          else if (state.canUpload(type))
             DocumentDropZone(
               selectedFile: null,
               hint: uploading
@@ -154,6 +154,11 @@ class _DocumentCard extends StatelessWidget {
                       if (path == null) return;
                       cubit.uploadDocument(type, File(path));
                     },
+            )
+          else
+            Text(
+              LocaleKeys.sentAwaitingReview.tr(),
+              style: const TextStyle(color: Palette.darkGray),
             ),
         ],
       ),

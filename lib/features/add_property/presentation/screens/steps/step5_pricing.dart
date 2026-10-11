@@ -113,10 +113,13 @@ class _MinStayFieldState extends State<_MinStayField> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AddPropertyCubit, AddPropertyState>(
-      buildWhen: (p, c) => p.formData.minimumStay != c.formData.minimumStay,
+      buildWhen: (p, c) =>
+          p.formData.minimumStay != c.formData.minimumStay ||
+          p.generalSettings != c.generalSettings,
       builder: (context, state) {
         final value = state.formData.minimumStay;
-        final showError = value != null && (value < 1 || value > 365);
+        final minAllowed = state.generalSettings.minStayDays;
+        final showError = value != null && (value < minAllowed || value > 365);
         return TextField(
           controller: _controller,
           keyboardType: TextInputType.number,
@@ -125,7 +128,9 @@ class _MinStayFieldState extends State<_MinStayField> {
             border: const OutlineInputBorder(),
             hintText: 'e.g. 2',
             suffixText: LocaleKeys.nights.tr(),
-            errorText: showError ? LocaleKeys.mustBeBetween1And365.tr() : null,
+            errorText: showError
+                ? LocaleKeys.mustBeBetweenXAndY.tr(args: ['$minAllowed', '365'])
+                : null,
           ),
           onChanged: (text) {
             final parsed = int.tryParse(text);

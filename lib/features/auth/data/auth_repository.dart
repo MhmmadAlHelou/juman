@@ -39,7 +39,8 @@ class AuthRepository {
     final Response<dynamic> response = await _dioClient.sendRequest(
       RequestType.post,
       EndPoint.signup,
-      data: signUpParams.toJson(),
+      formData: FormData.fromMap(signUpParams.toJson()),
+      // data: signUpParams.toJson(),
     );
     final MessageResponseModel signUpResponseModel =
         MessageResponseModel.fromJson(response.data as Map<String, dynamic>);

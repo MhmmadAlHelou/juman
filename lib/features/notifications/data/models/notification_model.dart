@@ -1,88 +1,79 @@
-// // To parse this JSON data, do
-// //
-// //     final notificationModel = notificationModelFromJson(jsonString);
+import 'package:equatable/equatable.dart';
 
-// import '../../../../core/common/models/pagination_model.dart';
-// import '../../../../core/core.dart';
+class NotificationModel extends Equatable {
+  final String id;
+  final String type;
+  final String title;
+  final String message;
+  final Map<String, dynamic> data;
+  final bool isRead;
+  final DateTime createdAt;
 
-// class NotificationModel {
-//   final PaginationData pagination;
-//   final List<NotificationData> results;
+  const NotificationModel({
+    required this.id,
+    required this.type,
+    required this.title,
+    required this.message,
+    required this.data,
+    required this.isRead,
+    required this.createdAt,
+  });
 
-//   NotificationModel({required this.pagination, required this.results});
+  factory NotificationModel.fromJson(Map<String, dynamic> json) {
+    return NotificationModel(
+      id: json['id'] as String,
+      type: json['notification_type'] as String? ?? '',
+      title: json['title'] as String? ?? '',
+      message: json['message'] as String? ?? '',
+      data: Map<String, dynamic>.from(json['data'] as Map? ?? const {}),
+      isRead: json['is_read'] as bool? ?? false,
+      createdAt: DateTime.parse(json['created_at'] as String).toLocal(),
+    );
+  }
 
-//   factory NotificationModel.fromJson(Map<String, dynamic> json) =>
-//       NotificationModel(
-//         pagination: PaginationData.fromJson(json["pagination"]),
-//         results: json["results"] == null
-//             ? <NotificationData>[]
-//             : List<NotificationData>.from(
-//                 json["results"]!.map(
-//                   (dynamic x) => NotificationData.fromJson(x),
-//                 ),
-//               ),
-//       );
-// }
+  NotificationModel copyWith({bool? isRead}) => NotificationModel(
+    id: id,
+    type: type,
+    title: title,
+    message: message,
+    data: data,
+    isRead: isRead ?? this.isRead,
+    createdAt: createdAt,
+  );
 
-// class NotificationData {
-//   final String id;
-//   final String? user;
-//   final int? role;
-//   final String? title;
-//   final String? body;
-//   final String? image;
-//   final NotificationType? objectType;
-//   final String? objectId;
-//   final dynamic extraData;
-//   final bool? isViewed;
-//   final DateTime createdAt;
-//   final String? updatedAt;
+  /// Convenience for navigation on tap (RESERVATION_* types).
+  String? get reservationId => data['reservation_id'] as String?;
 
-//   NotificationData({
-//     required this.id,
-//     this.user,
-//     this.role,
-//     this.title,
-//     this.body,
-//     this.image,
-//     this.objectType,
-//     this.objectId,
-//     this.extraData,
-//     this.isViewed,
-//     required this.createdAt,
-//     this.updatedAt,
-//   });
+  @override
+  List<Object?> get props => [
+    id,
+    type,
+    title,
+    message,
+    data,
+    isRead,
+    createdAt,
+  ];
+}
 
-//   factory NotificationData.fromJson(Map<String, dynamic> json) =>
-//       NotificationData(
-//         id: json["id"],
-//         user: json["user"],
-//         role: json["role"],
-//         title: json["title"],
-//         body: json["body"],
-//         image: json["image"],
-//         objectType: json["object_type"] == null
-//             ? NotificationType.none
-//             : NotificationType.values[json["object_type"]],
-//         objectId: json["object_id"],
-//         extraData: json["extra_data"],
-//         isViewed: json["is_viewed"],
-//         createdAt: DateTime.parse(json["created_at"]),
-//         updatedAt: json["updated_at"],
-//       );
+class PaginatedNotifications {
+  final List<NotificationModel> items;
+  final bool hasNext;
+  final int count;
 
-//   Map<String, dynamic> toJson() => <String, dynamic>{
-//     "id": id,
-//     "user": user,
-//     "role": role,
-//     "title": title,
-//     "body": body,
-//     "image": image,
-//     "object_type": objectType,
-//     "object_id": objectId,
-//     "extra_data": extraData,
-//     "is_viewed": isViewed,
-//     "created_at": createdAt,
-//     "updated_at": updatedAt,
-//   };
-// }
+  const PaginatedNotifications({
+    required this.items,
+    required this.hasNext,
+    required this.count,
+  });
+
+  factory PaginatedNotifications.fromJson(Map<String, dynamic> json) {
+    return PaginatedNotifications(
+      items: (json['results'] as List)
+          .map((e) => NotificationModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      hasNext: json['next'] != null,
+      count: json['count'] as int? ?? 0,
+    );
+  }
+}

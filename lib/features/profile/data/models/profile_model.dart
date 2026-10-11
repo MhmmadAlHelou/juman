@@ -1,3 +1,5 @@
+import 'package:ewan/features/profile/data/models/kyc_status_model.dart';
+
 enum DocumentVerificationStatus {
   pending,
   verified,
@@ -28,14 +30,12 @@ class ProfileModel {
     required this.firstName,
     required this.lastName,
     required this.email,
-    required this.passportVerificationStatus,
-    required this.identityPhotoStatus,
-    required this.familyBookStatus,
     this.profilePicture,
     this.phoneNumber,
     this.passportDocument,
-    this.identityPhoto,
+    this.selfiePhoto,
     this.familyBookDocument,
+    this.kycStatus,
   });
 
   final String id;
@@ -46,16 +46,9 @@ class ProfileModel {
   final String email;
   final String? phoneNumber;
   final String? passportDocument;
-  final DocumentVerificationStatus passportVerificationStatus;
-  final String? identityPhoto;
-  final DocumentVerificationStatus identityPhotoStatus;
+  final String? selfiePhoto;
   final String? familyBookDocument;
-  final DocumentVerificationStatus familyBookStatus;
-
-  bool get isFullyVerified =>
-      passportVerificationStatus == DocumentVerificationStatus.verified &&
-      identityPhotoStatus == DocumentVerificationStatus.verified &&
-      familyBookStatus == DocumentVerificationStatus.verified;
+  final KycStatusModel? kycStatus;
 
   factory ProfileModel.fromJson(Map<String, dynamic> json) {
     return ProfileModel(
@@ -67,17 +60,11 @@ class ProfileModel {
       email: json['email'] as String? ?? '',
       phoneNumber: json['phone_number'] as String?,
       passportDocument: json['passport_document'] as String?,
-      passportVerificationStatus: DocumentVerificationStatus.fromJson(
-        json['passport_verification_status'] as String?,
-      ),
-      identityPhoto: json['identity_photo'] as String?,
-      identityPhotoStatus: DocumentVerificationStatus.fromJson(
-        json['identity_photo_status'] as String?,
-      ),
+      selfiePhoto: json['selfie_photo'] as String?,
       familyBookDocument: json['family_book_document'] as String?,
-      familyBookStatus: DocumentVerificationStatus.fromJson(
-        json['family_book_status'] as String?,
-      ),
+      kycStatus: json['kyc_status'] is Map<String, dynamic>
+          ? KycStatusModel.fromJson(json['kyc_status'] as Map<String, dynamic>)
+          : null,
     );
   }
 }
