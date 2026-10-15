@@ -181,7 +181,8 @@ class _PersonalInformationViewState extends State<PersonalInformationView> {
                     _Avatar(
                       imageUrl: profile.profilePicture,
                       pickedImage: _pickedImage,
-                      showCameraBadge: _isEditing,
+                      showCameraBadge: false,
+                      // showCameraBadge: _isEditing,
                       onChangePhoto: isSaving ? null : _pickImage,
                     ),
                     const SizedBox(height: Dimensions.space24),

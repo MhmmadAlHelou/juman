@@ -116,17 +116,10 @@ class AppRouter extends RootStackRouter {
       page: NotificationsRoute.page,
       transitionsBuilder: TransitionsBuilders.fadeIn,
     ),
-    // CustomRoute(
-    //   page: EditProfileRoute.page,
-    //   transitionsBuilder: TransitionsBuilders.fadeIn,
-    // ),
-    // CustomRoute(
-    //   page: ContactUsRoute.page,
-    //   transitionsBuilder: TransitionsBuilders.fadeIn,
-    // ),
-    // CustomRoute(
-    //   page: ChangePasswordRoute.page,
-    //   transitionsBuilder: TransitionsBuilders.fadeIn,
-    // ),
+
+    CustomRoute(
+      page: ContactSupportRoute.page,
+      transitionsBuilder: TransitionsBuilders.fadeIn,
+    ),
   ];
 }

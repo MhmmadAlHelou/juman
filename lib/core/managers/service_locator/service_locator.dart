@@ -3,6 +3,8 @@ import 'package:ewan/features/add_property/data/add_property_repository.dart';
 import 'package:ewan/features/add_property/data/locations_repository.dart';
 import 'package:ewan/features/add_property/data/services/file_upload_service.dart';
 import 'package:ewan/features/base/data/base_repository.dart';
+import 'package:ewan/features/contact_support/bloc/contact_support_cubit.dart';
+import 'package:ewan/features/contact_support/data/contact_repository.dart';
 import 'package:ewan/features/favourites/bloc/favourites_cubit.dart';
 import 'package:ewan/features/favourites/data/datasources/favorites_local_data_source.dart';
 import 'package:ewan/features/favourites/data/datasources/favorites_remote_data_source.dart';
@@ -112,8 +114,9 @@ void repositories() {
     () => LegalRepositoryImpl(getIt<DioClient>()),
   );
 
-  // getIt.registerFactory(() => NotificationRepository(getIt()));
-  // getIt.registerFactory(() => FavouritesRepository(getIt()));
+  getIt.registerLazySingleton<ContactRepository>(
+    () => ContactRepositoryImpl(getIt()),
+  );
 }
 
 void cubits() {
@@ -150,6 +153,8 @@ void cubits() {
   getIt.registerFactory<LegalCubit>(
     () => LegalCubit(repository: getIt<LegalRepository>()),
   );
+
+  getIt.registerFactory(() => ContactSupportCubit(getIt()));
 
   getIt.registerFactory(
     () => MyPropertiesCubit(getIt<MyPropertiesRepository>()),

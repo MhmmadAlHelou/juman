@@ -102,11 +102,14 @@ class _MyPropertiesView extends StatelessWidget {
                         itemBuilder: (BuildContext context, int index) {
                           final MyPropertyModel item =
                               state.filteredItems[index];
-                          return MyPropertyCard(
-                            item: item,
-                            isDeleting: state.deletingId == item.id,
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 20),
+                            child: MyPropertyCard(
+                              item: item,
+                              isDeleting: state.deletingId == item.id,
 
-                            onDelete: () => _confirmDelete(context, item.id),
+                              onDelete: () => _confirmDelete(context, item.id),
+                            ),
                           );
                         },
                       ),

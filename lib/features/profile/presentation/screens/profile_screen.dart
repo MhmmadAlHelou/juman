@@ -199,12 +199,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   if (_user != null)
                     SettingsTile(
+                      icon: Icons.headphones_outlined,
+                      title: LocaleKeys.contactSupport.tr(),
+                      onTap: () {
+                        context.router.push(const ContactSupportRoute());
+                      },
+                    ),
+                  if (_user != null)
+                    SettingsTile(
                       icon: Icons.logout,
                       title: LocaleKeys.logout.tr(),
                       titleColor: Colors.red,
                       iconColor: Colors.red,
                       showChevron: false,
                       onTap: _logout,
+                    ),
+                  if (_user != null)
+                    SettingsTile(
+                      icon: Icons.delete_outline,
+                      title: LocaleKeys.deleteAccount.tr(),
+                      titleColor: Colors.red,
+                      iconColor: Colors.red,
+                      showChevron: false,
+                      onTap: () {
+                        //TODO:::::::::::::::
+                      },
                     ),
                   if (_user == null)
                     SettingsTile(

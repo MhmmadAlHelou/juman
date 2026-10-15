@@ -13,6 +13,7 @@ class AddPropertyState extends Equatable {
     this.isUploadingDocument = false,
     this.errorMessage,
     this.originalStatus,
+    this.blockedDates = const {},
     this.categories = const <PropertyCategoryModel>[],
     this.placeTypes = const <PlaceTypeModel>[],
     this.cities = const <CityModel>[],
@@ -34,6 +35,7 @@ class AddPropertyState extends Equatable {
   final bool isUploadingDocument;
   final String? errorMessage;
   final PropertyStatus? originalStatus;
+  final Set<DateTime> blockedDates;
 
   // Reference data loaded from LocationsRepository
   final List<PropertyCategoryModel> categories;
@@ -117,6 +119,7 @@ class AddPropertyState extends Equatable {
     bool? isUploadingDocument,
     String? errorMessage,
     PropertyStatus? originalStatus,
+    Set<DateTime>? blockedDates,
     bool clearError = false,
     List<PropertyCategoryModel>? categories,
     List<PlaceTypeModel>? placeTypes,
@@ -135,6 +138,7 @@ class AddPropertyState extends Equatable {
       isUploadingDocument: isUploadingDocument ?? this.isUploadingDocument,
       errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
       originalStatus: originalStatus ?? this.originalStatus,
+      blockedDates: blockedDates ?? this.blockedDates,
       categories: categories ?? this.categories,
       placeTypes: placeTypes ?? this.placeTypes,
       cities: cities ?? this.cities,
@@ -156,6 +160,7 @@ class AddPropertyState extends Equatable {
     isUploadingDocument,
     errorMessage,
     originalStatus,
+    blockedDates,
     categories,
     placeTypes,
     cities,

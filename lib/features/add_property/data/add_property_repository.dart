@@ -18,6 +18,11 @@ abstract class AddPropertyRepository {
 
   Future<void> deleteImage(String imageId);
   Future<void> deleteDocument(String documentId);
+
+  Future<List<DateTime>> updateBlockedDates({
+    required String propertyId,
+    required List<DateTime> dates,
+  });
 }
 
 class AddPropertyRepositoryImpl implements AddPropertyRepository {
@@ -136,17 +141,6 @@ class AddPropertyRepositoryImpl implements AddPropertyRepository {
     );
   }
 
-  // @override
-  // Future<AddPropertyFormModel> getPropertyById(String propertyId) async {
-  //   final Response<dynamic> response = await _dioClient.sendRequest(
-  //     RequestType.get,
-  //     '${EndPoint.properties}$propertyId/',
-  //   );
-  //   return AddPropertyFormModel.fromJson(
-  //     _unwrap(response.data as Map<String, dynamic>),
-  //   );
-  // }
-
   @override
   Future<void> deleteImage(String imageId) async {
     await _dioClient.sendRequest(
@@ -161,6 +155,35 @@ class AddPropertyRepositoryImpl implements AddPropertyRepository {
       RequestType.delete,
       '${EndPoint.properties}documents/$documentId/',
     );
+  }
+
+  @override
+  Future<List<DateTime>> updateBlockedDates({
+    required String propertyId,
+    required List<DateTime> dates,
+  }) async {
+    try {
+      String fmt(DateTime d) =>
+          '${d.year.toString().padLeft(4, '0')}-'
+          '${d.month.toString().padLeft(2, '0')}-'
+          '${d.day.toString().padLeft(2, '0')}';
+
+      final formData = FormData.fromMap({'dates': dates.map(fmt).toList()});
+
+      final response = await _dioClient.sendRequest(
+        RequestType.put,
+        '${EndPoint.properties}$propertyId/blocked-dates/',
+        formData: formData,
+      );
+
+      // Envelope: {success, data: {property, blocked_dates: [...]}, error, meta}
+      final list = (response.data['data']['blocked_dates'] as List)
+          .map((e) => DateTime.parse(e as String))
+          .toList();
+      return list;
+    } on DioException catch (e) {
+      throw BackendException(dioException: e);
+    }
   }
 
   Map<String, dynamic> _unwrap(Map<String, dynamic> body) {

@@ -26,6 +26,9 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
   final LocationsRepository _locationsRepository;
   final FileUploadService _uploadService;
 
+  void setBlockedDates(Set<DateTime> dates) =>
+      emit(state.copyWith(blockedDates: dates));
+
   Future<void> initWizard({String? propertyId, bool forceNew = false}) async {
     if (isClosed) return;
     emit(state.copyWith(isInitializing: true, clearError: true));
@@ -410,6 +413,14 @@ class AddPropertyCubit extends Cubit<AddPropertyState> {
         id,
         state.formData.toPricingJson(),
       );
+
+      if (state.blockedDates.isNotEmpty) {
+        final sorted = state.blockedDates.toList()..sort();
+        await _repository.updateBlockedDates(
+          propertyId: state.formData.id!,
+          dates: sorted,
+        );
+      }
 
       emit(
         state.copyWith(

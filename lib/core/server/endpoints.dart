@@ -131,6 +131,7 @@ class EndPoint {
   static const String generalSettings = 'settings/general/';
   static const String privacyPolicy = 'settings/privacy-policy/';
   static const String termsOfUse = 'settings/terms-of-use/';
+  static const String contactUs = 'contact/contact-us/';
 
   ///////////////////////////////////
   // static const String register = 'users/register/';
@@ -145,7 +146,6 @@ class EndPoint {
   static const String languages = 'languages/';
   static const String systemInfo = 'system-info/system-info/';
   static const String appInfo = 'system-info/app-info/';
-  static const String contactUs = 'contact-messages/submit/';
 
   // static const String sendVerificationCode = 'users/send-code/';
   // static const String verify = 'users/verify/';

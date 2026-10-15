@@ -304,42 +304,49 @@ class SelectDatesBottomSheet extends StatelessWidget {
       decoration: BoxDecoration(
         border: Border(top: BorderSide(color: Palette.semiGray)),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '$pricePerNight * ${state.numberOfNights} = ${total.toStringAsFixed(0)}',
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontFamily: FontFamily.alexandria,
-                  fontSize: 18,
-                ),
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '$pricePerNight * ${state.numberOfNights} = ${total.toStringAsFixed(0)}',
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontFamily: FontFamily.alexandria,
+                fontSize: 18,
               ),
-              Text(
-                LocaleKeys.total.tr(),
-                style: TextStyle(color: Palette.primary),
-              ),
-            ],
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context, {
-                'checkIn': state.checkIn!,
-                'checkOut': state.checkOut!,
-                'numberOfGuests': state.numberOfGuests,
-              });
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Palette.primary,
-              foregroundColor: Palette.white,
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
             ),
-            child: Text(LocaleKeys.save.tr()),
-          ),
-        ],
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  LocaleKeys.total.tr(),
+                  style: TextStyle(color: Palette.primary),
+                ),
+
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context, {
+                      'checkIn': state.checkIn!,
+                      'checkOut': state.checkOut!,
+                      'numberOfGuests': state.numberOfGuests,
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Palette.primary,
+                    foregroundColor: Palette.white,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 32,
+                      vertical: 14,
+                    ),
+                  ),
+                  child: Text(LocaleKeys.save.tr()),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

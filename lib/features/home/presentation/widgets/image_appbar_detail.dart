@@ -42,10 +42,15 @@ class _ImageAppbarDetailState extends State<ImageAppbarDetails> {
         ),
       ),
       actions: [
-        // Padding(
-        //   padding: const EdgeInsets.all(8),
-        //   child: _RoundIconButton(icon: Icons.share_outlined, onTap: () {}),
-        // ),
+        Padding(
+          padding: const EdgeInsets.all(8),
+
+          child: _RoundIconButton(
+            icon: Icons.share_outlined,
+            iconColor: Palette.black,
+            onTap: () {},
+          ),
+        ),
         if (widget.showFavorite)
           Padding(
             padding: const EdgeInsets.all(8),

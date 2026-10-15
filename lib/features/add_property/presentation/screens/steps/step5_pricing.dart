@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:ewan/core/core.dart';
 import 'package:ewan/features/add_property/bloc/add_property_cubit.dart';
 import 'package:ewan/features/add_property/data/models/uploaded_file_model.dart';
+import 'package:ewan/features/add_property/presentation/widgets/blocked_dates_section.dart';
 import 'package:ewan/features/add_property/presentation/widgets/dotted_border_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -60,6 +61,16 @@ class AddPropertyStep5 extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           const _PriceField(),
+          const SizedBox(height: 24),
+
+          BlocBuilder<AddPropertyCubit, AddPropertyState>(
+            buildWhen: (p, c) => p.blockedDates != c.blockedDates,
+            builder: (context, state) => BlockedDatesSection(
+              blockedDates: state.blockedDates,
+              onChanged: context.read<AddPropertyCubit>().setBlockedDates,
+            ),
+          ),
+
           const SizedBox(height: 32),
 
           Text(

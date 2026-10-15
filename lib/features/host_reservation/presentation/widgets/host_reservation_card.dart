@@ -51,7 +51,7 @@ class HostReservationCard extends StatelessWidget {
                 const Icon(
                   Icons.person_outline,
                   size: 18,
-                  color: Palette.semiGray,
+                  color: Palette.fontColor,
                 ),
                 const SizedBox(width: 6),
                 Expanded(child: Text(r.guestName)),
@@ -63,7 +63,7 @@ class HostReservationCard extends StatelessWidget {
                 const Icon(
                   Icons.calendar_today,
                   size: 16,
-                  color: Palette.semiGray,
+                  color: Palette.fontColor,
                 ),
                 const SizedBox(width: 6),
                 Text(
@@ -75,7 +75,7 @@ class HostReservationCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Palette.semiGray.withValues(alpha: 0.08),
+                color: Palette.darkGray.withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Row(
@@ -87,7 +87,7 @@ class HostReservationCard extends StatelessWidget {
                       Text(
                         LocaleKeys.ownerReceivable.tr(),
                         style: const TextStyle(
-                          color: Palette.semiGray,
+                          color: Palette.fontColor,
                           fontSize: 12,
                         ),
                       ),

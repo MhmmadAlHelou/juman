@@ -47,10 +47,25 @@ class PropertiesRepositoryImpl implements PropertiesRepository {
     final List<dynamic> rawResults =
         data['data']['results'] as List<dynamic>? ?? <dynamic>[];
 
-    final List<PropertiesModel> results = rawResults
-        .map((dynamic e) => PropertiesModel.fromJson(e as Map<String, dynamic>))
-        .where((PropertiesModel p) => p.status == PropertyStatus.approved)
-        .toList();
+    final List<PropertiesModel> results = <PropertiesModel>[];
+
+    for (final dynamic e in rawResults) {
+      try {
+        final Map<String, dynamic> json = e as Map<String, dynamic>;
+
+        if (json['category'] == null || json['place_type'] == null) {
+          log('Skipping property ${json['id']}: missing category/place_type');
+          continue;
+        }
+
+        final PropertiesModel property = PropertiesModel.fromJson(json);
+        if (property.status == PropertyStatus.approved) {
+          results.add(property);
+        }
+      } catch (err) {
+        log('Skipping invalid property: $err');
+      }
+    }
 
     return PaginatedResult<PropertiesModel>(
       count: data['count'] as int? ?? results.length,
