@@ -24,15 +24,19 @@ The app talks to a Django REST Framework backend and is built with a clean, feat
 <table>
   <tr>
     <td align="center"><img src="https://github.com/user-attachments/assets/48de3475-f4a3-4716-8e38-84dffd68d0f7" width="200" alt="Home" /><br /><sub><b>Home</b><br />Map search with price markers</sub></td>
-    <td align="center"><img src="docs/screenshots/property_details.jpg" width="200" alt="Property details" /><br /><sub><b>Property details</b><br />Gallery, specs and reserve bar</sub></td>
-    <td align="center"><img src="docs/screenshots/favourites.jpg" width="200" alt="Favorites" /><br /><sub><b>Favorites</b><br />Saved properties</sub></td>
+    <td align="center"><img src="https://github.com/user-attachments/assets/73a22bbd-6bb9-450d-a318-babdb757679d" width="200" alt="Property details" /><br /><sub><b>Property details</b><br />Gallery, specs and reserve bar</sub></td>
+    <td align="center"><img src="https://github.com/user-attachments/assets/2c8f4c1b-18cd-4be5-972a-2db301cdbc99" width="200" alt="Favorites" /><br /><sub><b>Favorites</b><br />Saved properties</sub></td>
   </tr>
   <tr>
-    <td align="center"><img src="docs/screenshots/my_reservations.jpg" width="200" alt="My reservations" /><br /><sub><b>My reservations</b><br />Approved / Pending / Rejected</sub></td>
-    <td align="center"><img src="docs/screenshots/profile.jpg" width="200" alt="Profile" /><br /><sub><b>Profile</b><br />Account, hosting and settings</sub></td>
+    <td align="center"><img src="https://github.com/user-attachments/assets/81b522ce-6790-44f1-933f-93353d519da5" width="200" alt="My reservations" /><br /><sub><b>My reservations</b><br />Approved / Pending / Rejected</sub></td>
+    <td align="center"><img src="https://github.com/user-attachments/assets/b2b69588-3025-490c-a6d3-3785793c3448" width="200" alt="Profile" /><br /><sub><b>Profile</b><br />Account, hosting and settings</sub></td>
     <td></td>
   </tr>
 </table>
+
+
+
+
 
 
 ## Features
