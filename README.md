@@ -23,7 +23,7 @@ The app talks to a Django REST Framework backend and is built with a clean, feat
 
 <table>
   <tr>
-    <td align="center"><img src="docs/screenshots/home.jpg" width="200" alt="Home" /><br /><sub><b>Home</b><br />Map search with price markers</sub></td>
+    <td align="center"><img src="Home.jpg" width="200" alt="Home" /><br /><sub><b>Home</b><br />Map search with price markers</sub></td>
     <td align="center"><img src="docs/screenshots/property_details.jpg" width="200" alt="Property details" /><br /><sub><b>Property details</b><br />Gallery, specs and reserve bar</sub></td>
     <td align="center"><img src="docs/screenshots/favourites.jpg" width="200" alt="Favorites" /><br /><sub><b>Favorites</b><br />Saved properties</sub></td>
   </tr>
